@@ -55,6 +55,11 @@ public class CommandHandler extends ListenerAdapter {
 							if(!cmd.call(event.getJDA(), member, guild, channel, label, args)) {
 								channel.sendMessage("**Invalid syntax.** `" + profile.getPrefix() + cmd.getFormattedSyntax() + "`").queue();
 							}
+							
+							if(profile.doesDeleteCommands()) {
+								event.getMessage().delete().queue();
+							}
+							
 							return;
 						}
 					}

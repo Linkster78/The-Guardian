@@ -4,6 +4,7 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 
+import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.CommandHandler;
 import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.commands.KickCommand;
@@ -45,6 +46,7 @@ public class Guardian {
 		commandHandler = new CommandHandler();
 		commandHandler.registerCommand(new HelpCommand());
 		commandHandler.registerCommand(new KickCommand());
+		commandHandler.registerCommand(new BanCommand());
 		jda.addEventListener(commandHandler, new ServerStatusListener());
 		
 		LOGGER.info("Launched Guardian successfully!");
