@@ -5,6 +5,7 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 
 import com.tek.guardian.commands.CommandHandler;
+import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.ServerStatusListener;
@@ -41,6 +42,7 @@ public class Guardian {
 		jda.awaitReady();
 		
 		commandHandler = new CommandHandler();
+		commandHandler.registerCommand(new HelpCommand());
 		jda.addEventListener(commandHandler, new ServerStatusListener());
 		
 		LOGGER.info("Launched Guardian successfully!");

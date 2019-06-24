@@ -2,6 +2,7 @@ package com.tek.guardian.commands;
 
 import java.util.List;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -22,7 +23,11 @@ public abstract class Command {
 		this.displayed = displayed;
 	}
 	
-	public abstract void call(Member member, Guild guild, TextChannel channel, String label, String[] args);
+	public abstract boolean call(JDA jda, Member member, Guild guild, TextChannel channel, String label, String[] args);
+	
+	public String getFormattedSyntax() {
+		return getName() + (getSyntax() == null ? "" : " " + getSyntax());
+	}
 	
 	public String getName() {
 		return name;
