@@ -29,7 +29,7 @@ public class HelpCommand extends Command {
 			
 			if(helpBuilder.length() > 0) helpBuilder.setLength(helpBuilder.length() - 1);
 			
-			MessageEmbed embed = Guardian.getInstance().getCommandHandler().formatEmbed(jda, "Help Menu")
+			MessageEmbed embed = CommandHandler.formatEmbed(jda, "Help Menu")
 					.setColor(Color.cyan)
 					.setDescription("<> = Required Parameter, [] = Optional Parameter")
 					.addField("Command List", helpBuilder.toString(), false)
