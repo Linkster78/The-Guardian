@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import com.tek.guardian.commands.CommandHandler;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
+import com.tek.guardian.events.ServerStatusListener;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -40,7 +41,7 @@ public class Guardian {
 		jda.awaitReady();
 		
 		commandHandler = new CommandHandler();
-		jda.addEventListener(commandHandler);
+		jda.addEventListener(commandHandler, new ServerStatusListener());
 		
 		LOGGER.info("Launched Guardian successfully!");
 	}
