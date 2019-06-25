@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.data.TemporaryAction;
+import com.tek.guardian.enums.Action;
 import com.tek.guardian.enums.BotRole;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -40,6 +43,14 @@ public class UnmuteCommand extends Command {
 							}, e -> {
 								guild.removeRoleFromMember(memberOpt.get(), r).queue();
 							});
+							
+							for(TemporaryAction action : Guardian.getInstance().getMongoAdapter().getTemporaryActions()) {
+								if(action.getUserId().equals(memberOpt.get().getId())) {
+									if(action.getAction().equals(Action.TEMPMUTE)) {
+										Guardian.getInstance().getMongoAdapter().removeTemporaryAction(action);
+									}
+								}
+							}
 							
 							channel.sendMessage("Successfully unmuted " + memberOpt.get().getUser().getAsMention() + ".").queue();
 						} else {

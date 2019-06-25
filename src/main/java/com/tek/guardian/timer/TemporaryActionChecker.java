@@ -8,7 +8,6 @@ import com.tek.guardian.main.Guardian;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 
 public class TemporaryActionChecker extends TimerTask {
 
@@ -20,11 +19,8 @@ public class TemporaryActionChecker extends TimerTask {
 				Guardian.getInstance().getMongoAdapter().removeTemporaryAction(action);
 				Guild guild = jda.getGuildById(action.getGuildId());
 				if(guild != null) {
-					Member member = guild.getMemberById(action.getUserId());
-					if(member != null) {
-						ServerProfile profile = Guardian.getInstance().getMongoAdapter().getServerProfile(guild);
-						action.handle(profile, guild);
-					}
+					ServerProfile profile = Guardian.getInstance().getMongoAdapter().getServerProfile(guild);
+					action.handle(profile, guild);
 				}
 			}
 		}

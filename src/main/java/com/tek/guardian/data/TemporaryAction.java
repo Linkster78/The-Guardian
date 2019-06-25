@@ -25,7 +25,7 @@ public class TemporaryAction {
 	public TemporaryAction() { }
 	
 	public TemporaryAction(String userId, String guildId, Action action, long assigned, long period) {
-		this.objectId = new ObjectId();;
+		this.objectId = new ObjectId();
 		this.userId = userId;
 		this.guildId = guildId;
 		this.action = action;
@@ -41,17 +41,33 @@ public class TemporaryAction {
 			
 			Role muted = guild.getRoleById(profile.getRoleMap().get(BotRole.MUTED.name()));
 			if(member.getRoles().contains(muted)) {
-				guild.removeRoleFromMember(member, muted).queue();
+				member.getUser().openPrivateChannel().queue(pm -> {
+					pm.sendMessage("Your mute has expired, you can now talk again in **" + guild.getName() + "**.").queue(m -> {
+						guild.removeRoleFromMember(member, muted).queue();
+					}, e -> {
+						guild.removeRoleFromMember(member, muted).queue();
+					});
+				}, e -> {
+					guild.removeRoleFromMember(member, muted).queue();
+				});
 			}
 		} else if(action.equals(Action.TEMPDEAFEN)) {
 			if(member == null) return;
 			
 			if(member.getVoiceState().isGuildDeafened()) {
-				member.deafen(false).queue();
+				member.getUser().openPrivateChannel().queue(pm -> {
+					pm.sendMessage("Your deafen has expired, you can now hear again in **" + guild.getName() + "**.").queue(m -> {
+						member.deafen(false).queue();
+					}, e -> {
+						member.deafen(false).queue();
+					});
+				}, e -> {
+					member.deafen(false).queue();
+				});
 			}
-		} else {
+		} else if(action.equals(Action.TEMPBAN)) {
 			guild.retrieveBanList().queue(bans -> {
-				bans.stream().filter(ban -> ban.getUser().getId().equals(userId)).forEach(ban -> guild.unban(ban.getUser()));
+				bans.stream().filter(ban -> ban.getUser().getId().equals(userId)).forEach(ban -> guild.unban(ban.getUser()).queue());
 			});
 		}
 	}

@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.data.TemporaryAction;
+import com.tek.guardian.enums.Action;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -36,6 +39,14 @@ public class UndeafenCommand extends Command {
 							}, e -> {
 								memberOpt.get().deafen(false).queue();
 							});
+							
+							for(TemporaryAction action : Guardian.getInstance().getMongoAdapter().getTemporaryActions()) {
+								if(action.getUserId().equals(memberOpt.get().getId())) {
+									if(action.getAction().equals(Action.TEMPDEAFEN)) {
+										Guardian.getInstance().getMongoAdapter().removeTemporaryAction(action);
+									}
+								}
+							}
 							
 							channel.sendMessage("Successfully undeafened " + memberOpt.get().getUser().getAsMention() + ".").queue();
 						} else {

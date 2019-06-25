@@ -68,6 +68,10 @@ public class MongoAdapter {
 		datastore.delete(action);
 	}
 	
+	public void createTemporaryAction(TemporaryAction action) {
+		datastore.save(action);
+	}
+	
 	public Morphia getMorphia() {
 		return morphia;
 	}

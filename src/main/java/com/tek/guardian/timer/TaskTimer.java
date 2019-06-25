@@ -12,7 +12,7 @@ public class TaskTimer {
 	}
 	
 	public void start() {
-		timer.scheduleAtFixedRate(new TemporaryActionChecker(), 0, TimeUnit.MINUTES.toMillis(1));
+		timer.scheduleAtFixedRate(new TemporaryActionChecker(), 0, TimeUnit.SECONDS.toMillis(30));
 	}
 	
 	public Timer getTimer() {

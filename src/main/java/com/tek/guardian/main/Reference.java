@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -65,19 +66,24 @@ public class Reference {
 		char timeCharacter = Character.toLowerCase(str.charAt(str.length() - 1));
 		String timeString = str.substring(0, str.length() - 1);
 		if(!isInteger(timeString)) throw new IllegalArgumentException("Invalid time string.");
-		if(timeCharacter == 't') {
-			return Integer.parseInt(timeString);
-		} else if(timeCharacter == 's') {
-			return Integer.parseInt(timeString) * 20;
+		if(timeCharacter == 's') {
+			return (int) TimeUnit.SECONDS.toMillis(Integer.parseInt(timeString));
 		} else if(timeCharacter == 'm') {
-			return Integer.parseInt(timeString) * 20 * 60;
+			return (int) TimeUnit.MINUTES.toMillis(Integer.parseInt(timeString));
 		} else if(timeCharacter == 'h') {
-			return Integer.parseInt(timeString) * 20 * 60 * 60;
+			return (int) TimeUnit.HOURS.toMillis(Integer.parseInt(timeString));
 		} else if(timeCharacter == 'd') {
-			return Integer.parseInt(timeString) * 20 * 60 * 60 * 24;
+			return (int) TimeUnit.DAYS.toMillis(Integer.parseInt(timeString));
 		} else {
 			throw new IllegalArgumentException("Invalid time string.");
 		}
+	}
+	
+	public static String formatTime(long millis) {
+		if(millis < TimeUnit.MINUTES.toMillis(1)) return TimeUnit.MILLISECONDS.toSeconds(millis) + " second(s)";
+		if(millis < TimeUnit.HOURS.toMillis(1)) return TimeUnit.MILLISECONDS.toMinutes(millis) + " minute(s)";
+		if(millis < TimeUnit.DAYS.toMillis(1)) return TimeUnit.MILLISECONDS.toHours(millis) + " hour(s)";
+		return TimeUnit.MILLISECONDS.toDays(millis) + " day(s)";
 	}
 	
 	public static boolean isInteger(String str) {
