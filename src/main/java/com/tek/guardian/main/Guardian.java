@@ -4,6 +4,7 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
@@ -37,6 +38,7 @@ public class Guardian {
 	private Config config;
 	private MongoAdapter mongoAdapter;
 	private JDA jda;
+	private EventWaiter waiter;
 	private CommandHandler commandHandler;
 	private TaskTimer taskTimer;
 	
@@ -56,8 +58,10 @@ public class Guardian {
 				.build();
 		jda.awaitReady();
 		
+		waiter = new EventWaiter();
+		
 		commandHandler = new CommandHandler();
-		commandHandler.registerCommand(new HelpCommand());
+		commandHandler.registerCommand(new HelpCommand(waiter));
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());
 		commandHandler.registerCommand(new TempbanCommand());
@@ -70,7 +74,7 @@ public class Guardian {
 		commandHandler.registerCommand(new LockCommand());
 		commandHandler.registerCommand(new UnlockCommand());
 		commandHandler.registerCommand(new ClearCommand());
-		jda.addEventListener(commandHandler, new ServerStatusListener(), new MessageReceivedListener());
+		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), new MessageReceivedListener());
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();
@@ -92,6 +96,10 @@ public class Guardian {
 	
 	public JDA getJDA() {
 		return jda;
+	}
+	
+	public EventWaiter getWaiter() {
+		return waiter;
 	}
 	
 	public CommandHandler getCommandHandler() {
