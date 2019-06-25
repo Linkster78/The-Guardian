@@ -25,7 +25,7 @@ public class HelpCommand extends Command {
 			StringBuilder helpBuilder = new StringBuilder();
 			for(Command command : Guardian.getInstance().getCommandHandler().getCommands()) {
 				if(command.isDisplayed()) {
-					helpBuilder.append("`" + command.getFormattedSyntax() + "` - *" + command.getDescription() + "*\n");
+					helpBuilder.append("`" + command.getFormattedSyntax() + "` **-** *" + command.getDescription() + "*\n");
 				}
 			}
 			
