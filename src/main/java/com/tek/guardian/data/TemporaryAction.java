@@ -46,7 +46,7 @@ public class TemporaryAction {
 		} else if(action.equals(Action.TEMPDEAFEN)) {
 			if(member == null) return;
 			
-			if(member.getVoiceState().isDeafened()) {
+			if(member.getVoiceState().isGuildDeafened()) {
 				member.deafen(false).queue();
 			}
 		} else {
@@ -54,6 +54,14 @@ public class TemporaryAction {
 				bans.stream().filter(ban -> ban.getUser().getId().equals(userId)).forEach(ban -> guild.unban(ban.getUser()));
 			});
 		}
+	}
+	
+	public boolean isDue() {
+		return System.currentTimeMillis() >= assigned + period;
+	}
+	
+	public ObjectId getObjectId() {
+		return objectId;
 	}
 	
 	public String getUserId() {

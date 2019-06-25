@@ -1,6 +1,17 @@
 package com.tek.guardian.main;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
+
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.SelfUser;
 
 public class Reference {
 	
@@ -9,5 +20,73 @@ public class Reference {
 	
 	public static final String CONFIG_PATH = "./config.json";
 	public static final String DATABASE = "guardian";
+	
+	public static EmbedBuilder formatEmbed(JDA jda, String title) {
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		SelfUser self = jda.getSelfUser();
+		
+		return new EmbedBuilder()
+				.setAuthor(title, null, self.getAvatarUrl())
+				.setFooter("Executed at " + timeFormatter.format(now) + " EST");
+	}
+	
+	public static Optional<Member> memberFromString(Guild guild, String str) {
+		List<Member> members;
+		Member member;
+		
+		if(Reference.SNOWFLAKE_REGEX.matcher(str).matches()) {
+			member = guild.getMemberById(str);
+			if(member != null) return Optional.of(member);
+		}
+		
+		if(Reference.TAG_REGEX.matcher(str).matches()) {
+			member = guild.getMemberByTag(str);
+			if(member != null) return Optional.of(member);
+		}
+		
+		members = guild.getMembersByName(str, true);
+		if(!members.isEmpty()) return Optional.of(members.get(0));
+		
+		members = guild.getMembersByNickname(str, true);
+		if(!members.isEmpty()) return Optional.of(members.get(0));
+		
+		Iterator<Member> memberIterator = guild.getMemberCache().iterator();
+		while(memberIterator.hasNext()) {
+			member = memberIterator.next();
+			if(member.getAsMention().equals(str) || member.getUser().getAsMention().equals(str)) return Optional.of(member);
+		}
+		
+		return Optional.empty();
+	}
+	
+	public static int timeToMillis(String str) throws IllegalArgumentException {
+		if(str.length() <= 1) throw new IllegalArgumentException("Invalid time string.");
+		char timeCharacter = Character.toLowerCase(str.charAt(str.length() - 1));
+		String timeString = str.substring(0, str.length() - 1);
+		if(!isInteger(timeString)) throw new IllegalArgumentException("Invalid time string.");
+		if(timeCharacter == 't') {
+			return Integer.parseInt(timeString);
+		} else if(timeCharacter == 's') {
+			return Integer.parseInt(timeString) * 20;
+		} else if(timeCharacter == 'm') {
+			return Integer.parseInt(timeString) * 20 * 60;
+		} else if(timeCharacter == 'h') {
+			return Integer.parseInt(timeString) * 20 * 60 * 60;
+		} else if(timeCharacter == 'd') {
+			return Integer.parseInt(timeString) * 20 * 60 * 60 * 24;
+		} else {
+			throw new IllegalArgumentException("Invalid time string.");
+		}
+	}
+	
+	public static boolean isInteger(String str) {
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch(NumberFormatException e) {
+			return false;
+		}
+	}
 	
 }

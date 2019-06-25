@@ -1,5 +1,9 @@
 package com.tek.guardian.data;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.mongodb.MongoClient;
 
 import dev.morphia.Datastore;
@@ -48,6 +52,20 @@ public class MongoAdapter {
 	
 	public void saveServerProfile(ServerProfile serverProfile) {
 		datastore.save(serverProfile);
+	}
+	
+	public List<TemporaryAction> getTemporaryActions() {
+		Query<TemporaryAction> actionQuery = datastore.createQuery(TemporaryAction.class);
+		ArrayList<TemporaryAction> actionList = new ArrayList<TemporaryAction>((int) actionQuery.count());
+		Iterator<TemporaryAction> actionIterator = actionQuery.iterator();
+		while(actionIterator.hasNext()) {
+			actionList.add(actionIterator.next());
+		}
+		return actionList;
+	}
+	
+	public void removeTemporaryAction(TemporaryAction action) {
+		datastore.delete(action);
 	}
 	
 	public Morphia getMorphia() {

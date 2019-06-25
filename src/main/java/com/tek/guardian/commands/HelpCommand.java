@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.tek.guardian.data.ServerProfile;
 import com.tek.guardian.main.Guardian;
+import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -30,7 +31,7 @@ public class HelpCommand extends Command {
 			
 			if(helpBuilder.length() > 0) helpBuilder.setLength(helpBuilder.length() - 1);
 			
-			MessageEmbed embed = CommandHandler.formatEmbed(jda, "Help Menu")
+			MessageEmbed embed = Reference.formatEmbed(jda, "Help Menu")
 					.setColor(Color.cyan)
 					.setDescription("<> = Required Parameter, [] = Optional Parameter")
 					.addField("Command List", helpBuilder.toString(), false)

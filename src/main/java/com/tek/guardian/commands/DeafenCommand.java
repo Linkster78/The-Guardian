@@ -12,16 +12,16 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class KickCommand extends Command {
+public class DeafenCommand extends Command {
 
-	public KickCommand() {
-		super("kick", Arrays.asList(), "<user> [reason]", "Kicks a member and specifies a reason.", true);
+	public DeafenCommand() {
+		super("deafen", Arrays.asList(), "<user> [reason]", "Deafens a member and specifies a reason.", true);
 	}
 
 	@Override
 	public boolean call(JDA jda, ServerProfile profile, Member member, Guild guild, TextChannel channel, String label, String[] args) {
 		if(args.length >= 1) {
-			if(member.hasPermission(Permission.KICK_MEMBERS)) {
+			if(member.hasPermission(Permission.VOICE_DEAF_OTHERS)) {
 				String reason;
 				if(args.length >= 2) {
 					StringBuilder reasonBuilder = new StringBuilder();
@@ -36,25 +36,29 @@ public class KickCommand extends Command {
 				
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
-						memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-							pm.sendMessage("You were kicked from the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
-								guild.kick(memberOpt.get(), reason).queue();
+						if(!memberOpt.get().getVoiceState().isGuildDeafened()) {
+							memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
+								pm.sendMessage("You have been deafened in the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
+									memberOpt.get().deafen(true).queue();
+								}, e -> {
+									memberOpt.get().deafen(true).queue();
+								});
 							}, e -> {
-								guild.kick(memberOpt.get(), reason).queue();
+								memberOpt.get().deafen(true).queue();
 							});
-						}, e -> {
-							guild.kick(memberOpt.get(), reason).queue();
-						});
-						
-						channel.sendMessage("Successfully kicked " + memberOpt.get().getUser().getAsMention() + " from the server. `" + reason + "`").queue();
+							
+							channel.sendMessage("Successfully deafened " + memberOpt.get().getUser().getAsMention() + ". `" + reason + "`").queue();
+						} else {
+							channel.sendMessage("**This person is already deafened.**").queue();
+						}
 					} else {
-						channel.sendMessage("**You cannot kick this person.**").queue();
+						channel.sendMessage("**You cannot deafen this person.**").queue();
 					}
 				} else {
 					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot kick members.**").queue();
+				channel.sendMessage("**You cannot deafen members.**").queue();
 			}
 			
 			return true;

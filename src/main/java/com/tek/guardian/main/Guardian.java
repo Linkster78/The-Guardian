@@ -6,13 +6,16 @@ import org.apache.log4j.Logger;
 
 import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.CommandHandler;
+import com.tek.guardian.commands.DeafenCommand;
 import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.commands.KickCommand;
 import com.tek.guardian.commands.MuteCommand;
+import com.tek.guardian.commands.UndeafenCommand;
 import com.tek.guardian.commands.UnmuteCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.ServerStatusListener;
+import com.tek.guardian.timer.TaskTimer;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -28,6 +31,7 @@ public class Guardian {
 	private MongoAdapter mongoAdapter;
 	private JDA jda;
 	private CommandHandler commandHandler;
+	private TaskTimer taskTimer;
 	
 	public Guardian(Config config) {
 		this.config = config;
@@ -51,7 +55,12 @@ public class Guardian {
 		commandHandler.registerCommand(new BanCommand());
 		commandHandler.registerCommand(new MuteCommand());
 		commandHandler.registerCommand(new UnmuteCommand());
+		commandHandler.registerCommand(new DeafenCommand());
+		commandHandler.registerCommand(new UndeafenCommand());
 		jda.addEventListener(commandHandler, new ServerStatusListener());
+		
+		taskTimer = new TaskTimer();
+		taskTimer.start();
 		
 		LOGGER.info("Launched Guardian successfully!");
 	}
@@ -74,6 +83,10 @@ public class Guardian {
 	
 	public CommandHandler getCommandHandler() {
 		return commandHandler;
+	}
+	
+	public TaskTimer getTaskTimer() {
+		return taskTimer;
 	}
 	
 }

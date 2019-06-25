@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -31,7 +32,7 @@ public class BanCommand extends Command {
 					reason = "No reason specified.";
 				}
 				
-				Optional<Member> memberOpt = CommandHandler.fromString(guild, args[0]);
+				Optional<Member> memberOpt = Reference.memberFromString(guild, args[0]);
 				
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
