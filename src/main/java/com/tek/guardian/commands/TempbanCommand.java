@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
-import com.tek.guardian.data.TemporaryAction;
-import com.tek.guardian.enums.Action;
 import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
@@ -42,20 +40,7 @@ public class TempbanCommand extends Command {
 						long time = Reference.timeToMillis(args[1]);
 						
 						if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
-							memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-								pm.sendMessage("You have been temporarily banned in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`").queue(m -> {
-									guild.ban(memberOpt.get(), 0, reason).queue();
-								}, e -> {
-									guild.ban(memberOpt.get(), 0, reason).queue();
-								});
-							}, e -> {
-								guild.ban(memberOpt.get(), 0, reason).queue();
-							});
-								
-							TemporaryAction action = new TemporaryAction(memberOpt.get().getId(), guild.getId(), Action.TEMPBAN, System.currentTimeMillis(), time);
-							Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
-								
-							channel.sendMessage("Temporarily banned " + memberOpt.get().getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+							Guardian.getInstance().getActionManager().temporarilyBan(member, memberOpt.get(), time, channel, reason);
 						} else {
 							channel.sendMessage("**You cannot ban this person.**").queue();
 						}

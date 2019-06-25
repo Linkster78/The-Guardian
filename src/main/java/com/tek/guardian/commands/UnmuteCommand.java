@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
-import com.tek.guardian.data.TemporaryAction;
-import com.tek.guardian.enums.Action;
 import com.tek.guardian.enums.BotRole;
 import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
@@ -34,25 +32,7 @@ public class UnmuteCommand extends Command {
 						Role r = guild.getRoleById(profile.getRoleMap().get(BotRole.MUTED.name()));
 						
 						if(memberOpt.get().getRoles().contains(r)) {
-							memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-								pm.sendMessage("You have been unmuted in the server **" + guild.getName() + "**.").queue(m -> {
-									guild.removeRoleFromMember(memberOpt.get(), r).queue();
-								}, e -> {
-									guild.removeRoleFromMember(memberOpt.get(), r).queue();
-								});
-							}, e -> {
-								guild.removeRoleFromMember(memberOpt.get(), r).queue();
-							});
-							
-							for(TemporaryAction action : Guardian.getInstance().getMongoAdapter().getTemporaryActions()) {
-								if(action.getUserId().equals(memberOpt.get().getId())) {
-									if(action.getAction().equals(Action.TEMPMUTE)) {
-										Guardian.getInstance().getMongoAdapter().removeTemporaryAction(action);
-									}
-								}
-							}
-							
-							channel.sendMessage("Successfully unmuted " + memberOpt.get().getUser().getAsMention() + ".").queue();
+							Guardian.getInstance().getActionManager().unmute(member, memberOpt.get(), profile, channel);
 						} else {
 							channel.sendMessage("**This person is not muted.**").queue();
 						}

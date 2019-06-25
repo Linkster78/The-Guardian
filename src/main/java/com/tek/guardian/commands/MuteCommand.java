@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
 import com.tek.guardian.enums.BotRole;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -41,17 +42,7 @@ public class MuteCommand extends Command {
 						Role r = guild.getRoleById(profile.getRoleMap().get(BotRole.MUTED.name()));
 						
 						if(!memberOpt.get().getRoles().contains(r)) {
-							memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-								pm.sendMessage("You have been muted in the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
-									guild.addRoleToMember(memberOpt.get(), r).queue();
-								}, e -> {
-									guild.addRoleToMember(memberOpt.get(), r).queue();
-								});
-							}, e -> {
-								guild.addRoleToMember(memberOpt.get(), r).queue();
-							});
-							
-							channel.sendMessage("Successfully muted " + memberOpt.get().getUser().getAsMention() + ". `" + reason + "`").queue();
+							Guardian.getInstance().getActionManager().mute(member, memberOpt.get(), profile, channel, reason);
 						} else {
 							channel.sendMessage("**This person is already muted.**").queue();
 						}

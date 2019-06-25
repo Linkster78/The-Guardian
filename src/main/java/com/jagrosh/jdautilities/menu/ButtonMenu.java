@@ -15,7 +15,6 @@
  */
 package com.jagrosh.jdautilities.menu;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +23,6 @@ import java.util.function.Consumer;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Message;
@@ -45,23 +43,19 @@ import net.dv8tion.jda.internal.utils.Checks;
  */
 public class ButtonMenu extends Menu
 {
-    private final Color color;
-    private final String text;
-    private final String description;
     private final List<String> choices;
     private final Consumer<ReactionEmote> action;
     private final Consumer<Message> finalAction;
+    private final Consumer<MessageBuilder> renderer;
     
     ButtonMenu(EventWaiter waiter, Set<User> users, Set<Role> roles, long timeout, TimeUnit unit,
-               Color color, String text, String description, List<String> choices, Consumer<ReactionEmote> action, Consumer<Message> finalAction)
+               List<String> choices, Consumer<ReactionEmote> action, Consumer<Message> finalAction, Consumer<MessageBuilder> renderer)
     {
         super(waiter, users, roles, timeout, unit);
-        this.color = color;
-        this.text = text;
-        this.description = description;
         this.choices = choices;
         this.action = action;
         this.finalAction = finalAction;
+        this.renderer = renderer;
     }
 
     /**
@@ -152,10 +146,7 @@ public class ButtonMenu extends Menu
     private Message getMessage()
     {
         MessageBuilder mbuilder = new MessageBuilder();
-        if(text!=null)
-            mbuilder.append(text);
-        if(description!=null)
-            mbuilder.setEmbed(new EmbedBuilder().setColor(color).setDescription(description).build());
+        if(renderer != null) renderer.accept(mbuilder);
         return mbuilder.build();
     }
 
@@ -167,12 +158,10 @@ public class ButtonMenu extends Menu
      */
     public static class Builder extends Menu.Builder<Builder, ButtonMenu>
     {
-        private Color color;
-        private String text;
-        private String description;
         private final List<String> choices = new LinkedList<>();
         private Consumer<ReactionEmote> action;
         private Consumer<Message> finalAction = (m) -> {};
+        private Consumer<MessageBuilder> renderer;
 
         /**
          * Builds the {@link com.jagrosh.jdautilities.menu.ButtonMenu ButtonMenu}
@@ -195,57 +184,10 @@ public class ButtonMenu extends Menu
             Checks.check(waiter != null, "Must set an EventWaiter");
             Checks.check(!choices.isEmpty(), "Must have at least one choice");
             Checks.check(action != null, "Must provide an action consumer");
-            Checks.check(text != null || description != null, "Either text or description must be set");
 
-            return new ButtonMenu(waiter, users, roles, timeout, unit, color, text, description, choices, action, finalAction);
+            return new ButtonMenu(waiter, users, roles, timeout, unit, choices, action, finalAction, renderer);
         }
-
-        /**
-         * Sets the {@link java.awt.Color Color} of the {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}.
-         *
-         * @param  color
-         *         The Color of the MessageEmbed
-         *
-         * @return This builder
-         */
-        public Builder setColor(Color color)
-        {
-            this.color = color;
-            return this;
-        }
-
-        /**
-         * Sets the text of the {@link net.dv8tion.jda.core.entities.Message Message} to be displayed
-         * when the {@link com.jagrosh.jdautilities.menu.ButtonMenu ButtonMenu} is built.
-         *
-         * <p>This is displayed directly above the embed.
-         *
-         * @param  text
-         *         The Message content to be displayed above the embed when the ButtonMenu is built
-         *
-         * @return This builder
-         */
-        public Builder setText(String text)
-        {
-            this.text = text;
-            return this;
-        }
-
-        /**
-         * Sets the description to be placed in an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}.
-         * <br>If this is {@code null}, no MessageEmbed will be displayed
-         *
-         * @param  description
-         *         The content of the MessageEmbed's description
-         *
-         * @return This builder
-         */
-        public Builder setDescription(String description)
-        {
-            this.description = description;
-            return this;
-        }
-
+            
         /**
          * Sets the {@link java.util.function.Consumer Consumer} action to perform upon selecting a button.
          *
@@ -385,6 +327,17 @@ public class ButtonMenu extends Menu
         {
             this.choices.clear();
             return addChoices(emotes);
+        }
+        
+        /**
+         * Added by RedstoneTek/Toon Link
+         * 
+         * @param renderer
+         * @return
+         */
+        public Builder setRenderer(Consumer<MessageBuilder> renderer) {
+        	this.renderer = renderer;
+        	return this;
         }
     }
 }

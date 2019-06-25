@@ -2,8 +2,18 @@ package com.tek.guardian.enums;
 
 public enum Action {
 	
+	MUTE,
 	TEMPMUTE,
+	UNMUTE,
+	DEAFEN,
 	TEMPDEAFEN,
-	TEMPBAN;
+	UNDEAFEN,
+	BAN,
+	TEMPBAN,
+	UNBAN,
+	KICK,
+	CLEAR,
+	LOCK,
+	UNLOCK;
 	
 }

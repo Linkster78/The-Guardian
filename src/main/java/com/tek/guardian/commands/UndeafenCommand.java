@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
-import com.tek.guardian.data.TemporaryAction;
-import com.tek.guardian.enums.Action;
 import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
@@ -30,25 +28,7 @@ public class UndeafenCommand extends Command {
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
 						if(memberOpt.get().getVoiceState().isGuildDeafened()) {
-							memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-								pm.sendMessage("You have been undeafened in the server **" + guild.getName() + "**").queue(m -> {
-									memberOpt.get().deafen(false).queue();
-								}, e -> {
-									memberOpt.get().deafen(false).queue();
-								});
-							}, e -> {
-								memberOpt.get().deafen(false).queue();
-							});
-							
-							for(TemporaryAction action : Guardian.getInstance().getMongoAdapter().getTemporaryActions()) {
-								if(action.getUserId().equals(memberOpt.get().getId())) {
-									if(action.getAction().equals(Action.TEMPDEAFEN)) {
-										Guardian.getInstance().getMongoAdapter().removeTemporaryAction(action);
-									}
-								}
-							}
-							
-							channel.sendMessage("Successfully undeafened " + memberOpt.get().getUser().getAsMention() + ".").queue();
+							Guardian.getInstance().getActionManager().undeafen(member, memberOpt.get(), channel);
 						} else {
 							channel.sendMessage("**This person is not deafened.**").queue();
 						}

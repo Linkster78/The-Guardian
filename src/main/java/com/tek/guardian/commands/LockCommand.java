@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -35,9 +36,7 @@ public class LockCommand extends Command {
 			}
 			
 			if(!profile.getLockedChannels().contains(lockChannel.getId())) {
-				profile.getLockedChannels().add(lockChannel.getId());
-				profile.save();
-				channel.sendMessage("Locked the channel " + lockChannel.getAsMention() + ".").queue();
+				Guardian.getInstance().getActionManager().lock(member, profile, channel, lockChannel);
 			} else {
 				channel.sendMessage("**This channel is already locked.**").queue();
 			}

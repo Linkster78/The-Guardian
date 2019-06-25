@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
-import com.tek.guardian.data.TemporaryAction;
-import com.tek.guardian.enums.Action;
 import com.tek.guardian.enums.BotRole;
 import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
@@ -47,20 +45,7 @@ public class TempmuteCommand extends Command {
 							Role r = guild.getRoleById(profile.getRoleMap().get(BotRole.MUTED.name()));
 							
 							if(!memberOpt.get().getRoles().contains(r)) {
-								memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-									pm.sendMessage("You have been temporarily muted in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`").queue(m -> {
-										guild.addRoleToMember(memberOpt.get(), r).queue();
-									}, e -> {
-										guild.addRoleToMember(memberOpt.get(), r).queue();
-									});
-								}, e -> {
-									guild.addRoleToMember(memberOpt.get(), r).queue();
-								});
-								
-								TemporaryAction action = new TemporaryAction(memberOpt.get().getId(), guild.getId(), Action.TEMPMUTE, System.currentTimeMillis(), time);
-								Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
-								
-								channel.sendMessage("Temporarily muted " + memberOpt.get().getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+								Guardian.getInstance().getActionManager().temporarilyMute(member, memberOpt.get(), profile, time, channel, reason);
 							} else {
 								channel.sendMessage("**This person is already muted.**").queue();
 							}

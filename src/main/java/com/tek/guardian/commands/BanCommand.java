@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -36,17 +37,7 @@ public class BanCommand extends Command {
 				
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
-						memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-							pm.sendMessage("You were banned from the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
-								guild.ban(memberOpt.get(), 0, reason).queue();
-							}, e -> {
-								guild.ban(memberOpt.get(), 0, reason).queue();
-							});
-						}, e -> {
-							guild.ban(memberOpt.get(), 0, reason).queue();
-						});
-						
-						channel.sendMessage("Successfully banned " + memberOpt.get().getUser().getAsMention() + " from the server. `" + reason + "`").queue();
+						Guardian.getInstance().getActionManager().ban(member, memberOpt.get(), channel, reason);
 					} else {
 						channel.sendMessage("**You cannot ban this person.**").queue();
 					}

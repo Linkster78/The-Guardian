@@ -19,6 +19,7 @@ import com.tek.guardian.commands.TempmuteCommand;
 import com.tek.guardian.commands.UndeafenCommand;
 import com.tek.guardian.commands.UnlockCommand;
 import com.tek.guardian.commands.UnmuteCommand;
+import com.tek.guardian.commands.WhoisCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.MessageReceivedListener;
@@ -41,6 +42,7 @@ public class Guardian {
 	private EventWaiter waiter;
 	private CommandHandler commandHandler;
 	private TaskTimer taskTimer;
+	private ActionManager actionManager;
 	
 	public Guardian(Config config) {
 		this.config = config;
@@ -62,6 +64,7 @@ public class Guardian {
 		
 		commandHandler = new CommandHandler();
 		commandHandler.registerCommand(new HelpCommand(waiter));
+		commandHandler.registerCommand(new WhoisCommand(waiter));
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());
 		commandHandler.registerCommand(new TempbanCommand());
@@ -78,6 +81,8 @@ public class Guardian {
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();
+		
+		actionManager = new ActionManager();
 		
 		LOGGER.info("Launched Guardian successfully!");
 	}
@@ -108,6 +113,10 @@ public class Guardian {
 	
 	public TaskTimer getTaskTimer() {
 		return taskTimer;
+	}
+	
+	public ActionManager getActionManager() {
+		return actionManager;
 	}
 	
 }

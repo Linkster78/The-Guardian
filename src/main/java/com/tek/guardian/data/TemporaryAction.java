@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 
 import com.tek.guardian.enums.Action;
 import com.tek.guardian.enums.BotRole;
+import com.tek.guardian.main.Guardian;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
@@ -41,34 +42,16 @@ public class TemporaryAction {
 			
 			Role muted = guild.getRoleById(profile.getRoleMap().get(BotRole.MUTED.name()));
 			if(member.getRoles().contains(muted)) {
-				member.getUser().openPrivateChannel().queue(pm -> {
-					pm.sendMessage("Your mute has expired, you can now talk again in **" + guild.getName() + "**.").queue(m -> {
-						guild.removeRoleFromMember(member, muted).queue();
-					}, e -> {
-						guild.removeRoleFromMember(member, muted).queue();
-					});
-				}, e -> {
-					guild.removeRoleFromMember(member, muted).queue();
-				});
+				Guardian.getInstance().getActionManager().unmute(null, member, profile, null);
 			}
 		} else if(action.equals(Action.TEMPDEAFEN)) {
 			if(member == null) return;
 			
 			if(member.getVoiceState().isGuildDeafened()) {
-				member.getUser().openPrivateChannel().queue(pm -> {
-					pm.sendMessage("Your deafen has expired, you can now hear again in **" + guild.getName() + "**.").queue(m -> {
-						member.deafen(false).queue();
-					}, e -> {
-						member.deafen(false).queue();
-					});
-				}, e -> {
-					member.deafen(false).queue();
-				});
+				Guardian.getInstance().getActionManager().undeafen(null, member, null);
 			}
 		} else if(action.equals(Action.TEMPBAN)) {
-			guild.retrieveBanList().queue(bans -> {
-				bans.stream().filter(ban -> ban.getUser().getId().equals(userId)).forEach(ban -> guild.unban(ban.getUser()).queue());
-			});
+			Guardian.getInstance().getActionManager().unban(guild, userId);
 		}
 	}
 	

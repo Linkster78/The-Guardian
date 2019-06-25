@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -37,17 +38,7 @@ public class DeafenCommand extends Command {
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
 						if(!memberOpt.get().getVoiceState().isGuildDeafened()) {
-							memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-								pm.sendMessage("You have been deafened in the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
-									memberOpt.get().deafen(true).queue();
-								}, e -> {
-									memberOpt.get().deafen(true).queue();
-								});
-							}, e -> {
-								memberOpt.get().deafen(true).queue();
-							});
-							
-							channel.sendMessage("Successfully deafened " + memberOpt.get().getUser().getAsMention() + ". `" + reason + "`").queue();
+							Guardian.getInstance().getActionManager().deafen(member, memberOpt.get(), channel, reason);
 						} else {
 							channel.sendMessage("**This person is already deafened.**").queue();
 						}

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -36,17 +37,7 @@ public class KickCommand extends Command {
 				
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
-						memberOpt.get().getUser().openPrivateChannel().queue(pm -> {
-							pm.sendMessage("You were kicked from the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
-								guild.kick(memberOpt.get(), reason).queue();
-							}, e -> {
-								guild.kick(memberOpt.get(), reason).queue();
-							});
-						}, e -> {
-							guild.kick(memberOpt.get(), reason).queue();
-						});
-						
-						channel.sendMessage("Successfully kicked " + memberOpt.get().getUser().getAsMention() + " from the server. `" + reason + "`").queue();
+						Guardian.getInstance().getActionManager().kick(member, memberOpt.get(), channel, reason);
 					} else {
 						channel.sendMessage("**You cannot kick this person.**").queue();
 					}

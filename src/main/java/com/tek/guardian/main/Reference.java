@@ -17,6 +17,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class Reference {
 	
+	public static final String BOOT = "👢";
+	public static final String HAMMER = "🔨";
+	public static final String SILENCE = "🔇";
+	public static final String DEAF = "🎧";
+	
 	public static final Pattern TAG_REGEX = Pattern.compile("^(\\w|\\s)+#\\d{4}$");
 	public static final Pattern SNOWFLAKE_REGEX = Pattern.compile("^\\d+$");
 	

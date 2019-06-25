@@ -25,6 +25,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -32,7 +33,6 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -368,7 +368,7 @@ public class Paginator extends Menu
     private Message renderPage(int pageNum, JDA jda)
     {
         MessageBuilder mbuilder = new MessageBuilder();
-        EmbedBuilder ebuilder = new EmbedBuilder();
+        EmbedBuilder ebuilder = Reference.formatEmbed(jda, text.apply(pageNum, pages));
         int start = (pageNum-1)*itemsPerPage;
         int end = strings.size() < pageNum*itemsPerPage ? strings.size() : pageNum*itemsPerPage;
         if(columns == 1)
@@ -376,8 +376,6 @@ public class Paginator extends Menu
             StringBuilder sbuilder = new StringBuilder();
             for(int i=start; i<end; i++)
                 sbuilder.append("\n").append(numberItems ? "`"+(i+1)+".` " : "").append(strings.get(i));
-            SelfUser self = jda.getSelfUser();
-            ebuilder.setAuthor(text.apply(pageNum, pages), null, self.getAvatarUrl());
             ebuilder.addField(title, sbuilder.toString(), true);
         }
         else
