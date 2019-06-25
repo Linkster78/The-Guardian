@@ -32,9 +32,11 @@ public class WhoisCommand extends Command {
 		menuBuilder = new ButtonMenu.Builder()
 				.setEventWaiter(waiter)
 				.setFinalAction(message -> {
-					message.clearReactions().queue(m -> {}, e -> {
-						message.delete().queue();
-					});
+					try {
+						message.clearReactions().queue(m -> {}, e -> {
+							message.delete().queue();
+						});
+					} catch(Exception e) { }
 				})
 				.setTimeout(1, TimeUnit.MINUTES);
 	}

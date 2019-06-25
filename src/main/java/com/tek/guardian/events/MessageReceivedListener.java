@@ -13,6 +13,8 @@ public class MessageReceivedListener extends ListenerAdapter {
 	
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		if(event.getAuthor().isBot()) return;
+		
 		Member member = event.getMember();
 		Guild guild = event.getGuild();
 		TextChannel channel = event.getChannel();

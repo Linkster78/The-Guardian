@@ -29,9 +29,11 @@ public class HelpCommand extends Command {
 				.waitOnSinglePage(false)
 				.useNumberedItems(false)
 				.setFinalAction(message -> {
-					message.clearReactions().queue(m -> {}, e -> {
-						message.delete().queue();
-					});
+					try {
+						message.clearReactions().queue(m -> {}, e -> {
+							message.delete().queue();
+						});
+					} catch(Exception e) { }
 				})
 				.setEventWaiter(waiter)
 				.setTimeout(1, TimeUnit.MINUTES);

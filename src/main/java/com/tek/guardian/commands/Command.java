@@ -27,6 +27,10 @@ public abstract class Command {
 	
 	public abstract boolean call(JDA jda, ServerProfile profile, Member member, Guild guild, TextChannel channel, String label, String[] args);
 	
+	public boolean canCallAnywhere() {
+		return false;
+	}
+	
 	public String getFormattedSyntax() {
 		return getName() + (getSyntax() == null ? "" : " " + getSyntax());
 	}

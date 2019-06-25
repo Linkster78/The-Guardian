@@ -120,6 +120,18 @@ public class ServerProfile {
 		return lockedChannels.contains(channelId);
 	}
 	
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+	
+	public void setDeleteCommands(boolean deleteCommands) {
+		this.deleteCommands = deleteCommands;
+	}
+	
+	public void setReplyUnknown(boolean replyUnknown) {
+		this.replyUnknown = replyUnknown;
+	}
+	
 	public String getServerId() {
 		return serverId;
 	}

@@ -8,6 +8,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
+import com.tek.guardian.commands.ConfigCommand;
 import com.tek.guardian.commands.DeafenCommand;
 import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.commands.KickCommand;
@@ -67,6 +68,7 @@ public class Guardian {
 		commandHandler = new CommandHandler();
 		commandHandler.registerCommand(new HelpCommand(waiter));
 		commandHandler.registerCommand(new WhoisCommand(waiter));
+		commandHandler.registerCommand(new ConfigCommand());
 		commandHandler.registerCommand(new ServerCommand());
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());

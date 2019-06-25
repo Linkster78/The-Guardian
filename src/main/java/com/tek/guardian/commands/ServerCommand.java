@@ -21,7 +21,7 @@ public class ServerCommand extends Command {
 	@Override
 	public boolean call(JDA jda, ServerProfile profile, Member member, Guild guild, TextChannel channel, String label, String[] args) {
 		MessageEmbed embed = Reference.formatEmbed(jda, "Server Information")
-				.setColor(Color.green)
+				.setColor(Color.lightGray)
 				.setThumbnail(guild.getIconUrl())
 				.addField("Name", guild.getName(), true)
 				.addField("Description", guild.getDescription() == null ? "None" : guild.getDescription(), true)

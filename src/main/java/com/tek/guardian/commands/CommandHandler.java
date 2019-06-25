@@ -39,33 +39,39 @@ public class CommandHandler extends ListenerAdapter {
 		
 		ServerProfile profile = Guardian.getInstance().getMongoAdapter().getServerProfile(guild);
 		if(label.startsWith(profile.getPrefix())) {
-			if(profile.canSendCommand(channel.getId(), member)) {
-				if(tokens[0].length() != profile.getPrefix().length()) {
-					String command = tokens[0].substring(profile.getPrefix().length());
-					for(Command cmd : commands) {
-						if(cmd.getName().equalsIgnoreCase(command)) {
-							if(!cmd.call(event.getJDA(), profile, member, guild, channel, label, args)) {
-								channel.sendMessage("**Invalid syntax.** `" + profile.getPrefix() + cmd.getFormattedSyntax() + "`").queue();
-							}
-							
-							if(profile.doesDeleteCommands()) {
-								event.getMessage().delete().queue();
-							}
-							
-							return;
+			if(tokens[0].length() != profile.getPrefix().length()) {
+				String command = tokens[0].substring(profile.getPrefix().length());
+				Command commandCalled = null;
+				for(Command cmd : commands) {
+					if(cmd.getName().equalsIgnoreCase(command)) {
+						commandCalled = cmd;
+						break;
+					}
+				}
+				
+				if(commandCalled != null) {
+					if(commandCalled.canCallAnywhere() || profile.canSendCommand(channel.getId(), member)) {
+						if(!commandCalled.call(event.getJDA(), profile, member, guild, channel, label, args)) {
+							channel.sendMessage("**Invalid syntax.** `" + profile.getPrefix() + commandCalled.getFormattedSyntax() + "`").queue();
 						}
-					}
-					
-					if(profile.doesDeleteCommands()) {
-						event.getMessage().delete().queue();
-					}
-					
-					if(profile.doesReplyUnknown()) {
-						channel.sendMessage("**The command** `" + command + "` **does not exist.**").queue();
+						
+						if(profile.doesDeleteCommands()) {
+							event.getMessage().delete().queue();
+						}
+					} else {
+						if(profile.doesDeleteCommands()) {
+							event.getMessage().delete().queue();
+						}
 					}
 				} else {
 					if(profile.doesDeleteCommands()) {
 						event.getMessage().delete().queue();
+					}
+					
+					if(profile.canSendCommand(channel.getId(), member)) {
+						if(profile.doesReplyUnknown()) {
+							channel.sendMessage("**The command** `" + command + "` **does not exist.**").queue();
+						}
 					}
 				}
 			} else {
