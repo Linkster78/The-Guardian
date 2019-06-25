@@ -12,6 +12,7 @@ import com.tek.guardian.commands.DeafenCommand;
 import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.commands.KickCommand;
 import com.tek.guardian.commands.LockCommand;
+import com.tek.guardian.commands.MentionCommand;
 import com.tek.guardian.commands.MuteCommand;
 import com.tek.guardian.commands.TempbanCommand;
 import com.tek.guardian.commands.TempdeafenCommand;
@@ -77,6 +78,7 @@ public class Guardian {
 		commandHandler.registerCommand(new LockCommand());
 		commandHandler.registerCommand(new UnlockCommand());
 		commandHandler.registerCommand(new ClearCommand());
+		commandHandler.registerCommand(new MentionCommand());
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), new MessageReceivedListener());
 		
 		taskTimer = new TaskTimer();

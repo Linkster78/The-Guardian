@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -79,6 +80,23 @@ public class Reference {
 		while(channelIterator.hasNext()) {
 			channel = channelIterator.next();
 			if(channel.getName().equalsIgnoreCase(str) || channel.getAsMention().equalsIgnoreCase(str)) return Optional.of(channel);
+		}
+		
+		return Optional.empty();
+	}
+	
+	public static Optional<Role> roleFromString(Guild guild, String str) {
+		Role role;
+		
+		if(Reference.SNOWFLAKE_REGEX.matcher(str).matches()) {
+			role = guild.getRoleById(str);
+			if(role != null) return Optional.of(role);
+		}
+		
+		Iterator<Role> roleIterator = guild.getRoles().iterator();
+		while(roleIterator.hasNext()) {
+			role = roleIterator.next();
+			if(role.getName().equalsIgnoreCase(str) || role.getAsMention().equalsIgnoreCase(str)) return Optional.of(role);
 		}
 		
 		return Optional.empty();

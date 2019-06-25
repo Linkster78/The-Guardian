@@ -3,6 +3,8 @@
 ## The Guardian
 The guardian is a moderation/administration bot made with server owners in mind. It is easy to use, there is a large set of tools from simple moderation to server backups and security scans.
 
+Invite Link: 
+
 ## Team Members
 
  - Toon Link#8313
