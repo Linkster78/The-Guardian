@@ -32,15 +32,22 @@ public class MongoAdapter {
 		if(profileQuery.count() > 0) {
 			ServerProfile profile = profileQuery.first();
 			datastore.delete(profile);
-			profile.leave(guild);
 		}
 	}
 	
 	public ServerProfile getServerProfile(Guild guild) {
 		Query<ServerProfile> profileQuery = datastore.createQuery(ServerProfile.class)
 				.field("serverId").equal(guild.getId());
-		if(profileQuery.count() > 0) return profileQuery.first();
+		if(profileQuery.count() > 0) {
+			ServerProfile first = profileQuery.first();
+			first.verify(guild);
+			return first;
+		}
 		return createServerProfile(guild);
+	}
+	
+	public void saveServerProfile(ServerProfile serverProfile) {
+		datastore.save(serverProfile);
 	}
 	
 	public Morphia getMorphia() {
