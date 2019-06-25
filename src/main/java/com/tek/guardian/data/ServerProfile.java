@@ -13,6 +13,7 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -96,7 +97,14 @@ public class ServerProfile {
 		Guardian.getInstance().getMongoAdapter().saveServerProfile(this);
 	}
 	
-	public boolean canSendCommand(String channelId) {
+	public boolean canSendCommand(String channelId, Member member) {
+		if(lockedChannels.contains(channelId)) {
+			if(member.hasPermission(Permission.MESSAGE_MANAGE) || member.hasPermission(Permission.MANAGE_CHANNEL)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 		if(commandChannels.isEmpty()) return true;
 		return commandChannels.contains(channelId);
 	}
