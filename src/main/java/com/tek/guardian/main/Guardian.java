@@ -10,14 +10,17 @@ import com.tek.guardian.commands.CommandHandler;
 import com.tek.guardian.commands.DeafenCommand;
 import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.commands.KickCommand;
+import com.tek.guardian.commands.LockCommand;
 import com.tek.guardian.commands.MuteCommand;
 import com.tek.guardian.commands.TempbanCommand;
 import com.tek.guardian.commands.TempdeafenCommand;
 import com.tek.guardian.commands.TempmuteCommand;
 import com.tek.guardian.commands.UndeafenCommand;
+import com.tek.guardian.commands.UnlockCommand;
 import com.tek.guardian.commands.UnmuteCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
+import com.tek.guardian.events.MessageReceivedListener;
 import com.tek.guardian.events.ServerStatusListener;
 import com.tek.guardian.timer.TaskTimer;
 
@@ -64,8 +67,10 @@ public class Guardian {
 		commandHandler.registerCommand(new DeafenCommand());
 		commandHandler.registerCommand(new TempdeafenCommand());
 		commandHandler.registerCommand(new UndeafenCommand());
+		commandHandler.registerCommand(new LockCommand());
+		commandHandler.registerCommand(new UnlockCommand());
 		commandHandler.registerCommand(new ClearCommand());
-		jda.addEventListener(commandHandler, new ServerStatusListener());
+		jda.addEventListener(commandHandler, new ServerStatusListener(), new MessageReceivedListener());
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();

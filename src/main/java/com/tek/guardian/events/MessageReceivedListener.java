@@ -18,8 +18,10 @@ public class MessageReceivedListener extends ListenerAdapter {
 		TextChannel channel = event.getChannel();
 		ServerProfile profile = Guardian.getInstance().getMongoAdapter().getServerProfile(guild);
 		
-		if(!profile.canSendCommand(channel.getId(), member)) {
-			event.getMessage().delete().queue();
+		if(profile.isLocked(channel.getId())) {
+			if(!profile.canMessage(channel.getId(), member)) {
+				event.getMessage().delete().queue();
+			}
 		}
 	}
 	

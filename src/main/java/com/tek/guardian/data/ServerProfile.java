@@ -1,5 +1,6 @@
 package com.tek.guardian.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,8 +35,8 @@ public class ServerProfile {
 	private Map<String, String> roleMap;
 	
 	public ServerProfile() {
-		this.commandChannels = Arrays.asList();
-		this.lockedChannels = Arrays.asList();
+		this.commandChannels = new ArrayList<String>();
+		this.lockedChannels = new ArrayList<String>();
 		this.roleMap = new HashMap<String, String>();
 	}
 	
@@ -44,8 +45,8 @@ public class ServerProfile {
 		this.prefix = Guardian.getInstance().getConfig().getDefaultPrefix();
 		this.deleteCommands = true;
 		this.replyUnknown = true;
-		this.commandChannels = Arrays.asList();
-		this.lockedChannels = Arrays.asList();
+		this.commandChannels = new ArrayList<String>();
+		this.lockedChannels = new ArrayList<String>();
 		this.roleMap = new HashMap<String, String>();
 	}
 	
@@ -98,15 +99,21 @@ public class ServerProfile {
 	}
 	
 	public boolean canSendCommand(String channelId, Member member) {
+		if(!canMessage(channelId, member)) return false;
+		if(commandChannels.isEmpty()) return true;
+		return commandChannels.contains(channelId);
+	}
+	
+	public boolean canMessage(String channelId, Member member) {
 		if(lockedChannels.contains(channelId)) {
 			if(member.hasPermission(Permission.MESSAGE_MANAGE) || member.hasPermission(Permission.MANAGE_CHANNEL)) {
 				return true;
 			} else {
 				return false;
 			}
+		} else {
+			return true;
 		}
-		if(commandChannels.isEmpty()) return true;
-		return commandChannels.contains(channelId);
 	}
 	
 	public boolean isLocked(String channelId) {

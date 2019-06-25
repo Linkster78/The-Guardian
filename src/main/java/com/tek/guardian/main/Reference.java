@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 public class Reference {
 	
@@ -56,6 +57,23 @@ public class Reference {
 		while(memberIterator.hasNext()) {
 			member = memberIterator.next();
 			if(member.getAsMention().equals(str) || member.getUser().getAsMention().equals(str)) return Optional.of(member);
+		}
+		
+		return Optional.empty();
+	}
+	
+	public static Optional<TextChannel> textChannelFromString(Guild guild, String str) {
+		TextChannel channel;
+		
+		if(Reference.SNOWFLAKE_REGEX.matcher(str).matches()) {
+			channel = guild.getTextChannelById(str);
+			if(channel != null) return Optional.of(channel);
+		}
+		
+		Iterator<TextChannel> channelIterator = guild.getTextChannels().iterator();
+		while(channelIterator.hasNext()) {
+			channel = channelIterator.next();
+			if(channel.getName().equalsIgnoreCase(str) || channel.getAsMention().equalsIgnoreCase(str)) return Optional.of(channel);
 		}
 		
 		return Optional.empty();
