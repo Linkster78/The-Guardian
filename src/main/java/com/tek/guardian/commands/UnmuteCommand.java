@@ -20,7 +20,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class UnmuteCommand extends Command {
 
 	public UnmuteCommand() {
-		super("unmute", Arrays.asList(), "<user> [reason]", "Unmutes a member.", true);
+		super("unmute", Arrays.asList(), "<user>", "Unmutes a member.", true);
 	}
 
 	@Override

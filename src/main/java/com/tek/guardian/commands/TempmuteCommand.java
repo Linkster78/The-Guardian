@@ -20,7 +20,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class TempmuteCommand extends Command {
 
 	public TempmuteCommand() {
-		super("tempmute", Arrays.asList(), "<user> <time> [reason]", "Mutes a member temporarily.", true);
+		super("tempmute", Arrays.asList("tmute"), "<user> <time> [reason]", "Mutes a member temporarily.", true);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class TempdeafenCommand extends Command {
 
 	public TempdeafenCommand() {
-		super("tempdeafen", Arrays.asList(), "<user> <time> [reason]", "Deafens a member temporarily.", true);
+		super("tempdeafen", Arrays.asList("tdeafen", "tdeaf"), "<user> <time> [reason]", "Deafens a member temporarily.", true);
 	}
 
 	@Override

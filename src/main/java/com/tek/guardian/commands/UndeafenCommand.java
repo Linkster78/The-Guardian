@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class UndeafenCommand extends Command {
 
 	public UndeafenCommand() {
-		super("undeafen", Arrays.asList(), "<user> [reason]", "Uneafens a member.", true);
+		super("undeafen", Arrays.asList("undeaf"), "<user>", "Uneafens a member.", true);
 	}
 
 	@Override

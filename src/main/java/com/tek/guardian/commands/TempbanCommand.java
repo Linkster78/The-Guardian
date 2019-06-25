@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class TempbanCommand extends Command {
 
 	public TempbanCommand() {
-		super("tempban", Arrays.asList(), "<user> [reason]", "Temporarily bans a member and specifies a reason.", true);
+		super("tempban", Arrays.asList("tban"), "<user> [reason]", "Temporarily bans a member and specifies a reason.", true);
 	}
 
 	@Override

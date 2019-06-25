@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class DeafenCommand extends Command {
 
 	public DeafenCommand() {
-		super("deafen", Arrays.asList(), "<user> [reason]", "Deafens a member and specifies a reason.", true);
+		super("deafen", Arrays.asList("deaf"), "<user> [reason]", "Deafens a member and specifies a reason.", true);
 	}
 
 	@Override

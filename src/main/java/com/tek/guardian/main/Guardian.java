@@ -5,6 +5,7 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 
 import com.tek.guardian.commands.BanCommand;
+import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
 import com.tek.guardian.commands.DeafenCommand;
 import com.tek.guardian.commands.HelpCommand;
@@ -63,6 +64,7 @@ public class Guardian {
 		commandHandler.registerCommand(new DeafenCommand());
 		commandHandler.registerCommand(new TempdeafenCommand());
 		commandHandler.registerCommand(new UndeafenCommand());
+		commandHandler.registerCommand(new ClearCommand());
 		jda.addEventListener(commandHandler, new ServerStatusListener());
 		
 		taskTimer = new TaskTimer();
