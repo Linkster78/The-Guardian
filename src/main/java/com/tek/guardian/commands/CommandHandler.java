@@ -47,7 +47,7 @@ public class CommandHandler extends ListenerAdapter {
 		
 		ServerProfile profile = Guardian.getInstance().getMongoAdapter().getServerProfile(guild);
 		if(label.startsWith(profile.getPrefix())) {
-			if(profile.canSendCommand(channel.getId())) {
+			if(profile.canSendCommand(channel.getId()) && !profile.getLockedChannels().contains(channel.getId())) {
 				if(tokens[0].length() != profile.getPrefix().length()) {
 					String command = tokens[0].substring(profile.getPrefix().length());
 					for(Command cmd : commands) {
