@@ -8,6 +8,8 @@ import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.CommandHandler;
 import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.commands.KickCommand;
+import com.tek.guardian.commands.MuteCommand;
+import com.tek.guardian.commands.UnmuteCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.ServerStatusListener;
@@ -47,6 +49,8 @@ public class Guardian {
 		commandHandler.registerCommand(new HelpCommand());
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());
+		commandHandler.registerCommand(new MuteCommand());
+		commandHandler.registerCommand(new UnmuteCommand());
 		jda.addEventListener(commandHandler, new ServerStatusListener());
 		
 		LOGGER.info("Launched Guardian successfully!");

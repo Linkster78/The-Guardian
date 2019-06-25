@@ -3,6 +3,7 @@ package com.tek.guardian.commands;
 import java.awt.Color;
 import java.util.Arrays;
 
+import com.tek.guardian.data.ServerProfile;
 import com.tek.guardian.main.Guardian;
 
 import net.dv8tion.jda.api.JDA;
@@ -18,7 +19,7 @@ public class HelpCommand extends Command {
 	}
 
 	@Override
-	public boolean call(JDA jda, Member member, Guild guild, TextChannel channel, String label, String[] args) {
+	public boolean call(JDA jda, ServerProfile profile, Member member, Guild guild, TextChannel channel, String label, String[] args) {
 		if(args.length == 0) {
 			StringBuilder helpBuilder = new StringBuilder();
 			for(Command command : Guardian.getInstance().getCommandHandler().getCommands()) {

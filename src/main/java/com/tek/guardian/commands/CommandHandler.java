@@ -52,7 +52,7 @@ public class CommandHandler extends ListenerAdapter {
 					String command = tokens[0].substring(profile.getPrefix().length());
 					for(Command cmd : commands) {
 						if(cmd.getName().equalsIgnoreCase(command)) {
-							if(!cmd.call(event.getJDA(), member, guild, channel, label, args)) {
+							if(!cmd.call(event.getJDA(), profile, member, guild, channel, label, args)) {
 								channel.sendMessage("**Invalid syntax.** `" + profile.getPrefix() + cmd.getFormattedSyntax() + "`").queue();
 							}
 							

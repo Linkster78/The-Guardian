@@ -3,6 +3,8 @@ package com.tek.guardian.commands;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.tek.guardian.data.ServerProfile;
+
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -16,7 +18,7 @@ public class KickCommand extends Command {
 	}
 
 	@Override
-	public boolean call(JDA jda, Member member, Guild guild, TextChannel channel, String label, String[] args) {
+	public boolean call(JDA jda, ServerProfile profile, Member member, Guild guild, TextChannel channel, String label, String[] args) {
 		if(args.length >= 1) {
 			if(member.hasPermission(Permission.KICK_MEMBERS)) {
 				String reason;
