@@ -12,6 +12,7 @@ import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -34,6 +35,8 @@ public class ConfigCommand extends Command {
 						.addField("Delete Commands", "**Description:** Does the bot delete commands after execution?\n**Key:** `delcmd`\n**Value:** yes/true/on no/false/off", true)
 						.addField("Reply Unknown", "**Description:** Does the bot inform the user when the command doesn't exist?\n**Key:** `replyunknown`\n**Value:** yes/true/on no/false/off", true)
 						.addField("Command Channels", "**Description:** Which channels can users use commands in?\n**Key:** `cmdchannels`\n**Value:** A list of channels, separated by spaces.", true)
+						.addField("Voice Channel Category", "**Description:** Which category holds custom voice channels?\n**Key:** `vccategory`\n**Value:** A category name or ID", true)
+						.addField("Suggestions Channel", "**Description:** Which channel will receive suggestions?\n**Key:** `suggestionschannel`\n**Value:** A channel name or ID", true)
 						.build();
 				
 				channel.sendMessage(embed).queue();
@@ -110,6 +113,30 @@ public class ConfigCommand extends Command {
 									.collect(Collectors.joining(", ")) + ".").queue();
 					} else {
 						channel.sendMessage("**Invalid Value:** The value must be a list of text channels. `Ex: channel1 channel2`.").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("vccategory") || key.equalsIgnoreCase("vcc")) {
+					Optional<Category> categoryOpt = Reference.categoryFromString(guild, value);
+					
+					if(categoryOpt.isPresent()) {
+						profile.setVoiceChannelCategory(guild, categoryOpt.get().getId());
+						profile.save();
+						channel.sendMessage("**Success!** The voice channel category is now **" + categoryOpt.get().getName() + "**.").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("suggestionschannel") || key.equalsIgnoreCase("suggestions")) {
+					Optional<TextChannel> channelOpt = Reference.textChannelFromString(guild, value);
+					
+					if(channelOpt.isPresent()) {
+						profile.setSuggestionChannel(channelOpt.get().getId());
+						profile.save();
+						channel.sendMessage("**Success!** The suggestions channel is now " + channelOpt.get().getAsMention() + ".").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
 					}
 				}
 				

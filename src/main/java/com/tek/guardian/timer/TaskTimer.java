@@ -13,6 +13,7 @@ public class TaskTimer {
 	
 	public void start() {
 		timer.scheduleAtFixedRate(new TemporaryActionChecker(), 0, TimeUnit.SECONDS.toMillis(30));
+		timer.scheduleAtFixedRate(new VoiceChannelChecker(), 0, TimeUnit.MINUTES.toMillis(1));
 	}
 	
 	public Timer getTimer() {

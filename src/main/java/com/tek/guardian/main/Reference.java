@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -80,6 +81,23 @@ public class Reference {
 		while(channelIterator.hasNext()) {
 			channel = channelIterator.next();
 			if(channel.getName().equalsIgnoreCase(str) || channel.getAsMention().equalsIgnoreCase(str)) return Optional.of(channel);
+		}
+		
+		return Optional.empty();
+	}
+	
+	public static Optional<Category> categoryFromString(Guild guild, String str) {
+		Category category;
+		
+		if(Reference.SNOWFLAKE_REGEX.matcher(str).matches()) {
+			category = guild.getCategoryById(str);
+			if(category != null) return Optional.of(category);
+		}
+		
+		Iterator<Category> categoryIterator = guild.getCategories().iterator();
+		while(categoryIterator.hasNext()) {
+			category = categoryIterator.next();
+			if(category.getName().equalsIgnoreCase(str)) return Optional.of(category);
 		}
 		
 		return Optional.empty();

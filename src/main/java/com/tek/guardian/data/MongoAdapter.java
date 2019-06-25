@@ -3,6 +3,7 @@ package com.tek.guardian.data;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import com.mongodb.MongoClient;
 
@@ -36,6 +37,7 @@ public class MongoAdapter {
 		if(profileQuery.count() > 0) {
 			ServerProfile profile = profileQuery.first();
 			datastore.delete(profile);
+			profile.leave(guild);
 		}
 	}
 	
@@ -70,6 +72,45 @@ public class MongoAdapter {
 	
 	public void createTemporaryAction(TemporaryAction action) {
 		datastore.save(action);
+	}
+	
+	public List<CustomVoiceChannel> getCustomVoiceChannels() {
+		Query<CustomVoiceChannel> customVoiceChannelQuery = datastore.createQuery(CustomVoiceChannel.class);
+		ArrayList<CustomVoiceChannel> customVoiceChannelList = new ArrayList<CustomVoiceChannel>((int) customVoiceChannelQuery.count());
+		Iterator<CustomVoiceChannel> customVoiceChannelIterator = customVoiceChannelQuery.iterator();
+		while(customVoiceChannelIterator.hasNext()) {
+			customVoiceChannelList.add(customVoiceChannelIterator.next());
+		}
+		return customVoiceChannelList;
+	}
+	
+	public Optional<CustomVoiceChannel> getCustomVoiceChannel(String guildId, String userId) {
+		Query<CustomVoiceChannel> channelQuery = datastore.createQuery(CustomVoiceChannel.class)
+				.field("userId").equal(userId)
+				.field("guildId").equal(guildId);
+		if(channelQuery.count() > 0) {
+			return Optional.of(channelQuery.first());
+		} else {
+			return Optional.empty();
+		}
+	}
+	
+	public Optional<CustomVoiceChannel> getCustomVoiceChannel(String channelId) {
+		Query<CustomVoiceChannel> channelQuery = datastore.createQuery(CustomVoiceChannel.class)
+				.field("channelId").equal(channelId);
+		if(channelQuery.count() > 0) {
+			return Optional.of(channelQuery.first());
+		} else {
+			return Optional.empty();
+		}
+	}
+	
+	public void removeCustomVoiceChannel(CustomVoiceChannel channel) {
+		datastore.delete(channel);
+	}
+	
+	public void saveCustomVoiceChannel(CustomVoiceChannel channel) {
+		datastore.save(channel);
 	}
 	
 	public Morphia getMorphia() {

@@ -9,6 +9,7 @@ import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
 import com.tek.guardian.commands.ConfigCommand;
+import com.tek.guardian.commands.CustomVoiceChannelCommand;
 import com.tek.guardian.commands.DeafenCommand;
 import com.tek.guardian.commands.HelpCommand;
 import com.tek.guardian.commands.KickCommand;
@@ -16,6 +17,7 @@ import com.tek.guardian.commands.LockCommand;
 import com.tek.guardian.commands.MentionCommand;
 import com.tek.guardian.commands.MuteCommand;
 import com.tek.guardian.commands.ServerCommand;
+import com.tek.guardian.commands.SuggestCommand;
 import com.tek.guardian.commands.TempbanCommand;
 import com.tek.guardian.commands.TempdeafenCommand;
 import com.tek.guardian.commands.TempmuteCommand;
@@ -27,6 +29,7 @@ import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.MessageReceivedListener;
 import com.tek.guardian.events.ServerStatusListener;
+import com.tek.guardian.events.VoiceChannelListener;
 import com.tek.guardian.timer.TaskTimer;
 
 import net.dv8tion.jda.api.JDA;
@@ -68,6 +71,8 @@ public class Guardian {
 		commandHandler = new CommandHandler();
 		commandHandler.registerCommand(new HelpCommand(waiter));
 		commandHandler.registerCommand(new WhoisCommand(waiter));
+		commandHandler.registerCommand(new CustomVoiceChannelCommand());
+		commandHandler.registerCommand(new SuggestCommand());
 		commandHandler.registerCommand(new ConfigCommand());
 		commandHandler.registerCommand(new ServerCommand());
 		commandHandler.registerCommand(new KickCommand());
@@ -83,7 +88,8 @@ public class Guardian {
 		commandHandler.registerCommand(new UnlockCommand());
 		commandHandler.registerCommand(new ClearCommand());
 		commandHandler.registerCommand(new MentionCommand());
-		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), new MessageReceivedListener());
+		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
+				new MessageReceivedListener(), new VoiceChannelListener());
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();

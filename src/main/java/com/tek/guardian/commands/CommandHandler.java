@@ -47,6 +47,13 @@ public class CommandHandler extends ListenerAdapter {
 						commandCalled = cmd;
 						break;
 					}
+					
+					for(String alias : cmd.getAliases()) {
+						if(alias.equalsIgnoreCase(command)) {
+							commandCalled = cmd;
+							break;
+						}
+					}
 				}
 				
 				if(commandCalled != null) {
