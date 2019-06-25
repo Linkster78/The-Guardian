@@ -60,13 +60,13 @@ public class HelpCommand extends Command {
 			
 			for(Command command : Guardian.getInstance().getCommandHandler().getCommands()) {
 				if(command.isDisplayed()) {
-					paginatorBuilder.addItems("`" + command.getFormattedSyntax() + "` **-** *" + command.getDescription() + "*");
+					paginatorBuilder.addItems("`" + profile.getPrefix() + command.getFormattedSyntax() + "` **-** *" + command.getDescription() + "*");
 				}
 			}
 			
 			Paginator paginator = paginatorBuilder
 					.setColor(Color.cyan)
-					.setText((total, current) -> "Help Menu (" + current + "/" + total + ")")
+					.setText((current, total) -> "Help Menu (" + current + "/" + total + ")")
 					.setTitle("Command List")
 					.setDescription("<> = Required Parameter, [] = Optional Parameter")
 					.setUsers(member.getUser())

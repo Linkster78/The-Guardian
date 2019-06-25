@@ -14,6 +14,7 @@ import com.tek.guardian.commands.KickCommand;
 import com.tek.guardian.commands.LockCommand;
 import com.tek.guardian.commands.MentionCommand;
 import com.tek.guardian.commands.MuteCommand;
+import com.tek.guardian.commands.ServerCommand;
 import com.tek.guardian.commands.TempbanCommand;
 import com.tek.guardian.commands.TempdeafenCommand;
 import com.tek.guardian.commands.TempmuteCommand;
@@ -66,6 +67,7 @@ public class Guardian {
 		commandHandler = new CommandHandler();
 		commandHandler.registerCommand(new HelpCommand(waiter));
 		commandHandler.registerCommand(new WhoisCommand(waiter));
+		commandHandler.registerCommand(new ServerCommand());
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());
 		commandHandler.registerCommand(new TempbanCommand());
