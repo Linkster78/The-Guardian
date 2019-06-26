@@ -37,7 +37,7 @@ public class KickCommand extends Command {
 				
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
-						Guardian.getInstance().getActionManager().kick(member, memberOpt.get(), channel, reason);
+						Guardian.getInstance().getActionManager().kick(member, memberOpt.get(), channel, reason, profile);
 					} else {
 						channel.sendMessage("**You cannot kick this person.**").queue();
 					}

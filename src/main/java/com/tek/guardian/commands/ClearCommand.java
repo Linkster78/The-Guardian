@@ -27,12 +27,12 @@ public class ClearCommand extends Command {
 					int amount = Integer.parseInt(args[0]);
 					
 					if(args.length == 1) {
-						Guardian.getInstance().getActionManager().clear(member, channel, amount);
+						Guardian.getInstance().getActionManager().clear(member, channel, amount, profile);
 					} else if(args.length == 2) {
 						Optional<Member> memberOpt = Reference.memberFromString(guild, args[1]);
 						
 						if(memberOpt.isPresent()) {
-							Guardian.getInstance().getActionManager().clearUser(member, memberOpt.get(), channel, amount);
+							Guardian.getInstance().getActionManager().clearUser(member, memberOpt.get(), channel, amount, profile);
 						} else {
 							channel.sendMessage("**No member was found by the identifier** `" + args[1] + "`").queue();
 						}

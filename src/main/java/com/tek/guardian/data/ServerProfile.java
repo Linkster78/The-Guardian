@@ -37,6 +37,7 @@ public class ServerProfile {
 	private String voiceChannelCategory;
 	private String suggestionChannel;
 	private String flagChannel;
+	private String logChannel;
 	
 	public ServerProfile() {
 		this.commandChannels = new ArrayList<String>();
@@ -45,6 +46,7 @@ public class ServerProfile {
 		this.voiceChannelCategory = null;
 		this.suggestionChannel = null;
 		this.flagChannel = null;
+		this.logChannel = null;
 	}
 	
 	public ServerProfile(String serverId) {
@@ -59,6 +61,7 @@ public class ServerProfile {
 		this.voiceChannelCategory = null;
 		this.suggestionChannel = null;
 		this.flagChannel = null;
+		this.logChannel = null;
 	}
 	
 	public void join(Guild guild) {
@@ -194,6 +197,10 @@ public class ServerProfile {
 		this.flagChannel = flagChannel;
 	}
 	
+	public void setLogChannel(String logChannel) {
+		this.logChannel = logChannel;
+	}
+	
 	public String getServerId() {
 		return serverId;
 	}
@@ -236,6 +243,10 @@ public class ServerProfile {
 	
 	public String getFlagChannel() {
 		return flagChannel;
+	}
+	
+	public String getLogChannel() {
+		return logChannel;
 	}
 	
 }

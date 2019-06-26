@@ -37,7 +37,7 @@ public class BanCommand extends Command {
 				
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
-						Guardian.getInstance().getActionManager().ban(member, memberOpt.get(), channel, reason);
+						Guardian.getInstance().getActionManager().ban(member, memberOpt.get(), channel, reason, profile);
 					} else {
 						channel.sendMessage("**You cannot ban this person.**").queue();
 					}

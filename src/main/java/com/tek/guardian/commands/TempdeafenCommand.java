@@ -41,7 +41,7 @@ public class TempdeafenCommand extends Command {
 						
 						if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
 							if(!memberOpt.get().getVoiceState().isGuildDeafened()) {
-								Guardian.getInstance().getActionManager().temporarilyDeafen(member, memberOpt.get(), time, channel, reason);
+								Guardian.getInstance().getActionManager().temporarilyDeafen(member, memberOpt.get(), time, channel, reason, profile);
 							} else {
 								channel.sendMessage("**This person is already deafened.**").queue();
 							}

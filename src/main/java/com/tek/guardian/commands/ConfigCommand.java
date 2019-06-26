@@ -40,6 +40,7 @@ public class ConfigCommand extends Command {
 							.addField("Voice Channel Category", "**Description:** Which category holds custom voice channels?\n**Key:** `vccategory`\n**Value:** A category name or ID", true)
 							.addField("Suggestions Channel", "**Description:** Which channel will receive suggestions?\n**Key:** `suggestionschannel`\n**Value:** A channel name or ID", true)
 							.addField("Flagging Channel", "**Description:** Which channel will suspicious users be flagged in?\n**Key:** `flagchannel`\n**Value:** A channel name or ID", true)
+							.addField("Log Channel", "**Description:** Which channel will actions be logged in?\n**Key:** `logchannel`\n**Value:** A channel name or ID", true)
 							.build();
 					
 					channel.sendMessage(embed).queue();
@@ -63,6 +64,7 @@ public class ConfigCommand extends Command {
 							.addField("Voice Channel Category", "`" + (profile.getVoiceChannelCategory() != null ? guild.getCategoryById(profile.getVoiceChannelCategory()) != null ? guild.getCategoryById(profile.getVoiceChannelCategory()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.addField("Suggestions Channel", "`" + (profile.getSuggestionChannel() != null ? guild.getTextChannelById(profile.getSuggestionChannel()) != null ? guild.getTextChannelById(profile.getSuggestionChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.addField("Flagging Channel", "`" + (profile.getFlagChannel() != null ? guild.getTextChannelById(profile.getFlagChannel()) != null ? guild.getTextChannelById(profile.getFlagChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
+							.addField("Log Channel", "`" + (profile.getLogChannel() != null ? guild.getTextChannelById(profile.getLogChannel()) != null ? guild.getTextChannelById(profile.getLogChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.build();
 					
 					channel.sendMessage(embed).queue();
@@ -192,6 +194,18 @@ public class ConfigCommand extends Command {
 						profile.setFlagChannel(channelOpt.get().getId());
 						profile.save();
 						channel.sendMessage("**Success!** The flagging channel is now " + channelOpt.get().getAsMention() + ".").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("logchannel") || key.equalsIgnoreCase("log")) {
+					Optional<TextChannel> channelOpt = Reference.textChannelFromString(guild, value);
+					
+					if(channelOpt.isPresent()) {
+						profile.setLogChannel(channelOpt.get().getId());
+						profile.save();
+						channel.sendMessage("**Success!** The logging channel is now " + channelOpt.get().getAsMention() + ".").queue();
 					} else {
 						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
 					}

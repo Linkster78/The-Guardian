@@ -53,9 +53,9 @@ public class WhoisCommand extends Command {
 					
 					if(guild.getMemberById(who.getId()) != null) {
 						if(emote.getEmoji().equals(Reference.BOOT)) {
-							Guardian.getInstance().getActionManager().kick(member, memberOpt.get(), channel, reason);
+							Guardian.getInstance().getActionManager().kick(member, memberOpt.get(), channel, reason, profile);
 						} else if(emote.getEmoji().equals(Reference.HAMMER)) {
-							Guardian.getInstance().getActionManager().ban(member, memberOpt.get(), channel, reason);
+							Guardian.getInstance().getActionManager().ban(member, memberOpt.get(), channel, reason, profile);
 						} else if(emote.getEmoji().equals(Reference.SILENCE)) {
 							Role r = guild.getRoleById(profile.getRoleMap().get(BotRole.MUTED.name()));
 							
@@ -64,7 +64,7 @@ public class WhoisCommand extends Command {
 							}
 						} else if(emote.getEmoji().equals(Reference.DEAF)) {
 							if(!memberOpt.get().getVoiceState().isGuildDeafened()) {
-								Guardian.getInstance().getActionManager().deafen(member, memberOpt.get(), channel, reason);
+								Guardian.getInstance().getActionManager().deafen(member, memberOpt.get(), channel, reason, profile);
 							}
 						}
 					}

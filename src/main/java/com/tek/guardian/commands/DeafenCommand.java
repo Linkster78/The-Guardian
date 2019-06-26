@@ -38,7 +38,7 @@ public class DeafenCommand extends Command {
 				if(memberOpt.isPresent()) {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
 						if(!memberOpt.get().getVoiceState().isGuildDeafened()) {
-							Guardian.getInstance().getActionManager().deafen(member, memberOpt.get(), channel, reason);
+							Guardian.getInstance().getActionManager().deafen(member, memberOpt.get(), channel, reason, profile);
 						} else {
 							channel.sendMessage("**This person is already deafened.**").queue();
 						}

@@ -48,10 +48,10 @@ public class TemporaryAction {
 			if(member == null) return;
 			
 			if(member.getVoiceState().isGuildDeafened()) {
-				Guardian.getInstance().getActionManager().undeafen(null, member, null);
+				Guardian.getInstance().getActionManager().undeafen(null, member, null, profile);
 			}
 		} else if(action.equals(Action.TEMPBAN)) {
-			Guardian.getInstance().getActionManager().unban(guild, userId);
+			Guardian.getInstance().getActionManager().unban(guild, userId, profile);
 		}
 	}
 	

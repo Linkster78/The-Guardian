@@ -11,6 +11,7 @@ import com.tek.guardian.enums.BotRole;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.pagination.PaginationAction.PaginationIterator;
@@ -33,6 +34,17 @@ public class ActionManager {
 			});
 			
 			channel.sendMessage("Successfully muted " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
+			
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Muted")
+					.setDescription("A user was muted.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Muted User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Muted User ID", member.getId(), true)
+					.addField("Mute Duration", "Indefinite", true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't mute " + member.getUser().getAsMention()).queue();
 		}
@@ -57,6 +69,17 @@ public class ActionManager {
 			Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
 			
 			channel.sendMessage("Temporarily muted " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+		
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Muted")
+					.setDescription("A user was muted.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Muted User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Muted User ID", member.getId(), true)
+					.addField("Mute Duration", Reference.formatTime(time), true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't mute " + member.getUser().getAsMention()).queue();
 		}
@@ -86,12 +109,22 @@ public class ActionManager {
 			}
 			
 			if(channel != null) channel.sendMessage("Successfully unmuted " + member.getUser().getAsMention() + ".").queue();
+		
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Unmuted")
+					.setDescription("A user was unmuted.")
+					.addField("Staff Member", author == null ? "Temporary Action" : author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author == null ? "Temporary Action" : author.getId(), true)
+					.addField("Unmuted User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Unmuted User ID", member.getId(), true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't unmute " + member.getUser().getAsMention()).queue();
 		}
 	}
 	
-	public void deafen(Member author, Member member, TextChannel channel, String reason) {
+	public void deafen(Member author, Member member, TextChannel channel, String reason, ServerProfile profile) {
 		Guild guild = author.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
@@ -107,6 +140,17 @@ public class ActionManager {
 				});
 				
 				channel.sendMessage("Successfully deafened " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
+			
+				MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Deafened")
+						.setDescription("A user was deafened.")
+						.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+						.addField("Staff Member ID", author.getId(), true)
+						.addField("Deafened User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+						.addField("Deafened User ID", member.getId(), true)
+						.addField("Deafen Duration", "Indefinite", true)
+						.build();
+				
+				log(embed, guild, profile);
 			} else {
 				channel.sendMessage("The user " + member.getUser().getAsMention() + " is not in a voice channel.").queue();
 			}
@@ -115,7 +159,7 @@ public class ActionManager {
 		}
 	}
 	
-	public void temporarilyDeafen(Member author, Member member, long time, TextChannel channel, String reason) {
+	public void temporarilyDeafen(Member author, Member member, long time, TextChannel channel, String reason, ServerProfile profile) {
 		Guild guild = author.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
@@ -133,12 +177,23 @@ public class ActionManager {
 			Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
 			
 			channel.sendMessage("Temporarily deafened " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+		
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Deafened")
+					.setDescription("A user was deafened.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Deafened User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Deafened User ID", member.getId(), true)
+					.addField("Deafen Duration", Reference.formatTime(time), true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't deafen " + member.getUser().getAsMention()).queue();
 		}
 	}
 	
-	public void undeafen(Member author, Member member, TextChannel channel) {
+	public void undeafen(Member author, Member member, TextChannel channel, ServerProfile profile) {
 		Guild guild = author.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
@@ -161,12 +216,22 @@ public class ActionManager {
 			}
 			
 			if(channel != null) channel.sendMessage("Successfully undeafened " + member.getUser().getAsMention() + ".").queue();
+		
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Undeafened")
+					.setDescription("A user was undeafened.")
+					.addField("Staff Member", author == null ? "Temporary Action" : author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author == null ? "Temporary Action" : author.getId(), true)
+					.addField("Undeafened User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Undeafened User ID", member.getId(), true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't undeafen " + member.getUser().getAsMention()).queue();
 		}
 	}
 	
-	public void ban(Member author, Member member, TextChannel channel, String reason) {
+	public void ban(Member author, Member member, TextChannel channel, String reason, ServerProfile profile) {
 		Guild guild = author.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
@@ -181,12 +246,23 @@ public class ActionManager {
 			});
 			
 			channel.sendMessage("Successfully banned " + member.getUser().getAsMention() + " from the server. `" + reason + "`").queue();
+		
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Banned")
+					.setDescription("A user was banned.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Banned User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Banned User ID", member.getId(), true)
+					.addField("Ban Duration", "Indefinite", true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't ban " + member.getUser().getAsMention()).queue();
 		}
 	}
 	
-	public void temporarilyBan(Member author, Member member, long time, TextChannel channel, String reason) {
+	public void temporarilyBan(Member author, Member member, long time, TextChannel channel, String reason, ServerProfile profile) {
 		Guild guild = author.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
@@ -204,18 +280,29 @@ public class ActionManager {
 			Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
 				
 			channel.sendMessage("Temporarily banned " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+		
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Banned")
+					.setDescription("A user was banned.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Banned User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Banned User ID", member.getId(), true)
+					.addField("Ban Duration", Reference.formatTime(time), true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't ban " + member.getUser().getAsMention()).queue();
 		}
 	}
 	
-	public void unban(Guild guild, String userId) {
+	public void unban(Guild guild, String userId, ServerProfile profile) {
 		guild.retrieveBanList().queue(bans -> {
 			bans.stream().filter(ban -> ban.getUser().getId().equals(userId)).forEach(ban -> guild.unban(ban.getUser()).queue());
 		});
 	}
 	
-	public void kick(Member author, Member member, TextChannel channel, String reason) {
+	public void kick(Member author, Member member, TextChannel channel, String reason, ServerProfile profile) {
 		Guild guild = author.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
@@ -230,12 +317,22 @@ public class ActionManager {
 			});
 			
 			channel.sendMessage("Successfully kicked " + member.getUser().getAsMention() + " from the server. `" + reason + "`").queue();
+		
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Kicked")
+					.setDescription("A user was kicked.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Kicked User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Kicked User ID", member.getId(), true)
+					.build();
+			
+			log(embed, guild, profile);
 		} else {
 			channel.sendMessage("Couldn't kick " + member.getUser().getAsMention()).queue();
 		}
 	}
 	
-	public void clear(Member author, TextChannel channel, int amount) {
+	public void clear(Member author, TextChannel channel, int amount, ServerProfile profile) {
 		int i = 0;
 		List<Message> toDelete = new ArrayList<Message>(amount);
 		PaginationIterator<Message> messageIterator = channel.getIterableHistory().iterator();
@@ -253,9 +350,18 @@ public class ActionManager {
 		channel.deleteMessages(toDelete).queue(v -> {
 			channel.sendMessage("Cleared **" + toDelete.size() + "** messages.").queue();
 		});
+		
+		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Messages Cleared")
+				.setDescription("A message clearing/purge took place.")
+				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+				.addField("Staff Member ID", author.getId(), true)
+				.addField("Message Count", toDelete.size() + " messages.", true)
+				.build();
+		
+		log(embed, channel.getGuild(), profile);
 	}
 	
-	public void clearUser(Member author, Member member, TextChannel channel, int amount) {
+	public void clearUser(Member author, Member member, TextChannel channel, int amount, ServerProfile profile) {
 		int i = 0;
 		List<Message> toDelete = new ArrayList<Message>(amount);
 		PaginationIterator<Message> messageIterator = channel.getIterableHistory().iterator();
@@ -273,18 +379,57 @@ public class ActionManager {
 		channel.deleteMessages(toDelete).queue(v -> {
 			channel.sendMessage("Cleared **" + toDelete.size() + "** messages from " + member.getAsMention() + ".").queue();
 		});
+		
+		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Messages Cleared")
+				.setDescription("A message clearing/purge took place.")
+				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+				.addField("Staff Member ID", author.getId(), true)
+				.addField("Message Count", toDelete.size() + " messages.", true)
+				.addField("Cleared User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+				.build();
+		
+		log(embed, channel.getGuild(), profile);
 	}
 	
 	public void lock(Member author, ServerProfile profile, TextChannel in, TextChannel channel) {
 		profile.getLockedChannels().add(channel.getId());
 		profile.save();
 		in.sendMessage("Locked the channel " + channel.getAsMention() + ".").queue();
+		
+		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Channel Locked")
+				.setDescription("A channel was locked.")
+				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+				.addField("Staff Member ID", author.getId(), true)
+				.addField("Locked Channel", "#" + channel.getName(), true)
+				.addField("Locked Channel ID", channel.getId(), true)
+				.build();
+		
+		log(embed, channel.getGuild(), profile);
 	}
 	
 	public void unlock(Member author, ServerProfile profile, TextChannel in, TextChannel channel) {
 		profile.getLockedChannels().remove(channel.getId());
 		profile.save();
 		in.sendMessage("Unlocked the channel " + channel.getAsMention() + ".").queue();
+		
+		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Channel Unlocked")
+				.setDescription("A channel was unlocked.")
+				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+				.addField("Staff Member ID", author.getId(), true)
+				.addField("Unlocked Channel", "#" + channel.getName(), true)
+				.addField("Unlocked Channel ID", channel.getId(), true)
+				.build();
+		
+		log(embed, channel.getGuild(), profile);
+	}
+	
+	public void log(MessageEmbed embed, Guild guild, ServerProfile profile) {
+		if(profile.getLogChannel() != null) {
+			TextChannel logChannel = guild.getTextChannelById(profile.getLogChannel());
+			if(logChannel != null) {
+				logChannel.sendMessage(embed).queue();
+			}
+		}
 	}
 	
 }

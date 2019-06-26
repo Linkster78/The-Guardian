@@ -40,7 +40,7 @@ public class TempbanCommand extends Command {
 						long time = Reference.timeToMillis(args[1]);
 						
 						if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
-							Guardian.getInstance().getActionManager().temporarilyBan(member, memberOpt.get(), time, channel, reason);
+							Guardian.getInstance().getActionManager().temporarilyBan(member, memberOpt.get(), time, channel, reason, profile);
 						} else {
 							channel.sendMessage("**You cannot ban this person.**").queue();
 						}
