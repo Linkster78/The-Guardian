@@ -32,6 +32,7 @@ import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.AccountFlaggingListener;
 import com.tek.guardian.events.ReactionRoleListener;
+import com.tek.guardian.events.RoleMemoryListener;
 import com.tek.guardian.events.ServerStatusListener;
 import com.tek.guardian.events.VoiceChannelListener;
 import com.tek.guardian.timer.TaskTimer;
@@ -95,8 +96,10 @@ public class Guardian {
 		commandHandler.registerCommand(new UnlockCommand());
 		commandHandler.registerCommand(new ClearCommand());
 		commandHandler.registerCommand(new MentionCommand());
+		
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
-				new VoiceChannelListener(), new AccountFlaggingListener(), new ReactionRoleListener());
+				new VoiceChannelListener(), new AccountFlaggingListener(), new ReactionRoleListener(),
+				new RoleMemoryListener());
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();

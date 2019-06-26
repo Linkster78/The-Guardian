@@ -30,6 +30,7 @@ public class ServerProfile {
 	private String prefix;
 	private boolean deleteCommands;
 	private boolean replyUnknown;
+	private boolean saveRoles;
 	private List<String> commandChannels;
 	private List<String> lockedChannels;
 	private Map<String, String> roleMap;
@@ -51,6 +52,7 @@ public class ServerProfile {
 		this.prefix = Guardian.getInstance().getConfig().getDefaultPrefix();
 		this.deleteCommands = true;
 		this.replyUnknown = true;
+		this.saveRoles = true;
 		this.commandChannels = new ArrayList<String>();
 		this.lockedChannels = new ArrayList<String>();
 		this.roleMap = new HashMap<String, String>();
@@ -90,6 +92,19 @@ public class ServerProfile {
 		for(CustomVoiceChannel channel : Guardian.getInstance().getMongoAdapter().getCustomVoiceChannels()) {
 			if(channel.getGuildId().equals(guild.getId())) {
 				Guardian.getInstance().getMongoAdapter().removeCustomVoiceChannel(channel);
+			}
+		}
+		
+		for(ReactionRole role : Guardian.getInstance().getMongoAdapter().getReactionRoles()) {
+			Role r = guild.getRoleById(role.getRoleId());
+			if(r != null) {
+				Guardian.getInstance().getMongoAdapter().removeReactionRole(role);
+			}
+		}
+		
+		for(RoleMemory memory : Guardian.getInstance().getMongoAdapter().getRoleMemories()) {
+			if(memory.getGuildId().equals(guild.getId())) {
+				Guardian.getInstance().getMongoAdapter().removeRoleMemory(memory);
 			}
 		}
 	}
@@ -155,6 +170,10 @@ public class ServerProfile {
 		this.replyUnknown = replyUnknown;
 	}
 	
+	public void setSaveRoles(boolean saveRoles) {
+		this.saveRoles = saveRoles;
+	}
+	
 	public void setVoiceChannelCategory(Guild guild, String voiceChannelCategory) {
 		for(CustomVoiceChannel channel : Guardian.getInstance().getMongoAdapter().getCustomVoiceChannels()) {
 			if(channel.getGuildId().equals(guild.getId())) {
@@ -189,6 +208,10 @@ public class ServerProfile {
 	
 	public boolean doesReplyUnknown() {
 		return replyUnknown;
+	}
+	
+	public boolean isSaveRoles() {
+		return saveRoles;
 	}
 	
 	public List<String> getCommandChannels() {

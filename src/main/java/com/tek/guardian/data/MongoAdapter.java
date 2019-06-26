@@ -156,6 +156,37 @@ public class MongoAdapter {
 		datastore.delete(roleQuery);
 	}
 	
+	public List<RoleMemory> getRoleMemories() {
+		Query<RoleMemory> memoryQuery = datastore.createQuery(RoleMemory.class);
+		ArrayList<RoleMemory> memoryList = new ArrayList<RoleMemory>((int) memoryQuery.count());
+		Iterator<RoleMemory> memoryIterator = memoryQuery.iterator();
+		while(memoryIterator.hasNext()) {
+			memoryList.add(memoryIterator.next());
+		}
+		return memoryList;
+	}
+	
+	public Optional<RoleMemory> getRoleMemory(String guildId, String userId) {
+		Query<RoleMemory> memoryQuery = datastore.createQuery(RoleMemory.class)
+				.field("userId").equal(userId)
+				.field("guildId").equal(guildId);
+		if(memoryQuery.count() > 0) {
+			return Optional.of(memoryQuery.first());
+		} else {
+			return Optional.empty();
+		}
+	}
+	
+	public void removeRoleMemory(RoleMemory memory) {
+		Query<RoleMemory> memoryQuery = datastore.createQuery(RoleMemory.class)
+				.field("objectId").equal(memory.getObjectId());
+		datastore.delete(memoryQuery);
+	}
+	
+	public void saveRoleMemory(RoleMemory memory) {
+		datastore.save(memory);
+	}
+	
 	public void saveReactionRole(ReactionRole role) {
 		datastore.save(role);
 	}

@@ -21,29 +21,59 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class ConfigCommand extends Command {
 
 	public ConfigCommand() {
-		super("config", Arrays.asList(), "<list/key> <value>", "Configures the server to your needs", true);
+		super("config", Arrays.asList(), "<list/show/key> <value>", "Configures the server to your needs", true);
 	}
 
 	@Override
 	public boolean call(JDA jda, ServerProfile profile, Member member, Guild guild, TextChannel channel, String label, String[] args) {
 		if(args.length == 1) {
 			if(args[0].equalsIgnoreCase("list")) {
-				MessageEmbed embed = Reference.formatEmbed(jda, "Configuration Keys")
-						.setColor(Color.orange)
-						.setDescription("A list of all configuration keys of the server.")
-						.addField("Prefix", "**Description:** The command prefix\n**Key:** `prefix`\n**Value:** A string of 3 characters or less.", true)
-						.addField("Delete Commands", "**Description:** Does the bot delete commands after execution?\n**Key:** `delcmd`\n**Value:** yes/true/on no/false/off", true)
-						.addField("Reply Unknown", "**Description:** Does the bot inform the user when the command doesn't exist?\n**Key:** `replyunknown`\n**Value:** yes/true/on no/false/off", true)
-						.addField("Command Channels", "**Description:** Which channels can users use commands in?\n**Key:** `cmdchannels`\n**Value:** A list of channels, separated by spaces.", true)
-						.addField("Voice Channel Category", "**Description:** Which category holds custom voice channels?\n**Key:** `vccategory`\n**Value:** A category name or ID", true)
-						.addField("Suggestions Channel", "**Description:** Which channel will receive suggestions?\n**Key:** `suggestionschannel`\n**Value:** A channel name or ID", true)
-						.addField("Flagging Channel", "**Description:** Which channel will suspicious users be flagged in?\n**Key:** `flagchannel`\n**Value:** A channel name or ID", true)
-						.build();
-				
-				channel.sendMessage(embed).queue();
+				if(member.hasPermission(Permission.MANAGE_SERVER)) {
+					MessageEmbed embed = Reference.formatEmbed(jda, "Configuration Keys")
+							.setColor(Color.orange)
+							.setDescription("A list of all configuration keys of the server.")
+							.addField("Prefix", "**Description:** The command prefix\n**Key:** `prefix`\n**Value:** A string of 3 characters or less.", true)
+							.addField("Delete Commands", "**Description:** Does the bot delete commands after execution?\n**Key:** `delcmd`\n**Value:** yes/true/on no/false/off", true)
+							.addField("Reply Unknown", "**Description:** Does the bot inform the user when the command doesn't exist?\n**Key:** `replyunknown`\n**Value:** yes/true/on no/false/off", true)
+							.addField("Save Role Memory", "**Description:** Should the bot remember the roles of a user when he leaves/rejoins?\n**Key:** `saveroles`\n**Value:** yes/true/on no/false/off", true)
+							.addField("Command Channels", "**Description:** Which channels can users use commands in?\n**Key:** `cmdchannels`\n**Value:** A list of channels, separated by spaces.", true)
+							.addField("Voice Channel Category", "**Description:** Which category holds custom voice channels?\n**Key:** `vccategory`\n**Value:** A category name or ID", true)
+							.addField("Suggestions Channel", "**Description:** Which channel will receive suggestions?\n**Key:** `suggestionschannel`\n**Value:** A channel name or ID", true)
+							.addField("Flagging Channel", "**Description:** Which channel will suspicious users be flagged in?\n**Key:** `flagchannel`\n**Value:** A channel name or ID", true)
+							.build();
+					
+					channel.sendMessage(embed).queue();
+				} else {
+					channel.sendMessage("**You cannot view the server configuration.**").queue();
+				}
 				
 				return true;
-			} else {
+			} 
+			
+			else if(args[0].equalsIgnoreCase("show")) {
+				if(member.hasPermission(Permission.MANAGE_SERVER)) {
+					MessageEmbed embed = Reference.formatEmbed(jda, "Configuration Values")
+							.setColor(Color.blue)
+							.setDescription("The current server configuration values.")
+							.addField("Prefix", "`" + profile.getPrefix() + "`", true)
+							.addField("Delete Commands", "`" + Boolean.toString(profile.doesDeleteCommands()) + "`", true)
+							.addField("Reply Unknown", "`" + Boolean.toString(profile.doesReplyUnknown()) + "`", true)
+							.addField("Save Role Memory", "`" + Boolean.toString(profile.isSaveRoles()) + "`", true)
+							.addField("Command Channels", profile.getCommandChannels().isEmpty() ? "`All`" : "`" + profile.getCommandChannels().stream().filter(ch -> ch != null).map(guild::getTextChannelById).filter(ch -> ch != null).map(ch -> "#" + ch.getName()).collect(Collectors.joining(", ")) + "`", true)
+							.addField("Voice Channel Category", "`" + (profile.getVoiceChannelCategory() != null ? guild.getCategoryById(profile.getVoiceChannelCategory()) != null ? guild.getCategoryById(profile.getVoiceChannelCategory()).getName() : "Invalid Value" : "Not Configured") + "`", true)
+							.addField("Suggestions Channel", "`" + (profile.getSuggestionChannel() != null ? guild.getTextChannelById(profile.getSuggestionChannel()) != null ? guild.getTextChannelById(profile.getSuggestionChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
+							.addField("Flagging Channel", "`" + (profile.getFlagChannel() != null ? guild.getTextChannelById(profile.getFlagChannel()) != null ? guild.getTextChannelById(profile.getFlagChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
+							.build();
+					
+					channel.sendMessage(embed).queue();
+				} else {
+					channel.sendMessage("**You cannot view the server configuration.**").queue();
+				}
+				
+				return true;
+			}
+			
+			else {
 				return false;
 			}
 		} else if(args.length >= 2) {
@@ -91,6 +121,20 @@ public class ConfigCommand extends Command {
 						profile.setReplyUnknown(false);
 						profile.save();
 						channel.sendMessage("**Success!** The bot will now ignore the user when the command doesn't exist.").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("saveroles") || key.equalsIgnoreCase("rolememory")) {
+					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
+						profile.setSaveRoles(true);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will now remember the roles of a user when he leaves/rejoins.").queue();
+					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
+						profile.setSaveRoles(false);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will no longer remember the roles of a user when he leaves/rejoins.").queue();
 					} else {
 						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
 					}
