@@ -46,7 +46,7 @@ public class ReactionRoleCommand extends Command {
 									message.editMessage("Reaction Role Creation: Okay, `" + roleOpt.get().getName() + "` selected. React to this message with the emote you want.").queue(message1 -> {
 										waitForReaction(waiter, channel, member, reaction -> {
 											if(reaction.getReactionEmote().isEmote()) {
-												ReactionRole reactionRole = new ReactionRole(messageOpt.get().getId(), reaction.getReactionEmote().getId(), roleOpt.get().getId(), false);
+												ReactionRole reactionRole = new ReactionRole(guild.getId(), messageOpt.get().getId(), reaction.getReactionEmote().getId(), roleOpt.get().getId(), false);
 												if(Guardian.getInstance().getMongoAdapter().getReactionRoles(reactionRole.getMessageId(), reactionRole.getEmoteId()).isEmpty()) {
 													Guardian.getInstance().getMongoAdapter().saveReactionRole(reactionRole);
 													messageOpt.get().addReaction(reaction.getReactionEmote().getEmote()).queue(r -> {
@@ -56,7 +56,7 @@ public class ReactionRoleCommand extends Command {
 													message.editMessage("**Failure!** That message already has a reaction role set to the emote.").queue();
 												}
 											} else {
-												ReactionRole reactionRole = new ReactionRole(messageOpt.get().getId(), reaction.getReactionEmote().getEmoji(), roleOpt.get().getId(), true);
+												ReactionRole reactionRole = new ReactionRole(guild.getId(), messageOpt.get().getId(), reaction.getReactionEmote().getEmoji(), roleOpt.get().getId(), true);
 												if(Guardian.getInstance().getMongoAdapter().getReactionRoles(reactionRole.getMessageId(), reactionRole.getEmoteId()).isEmpty()) {
 													Guardian.getInstance().getMongoAdapter().saveReactionRole(reactionRole);
 													messageOpt.get().addReaction(reaction.getReactionEmote().getEmoji()).queue(r -> {

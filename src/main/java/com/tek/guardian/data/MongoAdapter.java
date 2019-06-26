@@ -66,6 +66,12 @@ public class MongoAdapter {
 		return actionList;
 	}
 	
+	public void removeGuildTemporaryActions(String guildId) {
+		Query<TemporaryAction> actionQuery = datastore.createQuery(TemporaryAction.class)
+				.field("guildId").equal(guildId);
+		datastore.delete(actionQuery);
+	}
+	
 	public void removeTemporaryAction(TemporaryAction action) {
 		Query<TemporaryAction> actionQuery = datastore.createQuery(TemporaryAction.class)
 				.field("objectId").equal(action.getObjectId());
@@ -105,6 +111,12 @@ public class MongoAdapter {
 		} else {
 			return Optional.empty();
 		}
+	}
+	
+	public void removeGuildCustomVoiceChannels(String guildId) {
+		Query<CustomVoiceChannel> channelQuery = datastore.createQuery(CustomVoiceChannel.class)
+				.field("guildId").equal(guildId);
+		datastore.delete(channelQuery);
 	}
 	
 	public void removeCustomVoiceChannel(CustomVoiceChannel channel) {
@@ -150,6 +162,12 @@ public class MongoAdapter {
 		return roleList;
 	}
 	
+	public void removeGuildReactionRoles(String guildId) {
+		Query<ReactionRole> roleQuery = datastore.createQuery(ReactionRole.class)
+				.field("guildId").equal(guildId);
+		datastore.delete(roleQuery);
+	}
+	
 	public void removeReactionRole(ReactionRole role) {
 		Query<ReactionRole> roleQuery = datastore.createQuery(ReactionRole.class)
 				.field("objectId").equal(role.getObjectId());
@@ -175,6 +193,12 @@ public class MongoAdapter {
 		} else {
 			return Optional.empty();
 		}
+	}
+	
+	public void removeGuildRoleMemory(String guildId) {
+		Query<RoleMemory> memoryQuery = datastore.createQuery(RoleMemory.class)
+				.field("guildId").equal(guildId);
+		datastore.delete(memoryQuery);
 	}
 	
 	public void removeRoleMemory(RoleMemory memory) {

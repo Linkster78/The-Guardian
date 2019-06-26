@@ -89,30 +89,10 @@ public class ServerProfile {
 	}
 	
 	public void leave(Guild guild) {
-		for(TemporaryAction action : Guardian.getInstance().getMongoAdapter().getTemporaryActions()) {
-			if(action.getGuildId().equals(guild.getId())) {
-				Guardian.getInstance().getMongoAdapter().removeTemporaryAction(action);
-			}
-		}
-		
-		for(CustomVoiceChannel channel : Guardian.getInstance().getMongoAdapter().getCustomVoiceChannels()) {
-			if(channel.getGuildId().equals(guild.getId())) {
-				Guardian.getInstance().getMongoAdapter().removeCustomVoiceChannel(channel);
-			}
-		}
-		
-		for(ReactionRole role : Guardian.getInstance().getMongoAdapter().getReactionRoles()) {
-			Role r = guild.getRoleById(role.getRoleId());
-			if(r != null) {
-				Guardian.getInstance().getMongoAdapter().removeReactionRole(role);
-			}
-		}
-		
-		for(RoleMemory memory : Guardian.getInstance().getMongoAdapter().getRoleMemories()) {
-			if(memory.getGuildId().equals(guild.getId())) {
-				Guardian.getInstance().getMongoAdapter().removeRoleMemory(memory);
-			}
-		}
+		Guardian.getInstance().getMongoAdapter().removeGuildTemporaryActions(guild.getId());
+		Guardian.getInstance().getMongoAdapter().removeGuildCustomVoiceChannels(guild.getId());
+		Guardian.getInstance().getMongoAdapter().removeGuildRoleMemory(guild.getId());
+		Guardian.getInstance().getMongoAdapter().removeGuildReactionRoles(guild.getId());
 	}
 	
 	public void createRole(Guild guild, BotRole role) {

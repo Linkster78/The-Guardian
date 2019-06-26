@@ -10,6 +10,7 @@ public class ReactionRole {
 	
 	@Id
 	private ObjectId objectId;
+	private String guildId;
 	private String messageId;
 	private String emoteId;
 	private String roleId;
@@ -19,8 +20,9 @@ public class ReactionRole {
 		this.emoji = false;
 	}
 
-	public ReactionRole(String messageId, String emoteId, String roleId, boolean emoji) {
+	public ReactionRole(String guildId, String messageId, String emoteId, String roleId, boolean emoji) {
 		this.objectId = ObjectId.get();
+		this.guildId = guildId;
 		this.messageId = messageId;
 		this.emoteId = emoteId;
 		this.roleId = roleId;
@@ -29,6 +31,10 @@ public class ReactionRole {
 	
 	public ObjectId getObjectId() {
 		return objectId;
+	}
+	
+	public String getGuildId() {
+		return guildId;
 	}
 	
 	public String getMessageId() {
