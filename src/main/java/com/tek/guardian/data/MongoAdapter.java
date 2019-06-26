@@ -67,7 +67,9 @@ public class MongoAdapter {
 	}
 	
 	public void removeTemporaryAction(TemporaryAction action) {
-		datastore.delete(action);
+		Query<TemporaryAction> actionQuery = datastore.createQuery(TemporaryAction.class)
+				.field("objectId").equal(action.getObjectId());
+		datastore.delete(actionQuery);
 	}
 	
 	public void createTemporaryAction(TemporaryAction action) {
@@ -106,11 +108,56 @@ public class MongoAdapter {
 	}
 	
 	public void removeCustomVoiceChannel(CustomVoiceChannel channel) {
-		datastore.delete(channel);
+		Query<CustomVoiceChannel> channelQuery = datastore.createQuery(CustomVoiceChannel.class)
+				.field("id").equal(channel.getId());
+		datastore.delete(channelQuery);
 	}
 	
 	public void saveCustomVoiceChannel(CustomVoiceChannel channel) {
 		datastore.save(channel);
+	}
+	
+	public List<ReactionRole> getReactionRoles() {
+		Query<ReactionRole> roleQuery = datastore.createQuery(ReactionRole.class);
+		ArrayList<ReactionRole> roleList = new ArrayList<ReactionRole>((int) roleQuery.count());
+		Iterator<ReactionRole> roleIterator = roleQuery.iterator();
+		while(roleIterator.hasNext()) {
+			roleList.add(roleIterator.next());
+		}
+		return roleList;
+	}
+	
+	public List<ReactionRole> getReactionRoles(String messageId) {
+		Query<ReactionRole> roleQuery = datastore.createQuery(ReactionRole.class)
+				.field("messageId").equal(messageId);
+		ArrayList<ReactionRole> roleList = new ArrayList<ReactionRole>((int) roleQuery.count());
+		Iterator<ReactionRole> roleIterator = roleQuery.iterator();
+		while(roleIterator.hasNext()) {
+			roleList.add(roleIterator.next());
+		}
+		return roleList;
+	}
+	
+	public List<ReactionRole> getReactionRoles(String messageId, String emoteId) {
+		Query<ReactionRole> roleQuery = datastore.createQuery(ReactionRole.class)
+				.field("messageId").equal(messageId)
+				.field("emoteId").equal(emoteId);
+		ArrayList<ReactionRole> roleList = new ArrayList<ReactionRole>((int) roleQuery.count());
+		Iterator<ReactionRole> roleIterator = roleQuery.iterator();
+		while(roleIterator.hasNext()) {
+			roleList.add(roleIterator.next());
+		}
+		return roleList;
+	}
+	
+	public void removeReactionRole(ReactionRole role) {
+		Query<ReactionRole> roleQuery = datastore.createQuery(ReactionRole.class)
+				.field("objectId").equal(role.getObjectId());
+		datastore.delete(roleQuery);
+	}
+	
+	public void saveReactionRole(ReactionRole role) {
+		datastore.save(role);
 	}
 	
 	public Morphia getMorphia() {

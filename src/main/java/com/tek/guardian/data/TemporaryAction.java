@@ -26,7 +26,7 @@ public class TemporaryAction {
 	public TemporaryAction() { }
 	
 	public TemporaryAction(String userId, String guildId, Action action, long assigned, long period) {
-		this.objectId = new ObjectId();
+		this.objectId = ObjectId.get();
 		this.userId = userId;
 		this.guildId = guildId;
 		this.action = action;

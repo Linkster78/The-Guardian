@@ -50,12 +50,12 @@ public class PollCommand extends Command {
 			
 			if(pollChannel.canTalk(member)) {
 				channel.sendMessage("Poll Creation: What is the poll question?").queue(message1 -> {
-					waitForMessage(channel, member, response -> {
+					waitForMessage(waiter, channel, member, response -> {
 						String question = response;
 						
 						final List<String> options = new ArrayList<String>();
 						message1.editMessage("Poll Creation: Name a poll option. (Enter `done` if all the options are entered)").queue(message2 -> {
-							waitForMessage(channel, member, getOptionCallback(pollChannelFinal, channel, message1, member, options, question), () -> {
+							waitForMessage(waiter, channel, member, getOptionCallback(waiter, pollChannelFinal, channel, message1, member, options, question), () -> {
 								channel.sendMessage("**The poll creation timed out.**").queue();
 							});
 						});
@@ -73,7 +73,7 @@ public class PollCommand extends Command {
 		return true;
 	}
 	
-	public void waitForMessage(TextChannel channel, Member member, Consumer<String> messageCallback, Runnable timeout) {
+	public static void waitForMessage(EventWaiter waiter, TextChannel channel, Member member, Consumer<String> messageCallback, Runnable timeout) {
 		waiter.waitForEvent(GuildMessageReceivedEvent.class, (GuildMessageReceivedEvent event) -> {
 			return event.getChannel().getId().equals(channel.getId()) && member.getId().equals(event.getMember().getId());
 		}, (GuildMessageReceivedEvent event) -> {
@@ -82,7 +82,7 @@ public class PollCommand extends Command {
 		}, 1, TimeUnit.MINUTES, () -> timeout.run());
 	}
 	
-	public Consumer<String> getOptionCallback(TextChannel pollChannel, TextChannel channel, Message questionMessage, Member member, List<String> options, String question) {
+	public Consumer<String> getOptionCallback(EventWaiter waiter, TextChannel pollChannel, TextChannel channel, Message questionMessage, Member member, List<String> options, String question) {
 		return option -> {
 			if(option.equalsIgnoreCase("done")) {
 				if(!options.isEmpty()) {
@@ -115,7 +115,7 @@ public class PollCommand extends Command {
 				}
 			} else {
 				options.add(option);
-				waitForMessage(channel, member, getOptionCallback(pollChannel, channel, questionMessage, member, options, question), () -> {
+				waitForMessage(waiter, channel, member, getOptionCallback(waiter, pollChannel, channel, questionMessage, member, options, question), () -> {
 					channel.sendMessage("**The poll creation timed out.**").queue();
 				});
 			}
