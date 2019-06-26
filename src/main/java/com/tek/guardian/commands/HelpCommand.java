@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class HelpCommand extends Command {
 
-	private final int PER_PAGE = 15;
+	private final int PER_PAGE = 10;
 	private final Paginator.Builder paginatorBuilder;
 	
 	public HelpCommand(EventWaiter waiter) {

@@ -37,6 +37,7 @@ public class ConfigCommand extends Command {
 						.addField("Command Channels", "**Description:** Which channels can users use commands in?\n**Key:** `cmdchannels`\n**Value:** A list of channels, separated by spaces.", true)
 						.addField("Voice Channel Category", "**Description:** Which category holds custom voice channels?\n**Key:** `vccategory`\n**Value:** A category name or ID", true)
 						.addField("Suggestions Channel", "**Description:** Which channel will receive suggestions?\n**Key:** `suggestionschannel`\n**Value:** A channel name or ID", true)
+						.addField("Flagging Channel", "**Description:** Which channel will suspicious users be flagged in?\n**Key:** `flagchannel`\n**Value:** A channel name or ID", true)
 						.build();
 				
 				channel.sendMessage(embed).queue();
@@ -135,6 +136,18 @@ public class ConfigCommand extends Command {
 						profile.setSuggestionChannel(channelOpt.get().getId());
 						profile.save();
 						channel.sendMessage("**Success!** The suggestions channel is now " + channelOpt.get().getAsMention() + ".").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("flaggingchannel") || key.equalsIgnoreCase("flagchannel")) {
+					Optional<TextChannel> channelOpt = Reference.textChannelFromString(guild, value);
+					
+					if(channelOpt.isPresent()) {
+						profile.setFlagChannel(channelOpt.get().getId());
+						profile.save();
+						channel.sendMessage("**Success!** The flagging channel is now " + channelOpt.get().getAsMention() + ".").queue();
 					} else {
 						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
 					}

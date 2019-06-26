@@ -16,6 +16,7 @@ import com.tek.guardian.commands.KickCommand;
 import com.tek.guardian.commands.LockCommand;
 import com.tek.guardian.commands.MentionCommand;
 import com.tek.guardian.commands.MuteCommand;
+import com.tek.guardian.commands.SecurityScanCommand;
 import com.tek.guardian.commands.ServerCommand;
 import com.tek.guardian.commands.SuggestCommand;
 import com.tek.guardian.commands.TempbanCommand;
@@ -27,7 +28,7 @@ import com.tek.guardian.commands.UnmuteCommand;
 import com.tek.guardian.commands.WhoisCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
-import com.tek.guardian.events.MessageReceivedListener;
+import com.tek.guardian.events.AccountFlaggingListener;
 import com.tek.guardian.events.ServerStatusListener;
 import com.tek.guardian.events.VoiceChannelListener;
 import com.tek.guardian.timer.TaskTimer;
@@ -74,6 +75,7 @@ public class Guardian {
 		commandHandler.registerCommand(new CustomVoiceChannelCommand());
 		commandHandler.registerCommand(new SuggestCommand());
 		commandHandler.registerCommand(new ConfigCommand());
+		commandHandler.registerCommand(new SecurityScanCommand(waiter));
 		commandHandler.registerCommand(new ServerCommand());
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());
@@ -89,7 +91,7 @@ public class Guardian {
 		commandHandler.registerCommand(new ClearCommand());
 		commandHandler.registerCommand(new MentionCommand());
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
-				new MessageReceivedListener(), new VoiceChannelListener());
+				new VoiceChannelListener(), new AccountFlaggingListener());
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.events.LockedListener;
 import com.tek.guardian.main.Guardian;
 
 import net.dv8tion.jda.api.entities.Guild;
@@ -38,6 +39,9 @@ public class CommandHandler extends ListenerAdapter {
 		for(int i = 1; i < tokens.length; i++) args[i - 1] = tokens[i];
 		
 		ServerProfile profile = Guardian.getInstance().getMongoAdapter().getServerProfile(guild);
+		
+		if(LockedListener.onGuildMessageReceived(profile, event)) return;
+		
 		if(label.startsWith(profile.getPrefix())) {
 			if(tokens[0].length() != profile.getPrefix().length()) {
 				String command = tokens[0].substring(profile.getPrefix().length());

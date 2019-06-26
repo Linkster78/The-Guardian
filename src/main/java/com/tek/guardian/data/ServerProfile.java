@@ -35,6 +35,7 @@ public class ServerProfile {
 	private Map<String, String> roleMap;
 	private String voiceChannelCategory;
 	private String suggestionChannel;
+	private String flagChannel;
 	
 	public ServerProfile() {
 		this.commandChannels = new ArrayList<String>();
@@ -42,6 +43,7 @@ public class ServerProfile {
 		this.roleMap = new HashMap<String, String>();
 		this.voiceChannelCategory = null;
 		this.suggestionChannel = null;
+		this.flagChannel = null;
 	}
 	
 	public ServerProfile(String serverId) {
@@ -54,6 +56,7 @@ public class ServerProfile {
 		this.roleMap = new HashMap<String, String>();
 		this.voiceChannelCategory = null;
 		this.suggestionChannel = null;
+		this.flagChannel = null;
 	}
 	
 	public void join(Guild guild) {
@@ -168,6 +171,10 @@ public class ServerProfile {
 		this.suggestionChannel = suggestionChannel;
 	}
 	
+	public void setFlagChannel(String flagChannel) {
+		this.flagChannel = flagChannel;
+	}
+	
 	public String getServerId() {
 		return serverId;
 	}
@@ -202,6 +209,10 @@ public class ServerProfile {
 	
 	public String getSuggestionChannel() {
 		return suggestionChannel;
+	}
+	
+	public String getFlagChannel() {
+		return flagChannel;
 	}
 	
 }
