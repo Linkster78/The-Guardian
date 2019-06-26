@@ -16,6 +16,7 @@ import com.tek.guardian.commands.KickCommand;
 import com.tek.guardian.commands.LockCommand;
 import com.tek.guardian.commands.MentionCommand;
 import com.tek.guardian.commands.MuteCommand;
+import com.tek.guardian.commands.PollCommand;
 import com.tek.guardian.commands.SecurityScanCommand;
 import com.tek.guardian.commands.ServerCommand;
 import com.tek.guardian.commands.SuggestCommand;
@@ -74,6 +75,7 @@ public class Guardian {
 		commandHandler.registerCommand(new WhoisCommand(waiter));
 		commandHandler.registerCommand(new CustomVoiceChannelCommand());
 		commandHandler.registerCommand(new SuggestCommand());
+		commandHandler.registerCommand(new PollCommand(waiter));
 		commandHandler.registerCommand(new ConfigCommand());
 		commandHandler.registerCommand(new SecurityScanCommand(waiter));
 		commandHandler.registerCommand(new ServerCommand());

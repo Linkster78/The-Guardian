@@ -98,6 +98,8 @@ public class WhoisCommand extends Command {
 							.addField("Highest Role", highestRoleFinal == null ? "None" : highestRoleFinal.getName(), true)
 							.addField("Join Time", who.getTimeJoined().format(timeFormatter), true)
 							.addField("Account Creation Time", who.getUser().getTimeCreated().format(timeFormatter), true)
+							.addField("Actions", Reference.BOOT + " Kick Member\n" + Reference.HAMMER + " Ban Member\n"
+									+ Reference.SILENCE + " Mute Member\n" + Reference.DEAF + " Deafen Member", true)
 							.build();
 					builder.setEmbed(embed);
 				});

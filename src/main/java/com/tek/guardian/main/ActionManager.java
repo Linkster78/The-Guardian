@@ -95,17 +95,21 @@ public class ActionManager {
 		Guild guild = author.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
-			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You have been deafened in the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
-					member.deafen(true).queue();
+			if(member.getVoiceState().inVoiceChannel()) {
+				member.getUser().openPrivateChannel().queue(pm -> {
+					pm.sendMessage("You have been deafened in the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
+						member.deafen(true).queue();
+					}, e -> {
+						member.deafen(true).queue();
+					});
 				}, e -> {
 					member.deafen(true).queue();
 				});
-			}, e -> {
-				member.deafen(true).queue();
-			});
-			
-			channel.sendMessage("Successfully deafened " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
+				
+				channel.sendMessage("Successfully deafened " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
+			} else {
+				channel.sendMessage("The user " + member.getUser().getAsMention() + " is not in a voice channel.").queue();
+			}
 		} else {
 			channel.sendMessage("Couldn't deafen " + member.getUser().getAsMention()).queue();
 		}
