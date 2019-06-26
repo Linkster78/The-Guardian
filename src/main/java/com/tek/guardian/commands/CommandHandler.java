@@ -90,6 +90,8 @@ public class CommandHandler extends ListenerAdapter {
 					event.getMessage().delete().queue();
 				}
 			}
+		} else {
+			Guardian.getInstance().getMessageCache().cacheMessage(event.getMessage());
 		}
 	}
 	
