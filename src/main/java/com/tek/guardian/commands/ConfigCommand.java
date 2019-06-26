@@ -41,6 +41,7 @@ public class ConfigCommand extends Command {
 							.addField("Suggestions Channel", "**Description:** Which channel will receive suggestions?\n**Key:** `suggestionschannel`\n**Value:** A channel name or ID", true)
 							.addField("Flagging Channel", "**Description:** Which channel will suspicious users be flagged in?\n**Key:** `flagchannel`\n**Value:** A channel name or ID", true)
 							.addField("Log Channel", "**Description:** Which channel will actions be logged in?\n**Key:** `logchannel`\n**Value:** A channel name or ID", true)
+							.addField("Deleted Message Channel", "**Description:** Which channel will deleted messages be logged in?\n**Key:** `delchannel`\n**Value:** A channel name or ID", true)
 							.build();
 					
 					channel.sendMessage(embed).queue();
@@ -65,6 +66,7 @@ public class ConfigCommand extends Command {
 							.addField("Suggestions Channel", "`" + (profile.getSuggestionChannel() != null ? guild.getTextChannelById(profile.getSuggestionChannel()) != null ? guild.getTextChannelById(profile.getSuggestionChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.addField("Flagging Channel", "`" + (profile.getFlagChannel() != null ? guild.getTextChannelById(profile.getFlagChannel()) != null ? guild.getTextChannelById(profile.getFlagChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.addField("Log Channel", "`" + (profile.getLogChannel() != null ? guild.getTextChannelById(profile.getLogChannel()) != null ? guild.getTextChannelById(profile.getLogChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
+							.addField("Deleted Message Channel", "`" + (profile.getDeletedChannel() != null ? guild.getTextChannelById(profile.getDeletedChannel()) != null ? guild.getTextChannelById(profile.getDeletedChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.build();
 					
 					channel.sendMessage(embed).queue();
@@ -206,6 +208,18 @@ public class ConfigCommand extends Command {
 						profile.setLogChannel(channelOpt.get().getId());
 						profile.save();
 						channel.sendMessage("**Success!** The logging channel is now " + channelOpt.get().getAsMention() + ".").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("deletedchannel") || key.equalsIgnoreCase("delchannel")) {
+					Optional<TextChannel> channelOpt = Reference.textChannelFromString(guild, value);
+					
+					if(channelOpt.isPresent()) {
+						profile.setDeletedChannel(channelOpt.get().getId());
+						profile.save();
+						channel.sendMessage("**Success!** The deleted message channel is now " + channelOpt.get().getAsMention() + ".").queue();
 					} else {
 						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
 					}

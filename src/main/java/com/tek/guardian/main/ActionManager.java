@@ -1,5 +1,6 @@
 package com.tek.guardian.main;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class ActionManager {
 			channel.sendMessage("Successfully muted " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
 			
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Muted")
+					.setColor(Color.black)
 					.setDescription("A user was muted.")
 					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author.getId(), true)
@@ -71,6 +73,7 @@ public class ActionManager {
 			channel.sendMessage("Temporarily muted " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Muted")
+					.setColor(Color.black)
 					.setDescription("A user was muted.")
 					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author.getId(), true)
@@ -111,6 +114,7 @@ public class ActionManager {
 			if(channel != null) channel.sendMessage("Successfully unmuted " + member.getUser().getAsMention() + ".").queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Unmuted")
+					.setColor(Color.white)
 					.setDescription("A user was unmuted.")
 					.addField("Staff Member", author == null ? "Temporary Action" : author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author == null ? "Temporary Action" : author.getId(), true)
@@ -142,6 +146,7 @@ public class ActionManager {
 				channel.sendMessage("Successfully deafened " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
 			
 				MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Deafened")
+						.setColor(Color.black)
 						.setDescription("A user was deafened.")
 						.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 						.addField("Staff Member ID", author.getId(), true)
@@ -179,6 +184,7 @@ public class ActionManager {
 			channel.sendMessage("Temporarily deafened " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Deafened")
+					.setColor(Color.black)
 					.setDescription("A user was deafened.")
 					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author.getId(), true)
@@ -218,6 +224,7 @@ public class ActionManager {
 			if(channel != null) channel.sendMessage("Successfully undeafened " + member.getUser().getAsMention() + ".").queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Undeafened")
+					.setColor(Color.white)
 					.setDescription("A user was undeafened.")
 					.addField("Staff Member", author == null ? "Temporary Action" : author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author == null ? "Temporary Action" : author.getId(), true)
@@ -248,6 +255,7 @@ public class ActionManager {
 			channel.sendMessage("Successfully banned " + member.getUser().getAsMention() + " from the server. `" + reason + "`").queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Banned")
+					.setColor(Color.red)
 					.setDescription("A user was banned.")
 					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author.getId(), true)
@@ -282,6 +290,7 @@ public class ActionManager {
 			channel.sendMessage("Temporarily banned " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Banned")
+					.setColor(Color.red)
 					.setDescription("A user was banned.")
 					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author.getId(), true)
@@ -319,6 +328,7 @@ public class ActionManager {
 			channel.sendMessage("Successfully kicked " + member.getUser().getAsMention() + " from the server. `" + reason + "`").queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Kicked")
+					.setColor(Color.orange)
 					.setDescription("A user was kicked.")
 					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 					.addField("Staff Member ID", author.getId(), true)
@@ -352,6 +362,7 @@ public class ActionManager {
 		});
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Messages Cleared")
+				.setColor(Color.gray)
 				.setDescription("A message clearing/purge took place.")
 				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 				.addField("Staff Member ID", author.getId(), true)
@@ -381,6 +392,7 @@ public class ActionManager {
 		});
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Messages Cleared")
+				.setColor(Color.gray)
 				.setDescription("A message clearing/purge took place.")
 				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 				.addField("Staff Member ID", author.getId(), true)
@@ -397,6 +409,7 @@ public class ActionManager {
 		in.sendMessage("Locked the channel " + channel.getAsMention() + ".").queue();
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Channel Locked")
+				.setColor(Color.yellow)
 				.setDescription("A channel was locked.")
 				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 				.addField("Staff Member ID", author.getId(), true)
@@ -413,6 +426,7 @@ public class ActionManager {
 		in.sendMessage("Unlocked the channel " + channel.getAsMention() + ".").queue();
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Channel Unlocked")
+				.setColor(Color.yellow)
 				.setDescription("A channel was unlocked.")
 				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
 				.addField("Staff Member ID", author.getId(), true)

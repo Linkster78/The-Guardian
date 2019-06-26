@@ -5,6 +5,7 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.tek.guardian.cache.MessageCache;
 import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
@@ -31,6 +32,7 @@ import com.tek.guardian.commands.WhoisCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.AccountFlaggingListener;
+import com.tek.guardian.events.MessageChangeListener;
 import com.tek.guardian.events.ReactionRoleListener;
 import com.tek.guardian.events.RoleMemoryListener;
 import com.tek.guardian.events.ServerStatusListener;
@@ -54,6 +56,7 @@ public class Guardian {
 	private CommandHandler commandHandler;
 	private TaskTimer taskTimer;
 	private ActionManager actionManager;
+	private MessageCache messageCache;
 	
 	public Guardian(Config config) {
 		this.config = config;
@@ -99,12 +102,14 @@ public class Guardian {
 		
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
 				new VoiceChannelListener(), new AccountFlaggingListener(), new ReactionRoleListener(),
-				new RoleMemoryListener());
+				new RoleMemoryListener(), new MessageChangeListener());
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();
 		
 		actionManager = new ActionManager();
+		
+		messageCache = new MessageCache();
 		
 		LOGGER.info("Launched Guardian successfully!");
 	}
@@ -139,6 +144,10 @@ public class Guardian {
 	
 	public ActionManager getActionManager() {
 		return actionManager;
+	}
+	
+	public MessageCache getMessageCache() {
+		return messageCache;
 	}
 	
 }
