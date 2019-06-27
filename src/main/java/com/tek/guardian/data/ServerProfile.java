@@ -93,6 +93,7 @@ public class ServerProfile {
 		Guardian.getInstance().getMongoAdapter().removeGuildCustomVoiceChannels(guild.getId());
 		Guardian.getInstance().getMongoAdapter().removeGuildRoleMemory(guild.getId());
 		Guardian.getInstance().getMongoAdapter().removeGuildReactionRoles(guild.getId());
+		Guardian.getInstance().getMongoAdapter().removeGuildUserProfiles(guild.getId());
 	}
 	
 	public void createRole(Guild guild, BotRole role) {

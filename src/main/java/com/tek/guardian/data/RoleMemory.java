@@ -23,6 +23,7 @@ public class RoleMemory {
 	public RoleMemory() { }
 	
 	public RoleMemory(Member member) {
+		this.objectId = ObjectId.get();
 		this.guildId = member.getGuild().getId();
 		this.userId = member.getId();
 		this.roles = member.getRoles().stream().filter(role -> member.getGuild().getSelfMember().canInteract(role)).map(Role::getId).collect(Collectors.toList());

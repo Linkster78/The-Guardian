@@ -11,6 +11,7 @@ import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import dev.morphia.query.Query;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 
 public class MongoAdapter {
 	
@@ -54,6 +55,38 @@ public class MongoAdapter {
 	
 	public void saveServerProfile(ServerProfile serverProfile) {
 		datastore.save(serverProfile);
+	}
+	
+	public UserProfile createUserProfile(Member member) {
+		UserProfile newProfile = new UserProfile(member.getGuild().getId(), member.getUser().getId());
+		datastore.save(newProfile);
+		return newProfile;
+	}
+	
+	public void removeUserProfile(Member member) {
+		Query<UserProfile> profileQuery = datastore.createQuery(UserProfile.class)
+				.field("id").equal(member.getGuild().getId() + member.getUser().getId());
+		datastore.delete(profileQuery);
+	}
+	
+	public UserProfile getUserProfile(Member member) {
+		Query<UserProfile> profileQuery = datastore.createQuery(UserProfile.class)
+				.field("id").equal(member.getGuild().getId() + member.getUser().getId());
+		if(profileQuery.count() > 0) {
+			UserProfile first = profileQuery.first();
+			return first;
+		}
+		return createUserProfile(member);
+	}
+	
+	public void removeGuildUserProfiles(String guildId) {
+		Query<UserProfile> profileQuery = datastore.createQuery(UserProfile.class)
+				.field("guildId").equal(guildId);
+		datastore.delete(profileQuery);
+	}
+	
+	public void saveUserProfile(UserProfile userProfile) {
+		datastore.save(userProfile);
 	}
 	
 	public List<TemporaryAction> getTemporaryActions() {
