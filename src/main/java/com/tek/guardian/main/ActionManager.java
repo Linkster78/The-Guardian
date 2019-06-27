@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.tek.guardian.data.ServerProfile;
 import com.tek.guardian.data.TemporaryAction;
+import com.tek.guardian.data.UserProfile;
+import com.tek.guardian.data.UserProfile.Warning;
 import com.tek.guardian.enums.Action;
 import com.tek.guardian.enums.BotRole;
 
@@ -435,6 +437,73 @@ public class ActionManager {
 				.build();
 		
 		log(embed, channel.getGuild(), profile);
+	}
+	
+	public void warn(Member author, Member member, TextChannel in, String warningText, ServerProfile profile) {
+		UserProfile userProfile = Guardian.getInstance().getMongoAdapter().getUserProfile(member);
+		Warning warning = new Warning(author.getId(), warningText);
+		userProfile.pushWarning(warning);
+		userProfile.save();
+		
+		in.sendMessage("Successfully warned " + member.getAsMention() + " for `" + warningText + "`. He now has **" + userProfile.getWarnings().size() + "** warning(s).").queue();
+	
+		member.getUser().openPrivateChannel().queue(pm -> {
+			pm.sendMessage("You have been warned in the server **" + author.getGuild().getName() + "**: `" + warningText + "`.").queue(m -> {}, e -> {});
+		});
+		
+		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Member Warned")
+				.setColor(Color.gray)
+				.setDescription("A member was warned.")
+				.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+				.addField("Staff Member ID", author.getId(), true)
+				.addField("Warned User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+				.addField("Warned User ID", member.getId(), true)
+				.addField("Warning", warningText, true)
+				.addField("Member Warning Count", Integer.toString(userProfile.getWarnings().size()), true)
+				.build();
+		
+		log(embed, author.getGuild(), profile);
+	}
+	
+	public void unwarn(Member author, Member member, TextChannel in, int count, ServerProfile profile, UserProfile userProfile) {
+		if(count == Integer.MAX_VALUE) {
+			userProfile.getWarnings().clear();
+			userProfile.save();
+			
+			in.sendMessage("Cleared the warnings of " + member.getAsMention()).queue();
+			
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Member Warnings Cleared")
+					.setColor(Color.gray)
+					.setDescription("The warnings of a member were cleared.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Cleared User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Cleared User ID", member.getId(), true)
+					.build();
+			
+			log(embed, author.getGuild(), profile);
+		} else {
+			Warning warning = userProfile.getWarnings().get(count - 1);
+			Member warningAuthor = author.getGuild().getMemberById(warning.getAuthorId());
+			userProfile.getWarnings().remove(count - 1);
+			userProfile.save();
+			
+			in.sendMessage("Warning `" + warning.getWarning() + "` assigned by **" + (warningAuthor == null ? "Unknown User" : warningAuthor.getUser().getName() + "#" + warningAuthor.getUser().getDiscriminator()) + "** removed from " + member.getAsMention() + ".").queue();
+			
+			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Member Warning Removed")
+					.setColor(Color.gray)
+					.setDescription("A warning was removed from a member.")
+					.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+					.addField("Staff Member ID", author.getId(), true)
+					.addField("Unwarned User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+					.addField("Unwarned User ID", member.getId(), true)
+					.addField("Removed Warning", warning.getWarning(), true)
+					.addField("Removed Warning Author", warningAuthor == null ? "Unknown User" : warningAuthor.getUser().getName() + "#" + warningAuthor.getUser().getDiscriminator(), true)
+					.addField("Removed Warning Author ID", warningAuthor == null ? "Unknown User" : warningAuthor.getId(), true)
+					.build();
+			
+			log(embed, author.getGuild(), profile);
+		}
 	}
 	
 	public void log(MessageEmbed embed, Guild guild, ServerProfile profile) {

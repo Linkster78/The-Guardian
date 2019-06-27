@@ -17,6 +17,10 @@ public class UserProfile {
 	private String userId;
 	private List<Warning> warnings;
 	
+	public UserProfile() { 
+		this.warnings = new ArrayList<Warning>();
+	}
+	
 	public UserProfile(String guildId, String userId) {
 		this.id = guildId + userId;
 		this.guildId = guildId;
@@ -52,6 +56,8 @@ public class UserProfile {
 		
 		private String authorId;
 		private String warning;
+		
+		public Warning() { }
 		
 		public Warning(String authorId, String warning) {
 			this.authorId = authorId;

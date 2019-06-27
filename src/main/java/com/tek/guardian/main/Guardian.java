@@ -28,6 +28,9 @@ import com.tek.guardian.commands.TempmuteCommand;
 import com.tek.guardian.commands.UndeafenCommand;
 import com.tek.guardian.commands.UnlockCommand;
 import com.tek.guardian.commands.UnmuteCommand;
+import com.tek.guardian.commands.UnwarnCommand;
+import com.tek.guardian.commands.WarnCommand;
+import com.tek.guardian.commands.WarningsCommand;
 import com.tek.guardian.commands.WhoisCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
@@ -86,6 +89,13 @@ public class Guardian {
 		commandHandler.registerCommand(new ConfigCommand());
 		commandHandler.registerCommand(new SecurityScanCommand(waiter));
 		commandHandler.registerCommand(new ServerCommand());
+		commandHandler.registerCommand(new LockCommand());
+		commandHandler.registerCommand(new UnlockCommand());
+		commandHandler.registerCommand(new ClearCommand());
+		commandHandler.registerCommand(new WarnCommand());
+		commandHandler.registerCommand(new WarningsCommand(waiter));
+		commandHandler.registerCommand(new UnwarnCommand());
+		commandHandler.registerCommand(new MentionCommand());
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());
 		commandHandler.registerCommand(new TempbanCommand());
@@ -95,10 +105,6 @@ public class Guardian {
 		commandHandler.registerCommand(new DeafenCommand());
 		commandHandler.registerCommand(new TempdeafenCommand());
 		commandHandler.registerCommand(new UndeafenCommand());
-		commandHandler.registerCommand(new LockCommand());
-		commandHandler.registerCommand(new UnlockCommand());
-		commandHandler.registerCommand(new ClearCommand());
-		commandHandler.registerCommand(new MentionCommand());
 		
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
 				new VoiceChannelListener(), new AccountFlaggingListener(), new ReactionRoleListener(),
