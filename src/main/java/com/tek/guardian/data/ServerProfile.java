@@ -3,8 +3,10 @@ package com.tek.guardian.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.tek.guardian.enums.BotRole;
@@ -14,6 +16,7 @@ import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -35,6 +38,7 @@ public class ServerProfile {
 	private List<String> commandChannels;
 	private List<String> lockedChannels;
 	private Map<String, String> roleMap;
+	private Map<String, Integer> inviteMap;
 	private String voiceChannelCategory;
 	private String suggestionChannel;
 	private String flagChannel;
@@ -46,6 +50,7 @@ public class ServerProfile {
 		this.commandChannels = new ArrayList<String>();
 		this.lockedChannels = new ArrayList<String>();
 		this.roleMap = new HashMap<String, String>();
+		this.inviteMap = new HashMap<String, Integer>();
 		this.voiceChannelCategory = null;
 		this.suggestionChannel = null;
 		this.flagChannel = null;
@@ -65,6 +70,7 @@ public class ServerProfile {
 		this.commandChannels = new ArrayList<String>();
 		this.lockedChannels = new ArrayList<String>();
 		this.roleMap = new HashMap<String, String>();
+		this.inviteMap = new HashMap<String, Integer>();
 		this.voiceChannelCategory = null;
 		this.suggestionChannel = null;
 		this.flagChannel = null;
@@ -77,6 +83,14 @@ public class ServerProfile {
 		for(BotRole role : BotRole.values()) {
 			createRole(guild, role);
 		}
+		
+		guild.retrieveInvites().queue(invites -> {
+			for(Invite invite : invites) {
+				inviteMap.put(invite.getCode(), invite.getUses());
+			}
+			
+			save();
+		});
 		
 		save();
 	}
@@ -94,39 +108,89 @@ public class ServerProfile {
 		}
 	}
 	
-	public void leave(Guild guild) {
-		Guardian.getInstance().getMongoAdapter().removeGuildTemporaryActions(guild.getId());
-		Guardian.getInstance().getMongoAdapter().removeGuildCustomVoiceChannels(guild.getId());
-		Guardian.getInstance().getMongoAdapter().removeGuildRoleMemory(guild.getId());
-		Guardian.getInstance().getMongoAdapter().removeGuildReactionRoles(guild.getId());
-		Guardian.getInstance().getMongoAdapter().removeGuildUserProfiles(guild.getId());
+	public void leave(String guildId) {
+		Guardian.getInstance().getMongoAdapter().removeGuildTemporaryActions(guildId);
+		Guardian.getInstance().getMongoAdapter().removeGuildCustomVoiceChannels(guildId);
+		Guardian.getInstance().getMongoAdapter().removeGuildRoleMemory(guildId);
+		Guardian.getInstance().getMongoAdapter().removeGuildReactionRoles(guildId);
+		Guardian.getInstance().getMongoAdapter().removeGuildUserProfiles(guildId);
+	}
+	
+	public void verifyInvites(Guild guild) {
+		inviteMap.clear();
+		
+		guild.retrieveInvites().queue(invites -> {
+			for(Invite invite : invites) {
+				inviteMap.put(invite.getCode(), invite.getUses());
+			}
+			
+			save();
+		});
 	}
 	
 	public void createRole(Guild guild, BotRole role) {
-		guild.createRole().queue(r -> {
-			RoleManager roleManager = r.getManager();
-			roleManager.setName(role.getName());
-			roleManager.queue(v -> {
-				for(VoiceChannel vc : guild.getVoiceChannels()) {
-					ChannelManager vcm = vc.getManager();
-					vcm.putPermissionOverride(r, Arrays.asList(), 
-							role.getDenies().stream().filter(Permission::isVoice).collect(Collectors.toList())).queue();
-				}
+		Role r = guild.createRole().complete();
+		
+		RoleManager roleManager = r.getManager();
+		roleManager.setName(role.getName());
+		roleManager.queue(v -> {
+			for(VoiceChannel vc : guild.getVoiceChannels()) {
+				ChannelManager vcm = vc.getManager();
+				vcm.putPermissionOverride(r, Arrays.asList(), 
+					role.getDenies().stream().filter(Permission::isVoice).collect(Collectors.toList())).queue();
+			}
 				
-				for(TextChannel vc : guild.getTextChannels()) {
-					ChannelManager vcm = vc.getManager();
-					vcm.putPermissionOverride(r, Arrays.asList(), 
-							role.getDenies().stream().filter(Permission::isText).collect(Collectors.toList())).queue();
-				}
-				
-				roleMap.put(role.name(), r.getId());
-				save();
-			});
+			for(TextChannel vc : guild.getTextChannels()) {
+				ChannelManager vcm = vc.getManager();
+				vcm.putPermissionOverride(r, Arrays.asList(), 
+						role.getDenies().stream().filter(Permission::isText).collect(Collectors.toList())).queue();
+			}
 		});
+		
+		roleMap.put(role.name(), r.getId());
+		save();
 	}
 	
 	public void save() {
 		Guardian.getInstance().getMongoAdapter().saveServerProfile(this);
+	}
+	
+	public Optional<String> resolveInvite(Guild guild) {
+		List<Invite> invites = guild.retrieveInvites().complete();
+		
+		Iterator<String> inviteIterator = inviteMap.keySet().iterator();
+		while(inviteIterator.hasNext()) {
+			String inv = inviteIterator.next();
+			if(!invites.stream().anyMatch(i -> i.getCode().equals(inv))) {
+				inviteIterator.remove();
+			}
+		}
+		
+		int incrementCount = 0;
+		String inviteIncremented = null;
+		for(Invite invite : invites) {
+			if(inviteMap.containsKey(invite.getCode())) {
+				if(invite.getUses() > inviteMap.get(invite.getCode())) {
+					inviteIncremented = invite.getCode();
+					incrementCount += invite.getUses() - inviteMap.get(invite.getCode());
+					inviteMap.put(invite.getCode(), invite.getUses());
+				}
+			} else {
+				if(invite.getUses() > 0) {
+					inviteIncremented = invite.getCode();
+					incrementCount += invite.getUses();
+					inviteMap.put(invite.getCode(), invite.getUses());
+				}
+			}
+		}
+		
+		save();
+		
+		if(incrementCount == 1) {
+			return Optional.of(inviteIncremented);
+		} else {
+			return Optional.empty();
+		}
 	}
 	
 	public boolean canSendCommand(String channelId, Member member) {
@@ -269,6 +333,10 @@ public class ServerProfile {
 	
 	public String getJoinRole() {
 		return joinRole;
+	}
+	
+	public Map<String, Integer> getInviteMap() {
+		return inviteMap;
 	}
 	
 }

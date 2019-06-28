@@ -25,6 +25,10 @@ public class ServerProfileCache {
 		cache.put(guildId, profile);
 	}
 	
+	public void decacheServerProfile(String guildId) {
+		if(cache.containsKey(guildId)) cache.remove(guildId);
+	}
+	
 	public Optional<ServerProfile> getServerProfile(String guildId) {
 		if(cache.containsKey(guildId)) return Optional.of(cache.get(guildId));
 		return Optional.empty();

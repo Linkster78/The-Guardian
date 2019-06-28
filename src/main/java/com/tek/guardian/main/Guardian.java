@@ -40,9 +40,9 @@ import com.tek.guardian.commands.WhoisCommand;
 import com.tek.guardian.config.Config;
 import com.tek.guardian.data.MongoAdapter;
 import com.tek.guardian.events.AccountFlaggingListener;
+import com.tek.guardian.events.MemberStatusListener;
 import com.tek.guardian.events.MessageChangeListener;
 import com.tek.guardian.events.ReactionRoleListener;
-import com.tek.guardian.events.RoleMemoryListener;
 import com.tek.guardian.events.ServerStatusListener;
 import com.tek.guardian.events.VoiceChannelListener;
 import com.tek.guardian.timer.TaskTimer;
@@ -81,7 +81,6 @@ public class Guardian {
 				.setToken(config.getToken())
 				.setActivity(Activity.playing(config.getPresence()))
 				.build();
-		jda.awaitReady();
 		
 		waiter = new EventWaiter();
 		
@@ -116,7 +115,7 @@ public class Guardian {
 		
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
 				new VoiceChannelListener(), new AccountFlaggingListener(), new ReactionRoleListener(),
-				new RoleMemoryListener(), new MessageChangeListener());
+				new MemberStatusListener(), new MessageChangeListener());
 		
 		taskTimer = new TaskTimer();
 		taskTimer.start();
@@ -127,6 +126,8 @@ public class Guardian {
 		chatModerator = new ChatModerator();
 		chatModerator.registerFilter(new AdvertisingFilter());
 		chatModerator.registerFilter(new SpammingFilter());
+		
+		jda.awaitReady();
 		
 		LOGGER.info("Launched Guardian successfully!");
 	}

@@ -36,14 +36,25 @@ public class MongoAdapter {
 		return newProfile;
 	}
 	
-	public void removeServerProfile(Guild guild) {
+	public void removeServerProfile(String guildId) {
+		spCache.decacheServerProfile(guildId);
 		Query<ServerProfile> profileQuery = datastore.createQuery(ServerProfile.class)
-				.field("serverId").equal(guild.getId());
+				.field("serverId").equal(guildId);
 		if(profileQuery.count() > 0) {
 			ServerProfile profile = profileQuery.first();
 			datastore.delete(profile);
-			profile.leave(guild);
+			profile.leave(guildId);
 		}
+	}
+	
+	public List<ServerProfile> getServerProfiles() {
+		Query<ServerProfile> profileQuery = datastore.createQuery(ServerProfile.class);
+		ArrayList<ServerProfile> profileList = new ArrayList<ServerProfile>((int) profileQuery.count());
+		Iterator<ServerProfile> profileIterator = profileQuery.iterator();
+		while(profileIterator.hasNext()) {
+			profileList.add(profileIterator.next());
+		}
+		return profileList;
 	}
 	
 	public ServerProfile getServerProfile(Guild guild) {
