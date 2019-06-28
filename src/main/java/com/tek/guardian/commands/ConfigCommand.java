@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class ConfigCommand extends Command {
@@ -45,6 +46,7 @@ public class ConfigCommand extends Command {
 							.addField("Flagging Channel", "**Description:** Which channel will suspicious users be flagged in?\n**Key:** `flagchannel`\n**Value:** A channel name or ID", true)
 							.addField("Log Channel", "**Description:** Which channel will actions be logged in?\n**Key:** `logchannel`\n**Value:** A channel name or ID", true)
 							.addField("Deleted Message Channel", "**Description:** Which channel will deleted messages be logged in?\n**Key:** `delchannel`\n**Value:** A channel name or ID", true)
+							.addField("Join Role", "**Description:** Which role will be given to the user upon joining?\n**Key:** `joinrole`\n**Value:** A role name or ID", true)
 							.build();
 					
 					channel.sendMessage(embed).queue();
@@ -73,6 +75,7 @@ public class ConfigCommand extends Command {
 							.addField("Flagging Channel", "`" + (profile.getFlagChannel() != null ? guild.getTextChannelById(profile.getFlagChannel()) != null ? guild.getTextChannelById(profile.getFlagChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.addField("Log Channel", "`" + (profile.getLogChannel() != null ? guild.getTextChannelById(profile.getLogChannel()) != null ? guild.getTextChannelById(profile.getLogChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.addField("Deleted Message Channel", "`" + (profile.getDeletedChannel() != null ? guild.getTextChannelById(profile.getDeletedChannel()) != null ? guild.getTextChannelById(profile.getDeletedChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
+							.addField("Join Role", "`" + (profile.getJoinRole() != null ? guild.getRoleById(profile.getJoinRole()) != null ? guild.getRoleById(profile.getJoinRole()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.build();
 					
 					channel.sendMessage(embed).queue();
@@ -270,6 +273,22 @@ public class ConfigCommand extends Command {
 						channel.sendMessage("**Success!** The deleted message channel is now " + channelOpt.get().getAsMention() + ".").queue();
 					} else {
 						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("joinrole")) {
+					Optional<Role> roleOpt = Reference.roleFromString(guild, value);
+					
+					if(roleOpt.isPresent()) {
+						if(guild.getSelfMember().canInteract(roleOpt.get())) {
+							profile.setJoinRole(roleOpt.get().getId());
+							profile.save();
+							channel.sendMessage("**Success!** I will now assign the **" + roleOpt.get().getName() + "** role to new players.").queue();
+						} else {
+							channel.sendMessage("**I cannot assign that role to others.**").queue();
+						}
+					} else {
+						channel.sendMessage("**Invalid Value:** The value must be role. `Ex: role-name`.").queue();
 					}
 				}
 				

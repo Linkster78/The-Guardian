@@ -1,5 +1,6 @@
 package com.tek.guardian.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,9 @@ public class RoleMemory {
 	private String userId;
 	private List<String> roles;
 	
-	public RoleMemory() { }
+	public RoleMemory() {
+		this.roles = new ArrayList<String>();
+	}
 	
 	public RoleMemory(Member member) {
 		this.objectId = ObjectId.get();

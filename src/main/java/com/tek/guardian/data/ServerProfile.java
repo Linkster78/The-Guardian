@@ -41,6 +41,7 @@ public class ServerProfile {
 	private String flagChannel;
 	private String logChannel;
 	private String deletedChannel;
+	private String joinRole;
 	
 	public ServerProfile() {
 		this.commandChannels = new ArrayList<String>();
@@ -51,6 +52,7 @@ public class ServerProfile {
 		this.flagChannel = null;
 		this.logChannel = null;
 		this.deletedChannel = null;
+		this.joinRole = null;
 	}
 	
 	public ServerProfile(String serverId) {
@@ -70,6 +72,7 @@ public class ServerProfile {
 		this.flagChannel = null;
 		this.logChannel = null;
 		this.deletedChannel = null;
+		this.joinRole = null;
 	}
 	
 	public void join(Guild guild) {
@@ -206,6 +209,10 @@ public class ServerProfile {
 		this.moderateSpam = moderateSpam;
 	}
 	
+	public void setJoinRole(String joinRole) {
+		this.joinRole = joinRole;
+	}
+	
 	public String getServerId() {
 		return serverId;
 	}
@@ -268,6 +275,10 @@ public class ServerProfile {
 	
 	public String getDeletedChannel() {
 		return deletedChannel;
+	}
+	
+	public String getJoinRole() {
+		return joinRole;
 	}
 	
 }
