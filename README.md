@@ -23,6 +23,7 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - Permission & Server Security Scanning
  - Server Information
  - Auto On-Join role assignment
+ - Join/Leave logging with invite indication
  - Channel Locking/Unlocking
  - Message Bulk-Clearing
  - Per-User warning system
