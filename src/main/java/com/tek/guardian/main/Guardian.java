@@ -13,6 +13,7 @@ import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
 import com.tek.guardian.commands.ConfigCommand;
+import com.tek.guardian.commands.CreditsCommand;
 import com.tek.guardian.commands.CustomVoiceChannelCommand;
 import com.tek.guardian.commands.DeafenCommand;
 import com.tek.guardian.commands.GuideCommand;
@@ -116,6 +117,7 @@ public class Guardian {
 		commandHandler.registerCommand(new TempdeafenCommand());
 		commandHandler.registerCommand(new UndeafenCommand());
 		commandHandler.registerCommand(new PingCommand());
+		commandHandler.registerCommand(new CreditsCommand());
 		
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
 				new VoiceChannelListener(), new AccountFlaggingListener(), new ReactionRoleListener(),
