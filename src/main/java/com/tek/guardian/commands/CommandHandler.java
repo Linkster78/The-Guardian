@@ -91,7 +91,7 @@ public class CommandHandler extends ListenerAdapter {
 				}
 			}
 		} else {
-			Guardian.getInstance().getMessageCache().cacheMessage(event.getMessage());
+			Guardian.getInstance().getChatModerator().passEvent(event, profile);
 		}
 	}
 	

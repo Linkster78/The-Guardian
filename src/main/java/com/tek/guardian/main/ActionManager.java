@@ -354,6 +354,7 @@ public class ActionManager {
 			message = messageIterator.next();
 			if(!message.getId().equals(channel.getLatestMessageId())) {
 				toDelete.add(message);
+				Guardian.getInstance().getMessageCache().decache(message.getId());
 			} else {
 				continue;
 			}
@@ -385,6 +386,7 @@ public class ActionManager {
 			if(!message.getId().equals(channel.getLatestMessageId())) {
 				if(message.getAuthor().getId().equals(member.getId())) {
 					toDelete.add(message);
+					Guardian.getInstance().getMessageCache().decache(message.getId());
 					i++;
 				}
 			}

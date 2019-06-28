@@ -6,6 +6,10 @@ import org.apache.log4j.Logger;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.tek.guardian.cache.MessageCache;
+import com.tek.guardian.chat.AdvertisingFilter;
+import com.tek.guardian.chat.ChatModerator;
+import com.tek.guardian.chat.SpammingFilter;
+import com.tek.guardian.chat.SwearingFilter;
 import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
@@ -60,6 +64,7 @@ public class Guardian {
 	private TaskTimer taskTimer;
 	private ActionManager actionManager;
 	private MessageCache messageCache;
+	private ChatModerator chatModerator;
 	
 	public Guardian(Config config) {
 		this.config = config;
@@ -114,8 +119,12 @@ public class Guardian {
 		taskTimer.start();
 		
 		actionManager = new ActionManager();
-		
 		messageCache = new MessageCache();
+		
+		chatModerator = new ChatModerator();
+		chatModerator.registerFilter(new AdvertisingFilter());
+		chatModerator.registerFilter(new SpammingFilter());
+		chatModerator.registerFilter(new SwearingFilter());
 		
 		LOGGER.info("Launched Guardian successfully!");
 	}
@@ -154,6 +163,10 @@ public class Guardian {
 	
 	public MessageCache getMessageCache() {
 		return messageCache;
+	}
+	
+	public ChatModerator getChatModerator() {
+		return chatModerator;
 	}
 	
 }

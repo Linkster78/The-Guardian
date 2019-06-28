@@ -36,6 +36,9 @@ public class ConfigCommand extends Command {
 							.addField("Delete Commands", "**Description:** Does the bot delete commands after execution?\n**Key:** `delcmd`\n**Value:** yes/true/on no/false/off", true)
 							.addField("Reply Unknown", "**Description:** Does the bot inform the user when the command doesn't exist?\n**Key:** `replyunknown`\n**Value:** yes/true/on no/false/off", true)
 							.addField("Save Role Memory", "**Description:** Should the bot remember the roles of a user when he leaves/rejoins?\n**Key:** `saveroles`\n**Value:** yes/true/on no/false/off", true)
+							.addField("Moderate Advertising", "**Description:** Should the bot moderate the chat for advertising?\n**Key:** `modadvertising`\n**Value:** yes/true/on no/false/off", true)
+							.addField("Moderate Swearing", "**Description:** Should the bot moderate the chat for swearing?\n**Key:** `modswearing`\n**Value:** yes/true/on no/false/off", true)
+							.addField("Moderate Spamming", "**Description:** Should the bot moderate the chat for spamming?\n**Key:** `modspamming`\n**Value:** yes/true/on no/false/off", true)
 							.addField("Command Channels", "**Description:** Which channels can users use commands in?\n**Key:** `cmdchannels`\n**Value:** A list of channels, separated by spaces.", true)
 							.addField("Voice Channel Category", "**Description:** Which category holds custom voice channels?\n**Key:** `vccategory`\n**Value:** A category name or ID", true)
 							.addField("Suggestions Channel", "**Description:** Which channel will receive suggestions?\n**Key:** `suggestionschannel`\n**Value:** A channel name or ID", true)
@@ -61,6 +64,9 @@ public class ConfigCommand extends Command {
 							.addField("Delete Commands", "`" + Boolean.toString(profile.doesDeleteCommands()) + "`", true)
 							.addField("Reply Unknown", "`" + Boolean.toString(profile.doesReplyUnknown()) + "`", true)
 							.addField("Save Role Memory", "`" + Boolean.toString(profile.isSaveRoles()) + "`", true)
+							.addField("Moderate Advertising", "`" + Boolean.toString(profile.isModerateAdvertising()) + "`", true)
+							.addField("Moderate Swearing", "`" + Boolean.toString(profile.isModerateSwearing()) + "`", true)
+							.addField("Moderate Spamming", "`" + Boolean.toString(profile.isModerateSpam()) + "`", true)
 							.addField("Command Channels", profile.getCommandChannels().isEmpty() ? "`All`" : "`" + profile.getCommandChannels().stream().filter(ch -> ch != null).map(guild::getTextChannelById).filter(ch -> ch != null).map(ch -> "#" + ch.getName()).collect(Collectors.joining(", ")) + "`", true)
 							.addField("Voice Channel Category", "`" + (profile.getVoiceChannelCategory() != null ? guild.getCategoryById(profile.getVoiceChannelCategory()) != null ? guild.getCategoryById(profile.getVoiceChannelCategory()).getName() : "Invalid Value" : "Not Configured") + "`", true)
 							.addField("Suggestions Channel", "`" + (profile.getSuggestionChannel() != null ? guild.getTextChannelById(profile.getSuggestionChannel()) != null ? guild.getTextChannelById(profile.getSuggestionChannel()).getName() : "Invalid Value" : "Not Configured") + "`", true)
@@ -139,6 +145,48 @@ public class ConfigCommand extends Command {
 						profile.setSaveRoles(false);
 						profile.save();
 						channel.sendMessage("**Success!** The bot will no longer remember the roles of a user when he leaves/rejoins.").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("modadvertising")) {
+					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
+						profile.setModerateAdvertising(true);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will now moderate the chat for advertising.").queue();
+					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
+						profile.setModerateAdvertising(false);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will no longer moderate the chat for advertising.").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("modswearing") || key.equalsIgnoreCase("modswear")) {
+					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
+						profile.setModerateSwearing(true);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will now moderate the chat for swearing.").queue();
+					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
+						profile.setModerateSwearing(false);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will no longer moderate the chat for swearing.").queue();
+					} else {
+						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+					}
+				}
+				
+				else if(key.equalsIgnoreCase("modspamming") || key.equalsIgnoreCase("modspam")) {
+					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
+						profile.setModerateSpam(true);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will now moderate the chat for spamming.").queue();
+					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
+						profile.setModerateSpam(false);
+						profile.save();
+						channel.sendMessage("**Success!** The bot will no longer moderate the chat for spamming.").queue();
 					} else {
 						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
 					}
@@ -226,7 +274,7 @@ public class ConfigCommand extends Command {
 				}
 				
 				else {
-					channel.sendMessage("**Invalid Key. Accepted keys:** `prefix`.").queue();
+					channel.sendMessage("**Invalid Key. Accepted keys:** `prefix, delcmd, replyunknown, saveroles, modadvertising, modswearing, modspamming, cmdchannels, vccategory, suggestionschannel, flagchannel, logchannel, delchannel`.").queue();
 				}
 			} else {
 				channel.sendMessage("**You cannot edit the server configuration.**").queue();

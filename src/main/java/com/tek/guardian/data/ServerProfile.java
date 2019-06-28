@@ -26,11 +26,13 @@ public class ServerProfile {
 	
 	@Id
 	private String serverId;
-	
 	private String prefix;
 	private boolean deleteCommands;
 	private boolean replyUnknown;
 	private boolean saveRoles;
+	private boolean moderateAdvertising;
+	private boolean moderateSwearing;
+	private boolean moderateSpam;
 	private List<String> commandChannels;
 	private List<String> lockedChannels;
 	private Map<String, String> roleMap;
@@ -57,6 +59,9 @@ public class ServerProfile {
 		this.deleteCommands = true;
 		this.replyUnknown = true;
 		this.saveRoles = true;
+		this.moderateAdvertising = false;
+		this.moderateSwearing = false;
+		this.moderateSpam = false;
 		this.commandChannels = new ArrayList<String>();
 		this.lockedChannels = new ArrayList<String>();
 		this.roleMap = new HashMap<String, String>();
@@ -189,6 +194,18 @@ public class ServerProfile {
 		this.deletedChannel = deletedChannel;
 	}
 	
+	public void setModerateAdvertising(boolean moderateAdvertising) {
+		this.moderateAdvertising = moderateAdvertising;
+	}
+	
+	public void setModerateSwearing(boolean moderateSwearing) {
+		this.moderateSwearing = moderateSwearing;
+	}
+	
+	public void setModerateSpam(boolean moderateSpam) {
+		this.moderateSpam = moderateSpam;
+	}
+	
 	public String getServerId() {
 		return serverId;
 	}
@@ -207,6 +224,18 @@ public class ServerProfile {
 	
 	public boolean isSaveRoles() {
 		return saveRoles;
+	}
+	
+	public boolean isModerateAdvertising() {
+		return moderateAdvertising;
+	}
+	
+	public boolean isModerateSwearing() {
+		return moderateSwearing;
+	}
+	
+	public boolean isModerateSpam() {
+		return moderateSpam;
 	}
 	
 	public List<String> getCommandChannels() {

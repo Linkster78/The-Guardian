@@ -29,6 +29,7 @@ public class Reference {
 	
 	public static final Pattern TAG_REGEX = Pattern.compile("^(\\w|\\s)+#\\d{4}$");
 	public static final Pattern SNOWFLAKE_REGEX = Pattern.compile("^\\d+$");
+	public static final Pattern URL_REGEX = Pattern.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
 	
 	public static final String CONFIG_PATH = "./config.json";
 	public static final String DATABASE = "guardian";

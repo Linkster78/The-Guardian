@@ -30,6 +30,10 @@ public class MessageCache {
 		return Optional.empty();
 	}
 	
+	public void decache(String messageId) {
+		if(cache.containsKey(messageId)) cache.remove(messageId);
+	}
+	
 	public void cacheMessage(Message message) {
 		cache.put(message.getId(), new CachedMessage(message));
 	}
