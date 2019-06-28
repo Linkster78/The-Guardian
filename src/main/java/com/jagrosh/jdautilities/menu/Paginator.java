@@ -374,8 +374,9 @@ public class Paginator extends Menu
         if(columns == 1)
         {
             StringBuilder sbuilder = new StringBuilder();
-            for(int i=start; i<end; i++)
-                sbuilder.append("\n").append(numberItems ? "`"+(i+1)+".` " : "").append(strings.get(i));
+            for(int i=start; i<end; i++) {
+            	sbuilder.append("\n").append(numberItems ? "`"+(i+1)+".` " : "").append(strings.get(i));
+            }
             ebuilder.addField(title, sbuilder.toString(), true);
         }
         else

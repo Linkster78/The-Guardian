@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class SecurityScanCommand extends Command {
 
 	private final int ROLE_THRESHOLD = 25;
-	private final int PER_PAGE = 8;
+	private final int PER_PAGE = 5;
 	private final Paginator.Builder paginatorBuilder;
 	
 	public SecurityScanCommand(EventWaiter waiter) {
@@ -57,19 +57,23 @@ public class SecurityScanCommand extends Command {
 		List<String> warnings = new ArrayList<String>();
 		
 		for(Role role : guild.getRoles()) {
+			if(role.isManaged()) continue;
 			if(!role.hasPermission(Permission.ADMINISTRATOR) && role.hasPermission(Permission.MANAGE_ROLES)) {
 				for(Role other : guild.getRoles()) {
+					if(other.isManaged()) continue;
 					if(other.getPosition() < role.getPosition()) {
 						List<Permission> morePermissions = new ArrayList<Permission>();
 						for(Permission permission : Permission.values()) {
 							if(other.hasPermission(permission) && !role.hasPermission(permission)) {
-								morePermissions.add(permission);
+								if(!permission.isChannel()) {
+									morePermissions.add(permission);
+								}
 							}
 						}
 						if(!morePermissions.isEmpty()) {
 							vulnerabilities.add("Role **" + role.getName() + "** can give itself the **" + other.getName() + "**"
-									+ " role, which has more permissions: `" + morePermissions.stream()
-									.map(Permission::getName).collect(Collectors.joining(", ")) + "`.");
+									+ " role, which has: `" + morePermissions.stream()
+									.map(Permission::getName).limit(3).collect(Collectors.joining(", ")) + "`.");
 						}
 					}
 				}
@@ -82,8 +86,8 @@ public class SecurityScanCommand extends Command {
 				}
 				if(!channelPermissions.isEmpty()) {
 					warnings.add("Role **" + role.getName() + "**"
-							+ " can edit roles/permissions and as such, can give itself missing permissions on a channel to channel basis: `"
-							+ channelPermissions.stream().map(Permission::getName).collect(Collectors.joining(", ")) + "`.");
+							+ " can edit roles so they can get channel permissions: `"
+							+ channelPermissions.stream().map(Permission::getName).limit(3).collect(Collectors.joining(", ")) + "`.");
 				}
 			}
 			
