@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class SecurityScanCommand extends Command {
 
+	private final int ROLE_THRESHOLD = 25;
 	private final int PER_PAGE = 8;
 	private final Paginator.Builder paginatorBuilder;
 	
@@ -83,6 +84,13 @@ public class SecurityScanCommand extends Command {
 					warnings.add("Role **" + role.getName() + "**"
 							+ " can edit roles/permissions and as such, can give itself missing permissions on a channel to channel basis: `"
 							+ channelPermissions.stream().map(Permission::getName).collect(Collectors.joining(", ")) + "`.");
+				}
+			}
+			
+			if(guild.getMembersWithRoles(role).size() >= ROLE_THRESHOLD) {
+				if(role.isMentionable()) {
+					warnings.add("Role **" + role.getName() + "** has " + guild.getMembersWithRoles(role).size()
+							+ " members and can be pinged by **anyone**.");
 				}
 			}
 		}
