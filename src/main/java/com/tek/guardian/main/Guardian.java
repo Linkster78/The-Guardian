@@ -9,7 +9,6 @@ import com.tek.guardian.cache.MessageCache;
 import com.tek.guardian.chat.AdvertisingFilter;
 import com.tek.guardian.chat.ChatModerator;
 import com.tek.guardian.chat.SpammingFilter;
-import com.tek.guardian.chat.SwearingFilter;
 import com.tek.guardian.commands.BanCommand;
 import com.tek.guardian.commands.ClearCommand;
 import com.tek.guardian.commands.CommandHandler;
@@ -128,7 +127,6 @@ public class Guardian {
 		chatModerator = new ChatModerator();
 		chatModerator.registerFilter(new AdvertisingFilter());
 		chatModerator.registerFilter(new SpammingFilter());
-		chatModerator.registerFilter(new SwearingFilter());
 		
 		LOGGER.info("Launched Guardian successfully!");
 	}

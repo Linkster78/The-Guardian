@@ -31,7 +31,6 @@ public class ServerProfile {
 	private boolean replyUnknown;
 	private boolean saveRoles;
 	private boolean moderateAdvertising;
-	private boolean moderateSwearing;
 	private boolean moderateSpam;
 	private List<String> commandChannels;
 	private List<String> lockedChannels;
@@ -62,7 +61,6 @@ public class ServerProfile {
 		this.replyUnknown = true;
 		this.saveRoles = true;
 		this.moderateAdvertising = false;
-		this.moderateSwearing = false;
 		this.moderateSpam = false;
 		this.commandChannels = new ArrayList<String>();
 		this.lockedChannels = new ArrayList<String>();
@@ -201,10 +199,6 @@ public class ServerProfile {
 		this.moderateAdvertising = moderateAdvertising;
 	}
 	
-	public void setModerateSwearing(boolean moderateSwearing) {
-		this.moderateSwearing = moderateSwearing;
-	}
-	
 	public void setModerateSpam(boolean moderateSpam) {
 		this.moderateSpam = moderateSpam;
 	}
@@ -235,10 +229,6 @@ public class ServerProfile {
 	
 	public boolean isModerateAdvertising() {
 		return moderateAdvertising;
-	}
-	
-	public boolean isModerateSwearing() {
-		return moderateSwearing;
 	}
 	
 	public boolean isModerateSpam() {

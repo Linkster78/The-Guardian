@@ -38,7 +38,6 @@ public class ConfigCommand extends Command {
 							.addField("Reply Unknown", "**Description:** Does the bot inform the user when the command doesn't exist?\n**Key:** `replyunknown`\n**Value:** yes/true/on no/false/off", true)
 							.addField("Save Role Memory", "**Description:** Should the bot remember the roles of a user when he leaves/rejoins?\n**Key:** `saveroles`\n**Value:** yes/true/on no/false/off", true)
 							.addField("Moderate Advertising", "**Description:** Should the bot moderate the chat for advertising?\n**Key:** `modadvertising`\n**Value:** yes/true/on no/false/off", true)
-							.addField("Moderate Swearing", "**Description:** Should the bot moderate the chat for swearing?\n**Key:** `modswearing`\n**Value:** yes/true/on no/false/off", true)
 							.addField("Moderate Spamming", "**Description:** Should the bot moderate the chat for spamming?\n**Key:** `modspamming`\n**Value:** yes/true/on no/false/off", true)
 							.addField("Command Channels", "**Description:** Which channels can users use commands in?\n**Key:** `cmdchannels`\n**Value:** A list of channels, separated by spaces.", true)
 							.addField("Voice Channel Category", "**Description:** Which category holds custom voice channels?\n**Key:** `vccategory`\n**Value:** A category name or ID", true)
@@ -67,7 +66,6 @@ public class ConfigCommand extends Command {
 							.addField("Reply Unknown", "`" + Boolean.toString(profile.doesReplyUnknown()) + "`", true)
 							.addField("Save Role Memory", "`" + Boolean.toString(profile.isSaveRoles()) + "`", true)
 							.addField("Moderate Advertising", "`" + Boolean.toString(profile.isModerateAdvertising()) + "`", true)
-							.addField("Moderate Swearing", "`" + Boolean.toString(profile.isModerateSwearing()) + "`", true)
 							.addField("Moderate Spamming", "`" + Boolean.toString(profile.isModerateSpam()) + "`", true)
 							.addField("Command Channels", profile.getCommandChannels().isEmpty() ? "`All`" : "`" + profile.getCommandChannels().stream().filter(ch -> ch != null).map(guild::getTextChannelById).filter(ch -> ch != null).map(ch -> "#" + ch.getName()).collect(Collectors.joining(", ")) + "`", true)
 							.addField("Voice Channel Category", "`" + (profile.getVoiceChannelCategory() != null ? guild.getCategoryById(profile.getVoiceChannelCategory()) != null ? guild.getCategoryById(profile.getVoiceChannelCategory()).getName() : "Invalid Value" : "Not Configured") + "`", true)
@@ -162,20 +160,6 @@ public class ConfigCommand extends Command {
 						profile.setModerateAdvertising(false);
 						profile.save();
 						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will no longer moderate the chat for advertising.")).queue();
-					} else {
-						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
-					}
-				}
-				
-				else if(key.equalsIgnoreCase("modswearing") || key.equalsIgnoreCase("modswear")) {
-					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
-						profile.setModerateSwearing(true);
-						profile.save();
-						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now moderate the chat for swearing.")).queue();
-					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
-						profile.setModerateSwearing(false);
-						profile.save();
-						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will no longer moderate the chat for swearing.")).queue();
 					} else {
 						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
 					}

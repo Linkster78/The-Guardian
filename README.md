@@ -18,7 +18,7 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - Polls
  - Reaction Roles
  - Advanced server configuration (See further down)
- - Permission Security Scanning
+ - Permission & Server Security Scanning
  - Server Information
  - Auto On-Join role assignment
  - Channel Locking/Unlocking
@@ -53,7 +53,6 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - If the bot tells the user when commands are invalid
  - If the bot saves the roles of a user when he leaves/rejoins
  - If the bot moderates the chat for advertising
- - If the bot moderates the chat for swearing
  - If the bot moderates the chat for spamming
 
 *Note that you can view all of this with the* **config <show/list>** *command.*
