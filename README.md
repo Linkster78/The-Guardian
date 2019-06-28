@@ -31,6 +31,7 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - New Account Flagging
  - Deleted Message Logging
  - Moderation Action Logging
+ - Role Color (Hex)
  - Role mentioning
  - Channel slowmode
  - Chat Moderation
