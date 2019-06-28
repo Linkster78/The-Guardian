@@ -11,6 +11,7 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - I'm by myself, there's no one else :/
 
 ## Features
+ - Guide Menu
  - Userinfo/See/Whois
  - Per-User private voice channels
  - Suggestions
@@ -35,6 +36,8 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - Mute/Temporary Mute/Unmute
  - Deafen/Temporary Deafen/Undeafen
  - Paginated Help Menu
+ 
+*Note that you can view all of this with the* **help** *command.*
 
 ## Server Configuration
 **Every server** has their own custom server configuration. The bot adapts its features to it. **You can customize:**
@@ -56,7 +59,7 @@ The guardian is a moderation/administration bot made with server owners in mind.
 *Note that you can view all of this with the* **config <show/list>** *command.*
 
 ## Setup
-This should **only** be done if you are not able to use the provided bot (if he is offline or unavailable). Anyways, here it is:
+This should **only** be done if you are not able to use the provided bot (if he is offline or unavailable). If you've missed it, [here's the invite link](https://discordapp.com/oauth2/authorize?client_id=591840782793834505&scope=bot&permissions=8). Anyways, here it is:
  1. Compile the bot's source code into a runnable jar (Or download from the release section)
  2. Create a `config.json` file in the same folder.
  3. Inside of said file, insert this: 

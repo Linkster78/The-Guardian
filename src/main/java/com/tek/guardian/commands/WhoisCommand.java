@@ -48,7 +48,10 @@ public class WhoisCommand extends Command {
 			if(memberOpt.isPresent()) {
 				Member who = memberOpt.get();
 				
-				menuBuilder.addChoice(Paginator.STOP).setAction(emote -> {
+				menuBuilder.reset();
+				
+				menuBuilder.setUsers(member.getUser());
+				menuBuilder.addChoice(Paginator.STOP).setAction((m, emote) -> {
 					String reason = "No reason specified.";
 					
 					if(guild.getMemberById(who.getId()) != null) {

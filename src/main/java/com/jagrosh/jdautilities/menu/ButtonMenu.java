@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -44,12 +45,12 @@ import net.dv8tion.jda.internal.utils.Checks;
 public class ButtonMenu extends Menu
 {
     private final List<String> choices;
-    private final Consumer<ReactionEmote> action;
+    private final BiConsumer<Message, ReactionEmote> action;
     private final Consumer<Message> finalAction;
     private final Consumer<MessageBuilder> renderer;
     
     ButtonMenu(EventWaiter waiter, Set<User> users, Set<Role> roles, long timeout, TimeUnit unit,
-               List<String> choices, Consumer<ReactionEmote> action, Consumer<Message> finalAction, Consumer<MessageBuilder> renderer)
+               List<String> choices, BiConsumer<Message, ReactionEmote> action, Consumer<Message> finalAction, Consumer<MessageBuilder> renderer)
     {
         super(waiter, users, roles, timeout, unit);
         this.choices = choices;
@@ -133,7 +134,7 @@ public class ButtonMenu extends Menu
                             // is fired and processed above.
 
                             // Preform the specified action with the ReactionEmote
-                            action.accept(event.getReaction().getReactionEmote());
+                            action.accept(m, event.getReaction().getReactionEmote());
                             finalAction.accept(m);
                         }, timeout, unit, () -> finalAction.accept(m));
                     });
@@ -159,7 +160,7 @@ public class ButtonMenu extends Menu
     public static class Builder extends Menu.Builder<Builder, ButtonMenu>
     {
         private final List<String> choices = new LinkedList<>();
-        private Consumer<ReactionEmote> action;
+        private BiConsumer<Message, ReactionEmote> action;
         private Consumer<Message> finalAction = (m) -> {};
         private Consumer<MessageBuilder> renderer;
 
@@ -196,7 +197,7 @@ public class ButtonMenu extends Menu
          *
          * @return This builder
          */
-        public Builder setAction(Consumer<ReactionEmote> action)
+        public Builder setAction(BiConsumer<Message, ReactionEmote> action)
         {
             this.action = action;
             return this;
@@ -338,6 +339,10 @@ public class ButtonMenu extends Menu
         public Builder setRenderer(Consumer<MessageBuilder> renderer) {
         	this.renderer = renderer;
         	return this;
+        }
+        
+        public void reset() {
+        	choices.clear();
         }
     }
 }

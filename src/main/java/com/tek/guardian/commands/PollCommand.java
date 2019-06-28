@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.tek.guardian.data.ServerProfile;
+import com.tek.guardian.main.Guardian;
 import com.tek.guardian.main.Reference;
 
 import net.dv8tion.jda.api.JDA;
@@ -23,7 +24,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class PollCommand extends Command {
 
-	private final String[] EMOTES = new String[] {"🇦","🇧","🇨","🇩","🇪","🇫","🇬","🇭","🇮","🇯","🇰","🇱","🇲","🇳","🇴","🇵","🇶","🇷","🇸","🇹","🇺","🇻","🇼","🇽","🇾","🇿"};
+	public static final String[] EMOTES = new String[] {"🇦","🇧","🇨","🇩","🇪","🇫","🇬","🇭","🇮","🇯","🇰","🇱","🇲","🇳","🇴","🇵","🇶","🇷","🇸","🇹","🇺","🇻","🇼","🇽","🇾","🇿"};
 	private final EventWaiter waiter;
 	
 	public PollCommand(EventWaiter waiter) {
@@ -77,6 +78,7 @@ public class PollCommand extends Command {
 		waiter.waitForEvent(GuildMessageReceivedEvent.class, (GuildMessageReceivedEvent event) -> {
 			return event.getChannel().getId().equals(channel.getId()) && member.getId().equals(event.getMember().getId());
 		}, (GuildMessageReceivedEvent event) -> {
+			Guardian.getInstance().getMessageCache().decache(event.getMessageId());
 			event.getMessage().delete().queue();
 			messageCallback.accept(event.getMessage().getContentRaw());
 		}, 1, TimeUnit.MINUTES, () -> timeout.run());
