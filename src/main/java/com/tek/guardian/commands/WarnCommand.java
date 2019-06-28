@@ -34,13 +34,13 @@ public class WarnCommand extends Command {
 					if(member.canInteract(memberOpt.get()) && !member.equals(memberOpt.get())) {
 						Guardian.getInstance().getActionManager().warn(member, memberOpt.get(), channel, warningText, profile);
 					} else {
-						channel.sendMessage("**You cannot warn this person.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "You cannot warn this person.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot warn members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot warn members.")).queue();
 			}
 			
 			return true;

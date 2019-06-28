@@ -85,10 +85,10 @@ public class WarningsCommand extends Command {
 					
 					paginator.paginate(channel, 1);
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot view member warnings.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot view member warnings.")).queue();
 			}
 			
 			return true;

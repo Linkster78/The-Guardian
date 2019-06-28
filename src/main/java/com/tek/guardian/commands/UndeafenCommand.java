@@ -30,16 +30,16 @@ public class UndeafenCommand extends Command {
 						if(memberOpt.get().getVoiceState().isGuildDeafened()) {
 							Guardian.getInstance().getActionManager().undeafen(member, memberOpt.get(), channel, profile);
 						} else {
-							channel.sendMessage("**This person is not deafened.**").queue();
+							channel.sendMessage(Reference.embedError(jda, "This person is not deafened.")).queue();
 						}
 					} else {
-						channel.sendMessage("**You cannot undeafen this person.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "You cannot undeafen this person.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot undeafen members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot undeafen members.")).queue();
 			}
 			
 			return true;

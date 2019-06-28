@@ -43,19 +43,19 @@ public class TempdeafenCommand extends Command {
 							if(!memberOpt.get().getVoiceState().isGuildDeafened()) {
 								Guardian.getInstance().getActionManager().temporarilyDeafen(member, memberOpt.get(), time, channel, reason, profile);
 							} else {
-								channel.sendMessage("**This person is already deafened.**").queue();
+								channel.sendMessage(Reference.embedError(jda, "This person is already deafened.")).queue();
 							}
 						} else {
-							channel.sendMessage("**You cannot deafen this person.**").queue();
+							channel.sendMessage(Reference.embedError(jda, "You cannot deafen this person.")).queue();
 						}
 					} catch(IllegalArgumentException e) {
-						channel.sendMessage("**Invalid time. Format:** `time[s/m/h/d] Ex: 5h = 5 hours`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid time. Format: `time[s/m/h/d] Ex: 5h = 5 hours`.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot deafen members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot deafen members.")).queue();
 			}
 			
 			return true;

@@ -39,52 +39,52 @@ public class ReactionRoleCommand extends Command {
 				if(channelOpt.isPresent()) {
 					Optional<Message> messageOpt = findMessage(channelOpt.get(), args[1]);
 					if(messageOpt.isPresent()) {
-						channel.sendMessage("Reaction Role Creation: What's the name of the reaction role?").queue(message -> {
+						channel.sendMessage(Reference.embedInfo(jda, "Reaction Role Creation: What's the name of the reaction role?")).queue(message -> {
 							PollCommand.waitForMessage(waiter, channel, member, response -> {
 								Optional<Role> roleOpt = Reference.roleFromString(guild, response);
 								if(roleOpt.isPresent()) {
-									message.editMessage("Reaction Role Creation: Okay, `" + roleOpt.get().getName() + "` selected. React to this message with the emote you want.").queue(message1 -> {
+									message.editMessage(Reference.embedInfo(jda, "Reaction Role Creation: Okay, `" + roleOpt.get().getName() + "` selected. React to this message with the emote you want.")).queue(message1 -> {
 										waitForReaction(waiter, channel, member, reaction -> {
 											if(reaction.getReactionEmote().isEmote()) {
 												ReactionRole reactionRole = new ReactionRole(guild.getId(), messageOpt.get().getId(), reaction.getReactionEmote().getId(), roleOpt.get().getId(), false);
 												if(Guardian.getInstance().getMongoAdapter().getReactionRoles(reactionRole.getMessageId(), reactionRole.getEmoteId()).isEmpty()) {
 													Guardian.getInstance().getMongoAdapter().saveReactionRole(reactionRole);
 													messageOpt.get().addReaction(reaction.getReactionEmote().getEmote()).queue(r -> {
-														message1.editMessage("**Success!** The reaction role has been attached to your message.").queue();
+														message1.editMessage(Reference.embedSuccess(jda, "Success! The reaction role has been attached to your message.")).queue();
 													});
 												} else {
-													message.editMessage("**Failure!** That message already has a reaction role set to the emote.").queue();
+													message.editMessage(Reference.embedError(jda, "Failure! That message already has a reaction role set to the emote.")).queue();
 												}
 											} else {
 												ReactionRole reactionRole = new ReactionRole(guild.getId(), messageOpt.get().getId(), reaction.getReactionEmote().getEmoji(), roleOpt.get().getId(), true);
 												if(Guardian.getInstance().getMongoAdapter().getReactionRoles(reactionRole.getMessageId(), reactionRole.getEmoteId()).isEmpty()) {
 													Guardian.getInstance().getMongoAdapter().saveReactionRole(reactionRole);
 													messageOpt.get().addReaction(reaction.getReactionEmote().getEmoji()).queue(r -> {
-														message1.editMessage("**Success!** The reaction role has been attached to your message.").queue();
+														message1.editMessage(Reference.embedSuccess(jda, "Success! The reaction role has been attached to your message.")).queue();
 													});
 												} else {
-													message.editMessage("**Failure!** That message already has a reaction role set to the emote.").queue();
+													message.editMessage(Reference.embedError(jda, "Failure! That message already has a reaction role set to the emote.")).queue();
 												}
 											}
 										}, () -> {
-											channel.sendMessage("**The reaction role creation timed out.**").queue();
+											channel.sendMessage(Reference.embedError(jda, "The reaction role creation timed out.")).queue();
 										});
 									});
 								} else {
-									channel.sendMessage("**Invalid role. Reaction role creation cancelled.**").queue();
+									channel.sendMessage(Reference.embedError(jda, "Invalid role. Reaction role creation cancelled.")).queue();
 								}
 							}, () -> {
-								channel.sendMessage("**The reaction role creation timed out.**").queue();
+								channel.sendMessage(Reference.embedError(jda, "The reaction role creation timed out.")).queue();
 							});
 						});
 					} else {
-						channel.sendMessage("**Sorry. The message you specified either doesn't exist or is too old.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "Sorry. The message you specified either doesn't exist or is too old.")).queue();
 					}
 				} else {
-					channel.sendMessage("**The channel specified does not exist.**").queue();
+					channel.sendMessage(Reference.embedError(jda, "The channel specified does not exist.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot create reaction roles.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot create reaction roles.")).queue();
 			}
 			
 			return true;

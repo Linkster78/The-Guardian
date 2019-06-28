@@ -35,15 +35,15 @@ public class SuggestCommand extends Command {
 							.build();
 					
 					suggestions.sendMessage(embed).queue(m -> {
-						channel.sendMessage("Your suggestion has been submitted!").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Your suggestion has been submitted!")).queue();
 					});
 				} else {
 					profile.setSuggestionChannel(null);
 					profile.save();
-					channel.sendMessage("**The configured suggestions channel is invalid.**").queue();
+					channel.sendMessage(Reference.embedError(jda, "The configured suggestions channel is invalid.")).queue();
 				}
 			} else {
-				channel.sendMessage("**There is no suggestions channel configured. Contact the server administrators.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "There is no suggestions channel configured. Contact the server administrators.")).queue();
 			}
 			
 			return true;

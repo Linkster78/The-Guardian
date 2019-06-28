@@ -48,12 +48,12 @@ public class HelpCommand extends Command {
 				if(Reference.isInteger(args[0])) {
 					page = Integer.parseInt(args[0]);
 				} else {
-					channel.sendMessage("**Invalid Amount** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "Invalid Amount `" + args[0] + "`.")).queue();
 					return true;
 				}
 				
 				if(!(page >= 1 && page <= getPageCount())) {
-					channel.sendMessage("**Page number out of range: 1-" + getPageCount() + "**").queue();
+					channel.sendMessage(Reference.embedError(jda, "Page number out of range: 1-" + getPageCount() + ".")).queue();
 					return true;
 				}
 			}

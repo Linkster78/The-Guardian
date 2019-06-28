@@ -109,7 +109,7 @@ public class WhoisCommand extends Command {
 				
 				menuBuilder.build().display(channel);
 			} else {
-				channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+				channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 			}
 			
 			return true;

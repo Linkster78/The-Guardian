@@ -39,13 +39,13 @@ public class KickCommand extends Command {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
 						Guardian.getInstance().getActionManager().kick(member, memberOpt.get(), channel, reason, profile);
 					} else {
-						channel.sendMessage("**You cannot kick this person.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "You cannot kick this person.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot kick members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot kick members.")).queue();
 			}
 			
 			return true;

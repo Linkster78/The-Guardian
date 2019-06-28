@@ -43,32 +43,32 @@ public class PollCommand extends Command {
 				if(channelOpt.isPresent()) {
 					pollChannel = channelOpt.get();
 				} else {
-					channel.sendMessage("**The channel specified does not exist.**").queue();
+					channel.sendMessage(Reference.embedError(jda, "The channel specified does not exist.")).queue();
 					return true;
 				}
 			}
 			final TextChannel pollChannelFinal = pollChannel;
 			
 			if(pollChannel.canTalk(member)) {
-				channel.sendMessage("Poll Creation: What is the poll question?").queue(message1 -> {
+				channel.sendMessage(Reference.embedInfo(jda, "Poll Creation: What is the poll question?")).queue(message1 -> {
 					waitForMessage(waiter, channel, member, response -> {
 						String question = response;
 						
 						final List<String> options = new ArrayList<String>();
-						message1.editMessage("Poll Creation: Name a poll option. (Enter `done` if all the options are entered)").queue(message2 -> {
+						message1.editMessage(Reference.embedInfo(jda, "Poll Creation: Name a poll option. (Enter `done` if all the options are entered)")).queue(message2 -> {
 							waitForMessage(waiter, channel, member, getOptionCallback(waiter, pollChannelFinal, channel, message1, member, options, question), () -> {
-								channel.sendMessage("**The poll creation timed out.**").queue();
+								channel.sendMessage(Reference.embedError(jda, "The poll creation timed out.")).queue();
 							});
 						});
 					}, () -> {
-						channel.sendMessage("**The poll creation timed out.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "The poll creation timed out.")).queue();
 					});
 				});
 			} else {
-				channel.sendMessage("**The cannot create a poll in this channel.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot create a poll in this channel.")).queue();
 			}
 		} else {
-			channel.sendMessage("**The cannot create polls.**").queue();
+			channel.sendMessage(Reference.embedError(jda, "You cannot create polls.")).queue();
 		}
 		
 		return true;
@@ -78,7 +78,7 @@ public class PollCommand extends Command {
 		waiter.waitForEvent(GuildMessageReceivedEvent.class, (GuildMessageReceivedEvent event) -> {
 			return event.getChannel().getId().equals(channel.getId()) && member.getId().equals(event.getMember().getId());
 		}, (GuildMessageReceivedEvent event) -> {
-			Guardian.getInstance().getMessageCache().decache(event.getMessageId());
+			Guardian.getInstance().getMessageCache().dontCache(event.getMessageId());
 			event.getMessage().delete().queue();
 			messageCallback.accept(event.getMessage().getContentRaw());
 		}, 1, TimeUnit.MINUTES, () -> timeout.run());
@@ -89,7 +89,7 @@ public class PollCommand extends Command {
 			if(option.equalsIgnoreCase("done")) {
 				if(!options.isEmpty()) {
 					if(options.size() <= 26) {
-						questionMessage.editMessage("Created the poll in the " + pollChannel.getAsMention() + " channel.").queue();
+						questionMessage.editMessage(Reference.embedSuccess(channel.getJDA(), "Created the poll in the " + pollChannel.getAsMention() + " channel.")).queue();
 						
 						StringBuilder descriptionBuilder = new StringBuilder();
 						int i = 0;
@@ -110,15 +110,15 @@ public class PollCommand extends Command {
 							}
 						});
 					} else {
-						channel.sendMessage("**Poll creation cancelled. You can only have 26 options.**").queue();
+						channel.sendMessage(Reference.embedError(channel.getJDA(), "Poll creation cancelled. You can only have 26 options.")).queue();
 					}
 				} else {
-					channel.sendMessage("**Poll creation cancelled. You need to provide at least one option.**").queue();
+					channel.sendMessage(Reference.embedError(channel.getJDA(), "Poll creation cancelled. You need to provide at least one option.")).queue();
 				}
 			} else {
 				options.add(option);
 				waitForMessage(waiter, channel, member, getOptionCallback(waiter, pollChannel, channel, questionMessage, member, options, question), () -> {
-					channel.sendMessage("**The poll creation timed out.**").queue();
+					channel.sendMessage(Reference.embedError(channel.getJDA(), "The poll creation timed out.")).queue();
 				});
 			}
 		};

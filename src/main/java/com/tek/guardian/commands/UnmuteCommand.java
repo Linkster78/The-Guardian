@@ -34,16 +34,16 @@ public class UnmuteCommand extends Command {
 						if(memberOpt.get().getRoles().contains(r)) {
 							Guardian.getInstance().getActionManager().unmute(member, memberOpt.get(), profile, channel);
 						} else {
-							channel.sendMessage("**This person is not muted.**").queue();
+							channel.sendMessage(Reference.embedError(jda, "This person is not muted.")).queue();
 						}
 					} else {
-						channel.sendMessage("**You cannot unmute this person.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "You cannot unmute this person.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot unmute members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot unmute members.")).queue();
 			}
 			
 			return true;

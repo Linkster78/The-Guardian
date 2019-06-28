@@ -48,7 +48,7 @@ public class SecurityScanCommand extends Command {
 		if(args.length != 0) return false;
 		
 		if(!member.hasPermission(Permission.MANAGE_SERVER)) {
-			channel.sendMessage("**You cannot perform security scans on the server.**").queue();
+			channel.sendMessage(Reference.embedError(jda, "You cannot perform security scans on the server.")).queue();
 			return true;
 		}
 		

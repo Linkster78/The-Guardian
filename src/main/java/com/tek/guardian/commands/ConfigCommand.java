@@ -51,7 +51,7 @@ public class ConfigCommand extends Command {
 					
 					channel.sendMessage(embed).queue();
 				} else {
-					channel.sendMessage("**You cannot view the server configuration.**").queue();
+					channel.sendMessage(Reference.embedError(jda, "You cannot view the server configuration.")).queue();
 				}
 				
 				return true;
@@ -80,7 +80,7 @@ public class ConfigCommand extends Command {
 					
 					channel.sendMessage(embed).queue();
 				} else {
-					channel.sendMessage("**You cannot view the server configuration.**").queue();
+					channel.sendMessage(Reference.embedError(jda, "You cannot view the server configuration.")).queue();
 				}
 				
 				return true;
@@ -102,12 +102,12 @@ public class ConfigCommand extends Command {
 						if(value.length() <= 3) {
 							profile.setPrefix(value);
 							profile.save();
-							channel.sendMessage("**Success!** New server prefix is `" + value + "`.").queue();
+							channel.sendMessage(Reference.embedSuccess(jda, "Success! New server prefix is `" + value + "`.")).queue();
 						} else {
-							channel.sendMessage("**The prefix must be 3 characters or less.**").queue();
+							channel.sendMessage(Reference.embedError(jda, "The prefix must be 3 characters or less.")).queue();
 						}
 					} else {
-						channel.sendMessage("**The prefix must not contain spaces.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "The prefix must not contain spaces.")).queue();
 					}
 				} 
 				
@@ -115,13 +115,13 @@ public class ConfigCommand extends Command {
 					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
 						profile.setDeleteCommands(true);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now delete commands after execution.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now delete commands after execution.")).queue();
 					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
 						profile.setDeleteCommands(false);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now leave commands after execution.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now leave commands after execution.")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
 					}
 				}
 				
@@ -129,13 +129,13 @@ public class ConfigCommand extends Command {
 					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
 						profile.setReplyUnknown(true);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now tell the user when the command doesn't exist.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now tell the user when the command doesn't exist.")).queue();
 					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
 						profile.setReplyUnknown(false);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now ignore the user when the command doesn't exist.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now ignore the user when the command doesn't exist.")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
 					}
 				}
 				
@@ -143,13 +143,13 @@ public class ConfigCommand extends Command {
 					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
 						profile.setSaveRoles(true);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now remember the roles of a user when he leaves/rejoins.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now remember the roles of a user when he leaves/rejoins.")).queue();
 					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
 						profile.setSaveRoles(false);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will no longer remember the roles of a user when he leaves/rejoins.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will no longer remember the roles of a user when he leaves/rejoins.")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
 					}
 				}
 				
@@ -157,13 +157,13 @@ public class ConfigCommand extends Command {
 					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
 						profile.setModerateAdvertising(true);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now moderate the chat for advertising.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now moderate the chat for advertising.")).queue();
 					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
 						profile.setModerateAdvertising(false);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will no longer moderate the chat for advertising.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will no longer moderate the chat for advertising.")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
 					}
 				}
 				
@@ -171,13 +171,13 @@ public class ConfigCommand extends Command {
 					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
 						profile.setModerateSwearing(true);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now moderate the chat for swearing.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now moderate the chat for swearing.")).queue();
 					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
 						profile.setModerateSwearing(false);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will no longer moderate the chat for swearing.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will no longer moderate the chat for swearing.")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
 					}
 				}
 				
@@ -185,13 +185,13 @@ public class ConfigCommand extends Command {
 					if(value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("on")) {
 						profile.setModerateSpam(true);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will now moderate the chat for spamming.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will now moderate the chat for spamming.")).queue();
 					} else if(value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("off")) {
 						profile.setModerateSpam(false);
 						profile.save();
-						channel.sendMessage("**Success!** The bot will no longer moderate the chat for spamming.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The bot will no longer moderate the chat for spamming.")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** `yes/true/on no/false/off`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: `yes/true/on no/false/off`.")).queue();
 					}
 				}
 				
@@ -207,12 +207,12 @@ public class ConfigCommand extends Command {
 						profile.getCommandChannels().clear();
 						profile.getCommandChannels().addAll(channels);
 						profile.save();
-						channel.sendMessage("**Success!** The command channels are now " + channels.stream()
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The command channels are now " + channels.stream()
 									.map(guild::getTextChannelById)
 									.map(TextChannel::getAsMention)
-									.collect(Collectors.joining(", ")) + ".").queue();
+									.collect(Collectors.joining(", ")) + ".")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** The value must be a list of text channels. `Ex: channel1 channel2`.").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: The value must be a list of text channels. `Ex: channel1 channel2`.")).queue();
 					}
 				}
 				
@@ -222,9 +222,9 @@ public class ConfigCommand extends Command {
 					if(categoryOpt.isPresent()) {
 						profile.setVoiceChannelCategory(guild, categoryOpt.get().getId());
 						profile.save();
-						channel.sendMessage("**Success!** The voice channel category is now **" + categoryOpt.get().getName() + "**.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The voice channel category is now **" + categoryOpt.get().getName() + "**.")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: The value must be category. `Ex: category-name`.")).queue();
 					}
 				}
 				
@@ -234,9 +234,9 @@ public class ConfigCommand extends Command {
 					if(channelOpt.isPresent()) {
 						profile.setSuggestionChannel(channelOpt.get().getId());
 						profile.save();
-						channel.sendMessage("**Success!** The suggestions channel is now " + channelOpt.get().getAsMention() + ".").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The suggestions channel is now " + channelOpt.get().getAsMention() + ".")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: The value must be category. `Ex: category-name`.")).queue();
 					}
 				}
 				
@@ -246,9 +246,9 @@ public class ConfigCommand extends Command {
 					if(channelOpt.isPresent()) {
 						profile.setFlagChannel(channelOpt.get().getId());
 						profile.save();
-						channel.sendMessage("**Success!** The flagging channel is now " + channelOpt.get().getAsMention() + ".").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The flagging channel is now " + channelOpt.get().getAsMention() + ".")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: The value must be category. `Ex: category-name`.")).queue();
 					}
 				}
 				
@@ -258,9 +258,9 @@ public class ConfigCommand extends Command {
 					if(channelOpt.isPresent()) {
 						profile.setLogChannel(channelOpt.get().getId());
 						profile.save();
-						channel.sendMessage("**Success!** The logging channel is now " + channelOpt.get().getAsMention() + ".").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The logging channel is now " + channelOpt.get().getAsMention() + ".")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: The value must be category. `Ex: category-name`.")).queue();
 					}
 				}
 				
@@ -270,9 +270,9 @@ public class ConfigCommand extends Command {
 					if(channelOpt.isPresent()) {
 						profile.setDeletedChannel(channelOpt.get().getId());
 						profile.save();
-						channel.sendMessage("**Success!** The deleted message channel is now " + channelOpt.get().getAsMention() + ".").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Success! The deleted message channel is now " + channelOpt.get().getAsMention() + ".")).queue();
 					} else {
-						channel.sendMessage("**Invalid Value:** The value must be category. `Ex: category-name`.").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: The value must be category. `Ex: category-name`.")).queue();
 					}
 				}
 				
@@ -283,20 +283,20 @@ public class ConfigCommand extends Command {
 						if(guild.getSelfMember().canInteract(roleOpt.get())) {
 							profile.setJoinRole(roleOpt.get().getId());
 							profile.save();
-							channel.sendMessage("**Success!** I will now assign the **" + roleOpt.get().getName() + "** role to new players.").queue();
+							channel.sendMessage(Reference.embedSuccess(jda, "Success! I will now assign the **" + roleOpt.get().getName() + "** role to new players.")).queue();
 						} else {
-							channel.sendMessage("**I cannot assign that role to others.**").queue();
+							channel.sendMessage(Reference.embedError(jda, "That role is unassignable by me.")).queue();
 						}
 					} else {
-						channel.sendMessage("**Invalid Value:** The value must be role. `Ex: role-name`.").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid Value: The value must be role. `Ex: role-name`.")).queue();
 					}
 				}
 				
 				else {
-					channel.sendMessage("**Invalid Key. Accepted keys:** `prefix, delcmd, replyunknown, saveroles, modadvertising, modswearing, modspamming, cmdchannels, vccategory, suggestionschannel, flagchannel, logchannel, delchannel`.").queue();
+					channel.sendMessage(Reference.embedError(jda, "Invalid Key. Accepted keys: `prefix, delcmd, replyunknown, saveroles, modadvertising, modswearing, modspamming, cmdchannels, vccategory, suggestionschannel, flagchannel, logchannel, delchannel`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot edit the server configuration.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot edit the server configuration.")).queue();
 			}
 			
 			return true;

@@ -37,7 +37,7 @@ public class UnwarnCommand extends Command {
 							if(Reference.isInteger(args[1])) {
 								count = Integer.parseInt(args[1]);
 							} else {
-								channel.sendMessage("**Invalid Amount** `" + args[1] + "`").queue();
+								channel.sendMessage(Reference.embedError(jda, "Invalid Amount `" + args[1] + "`.")).queue();
 								return true;
 							}
 						}
@@ -45,16 +45,16 @@ public class UnwarnCommand extends Command {
 						if((count >= 1 && count <= userProfile.getWarnings().size()) || count == Integer.MAX_VALUE) {
 							Guardian.getInstance().getActionManager().unwarn(member, memberOpt.get(), channel, count, profile, userProfile);
 						} else {
-							channel.sendMessage("**Warning number out of range: 1-" + userProfile.getWarnings().size() + "**").queue();
+							channel.sendMessage(Reference.embedError(jda, "Warning number out of range: 1-" + userProfile.getWarnings().size() + ".")).queue();
 						}
 					} else {
-						channel.sendMessage("**You cannot unwarn this person.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "You cannot unwarn this person.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot unwarn members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot unwarn members.")).queue();
 			}
 			
 			return true;

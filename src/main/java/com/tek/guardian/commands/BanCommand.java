@@ -39,13 +39,13 @@ public class BanCommand extends Command {
 					if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
 						Guardian.getInstance().getActionManager().ban(member, memberOpt.get(), channel, reason, profile);
 					} else {
-						channel.sendMessage("**You cannot ban this person.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "You cannot ban this person.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot ban members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot ban members.")).queue();
 			}
 			
 			return true;

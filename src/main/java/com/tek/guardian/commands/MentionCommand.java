@@ -39,10 +39,10 @@ public class MentionCommand extends Command {
 						});
 					});
 				} else {
-					channel.sendMessage("**No role was found by the identifier** `" + roleName + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No role was found by the identifier `" + roleName + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot mention this role.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot mention this role.")).queue();
 			}
 			
 			return true;

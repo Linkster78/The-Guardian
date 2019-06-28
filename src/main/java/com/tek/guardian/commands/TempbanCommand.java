@@ -42,16 +42,16 @@ public class TempbanCommand extends Command {
 						if(!memberOpt.get().equals(member) && member.canInteract(memberOpt.get())) {
 							Guardian.getInstance().getActionManager().temporarilyBan(member, memberOpt.get(), time, channel, reason, profile);
 						} else {
-							channel.sendMessage("**You cannot ban this person.**").queue();
+							channel.sendMessage(Reference.embedError(jda, "You cannot ban this person.")).queue();
 						}
 					} catch(IllegalArgumentException e) {
-						channel.sendMessage("**Invalid time. Format:** `time[s/m/h/d] Ex: 5h = 5 hours`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid time. Format: `time[s/m/h/d] Ex: 5h = 5 hours`.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot ban members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot ban members.")).queue();
 			}
 			
 			return true;

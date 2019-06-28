@@ -34,14 +34,14 @@ public class ClearCommand extends Command {
 						if(memberOpt.isPresent()) {
 							Guardian.getInstance().getActionManager().clearUser(member, memberOpt.get(), channel, amount, profile);
 						} else {
-							channel.sendMessage("**No member was found by the identifier** `" + args[1] + "`").queue();
+							channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[1] + "`.")).queue();
 						}
 					}
 				} else {
-					channel.sendMessage("**Invalid Amount** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "Invalid Amount `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot delete messages.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot delete messages.")).queue();
 			}
 			
 			return true;

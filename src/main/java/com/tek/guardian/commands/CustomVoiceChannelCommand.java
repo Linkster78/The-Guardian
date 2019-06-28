@@ -35,21 +35,21 @@ public class CustomVoiceChannelCommand extends Command {
 							CustomVoiceChannel customvc = new CustomVoiceChannel(category, member);
 							customvc.create(category, member, capacity, () -> {
 								Guardian.getInstance().getMongoAdapter().saveCustomVoiceChannel(customvc);
-								channel.sendMessage("**Created a custom voice channel for you!**\n Here's the Video Chat URL: https://discordapp.com/channels/" + guild.getId() + "/" + customvc.getChannelId()).queue();
+								channel.sendMessage(Reference.embedSuccess(jda, "Created a custom voice channel for you!\n Here's the Video Chat URL: https://discordapp.com/channels/" + guild.getId() + "/" + customvc.getChannelId())).queue();
 							});
 						} else {
-							channel.sendMessage("**Invalid Amount** `" + args[0] + "`").queue();
+							channel.sendMessage(Reference.embedError(jda, "Invalid Amount `" + args[0] + "`.")).queue();
 						}
 					} else {
-						channel.sendMessage("**You already own a custom voice channel.**").queue();
+						channel.sendMessage(Reference.embedError(jda, "You already own a custom voice channel.")).queue();
 					}
 				} else {
 					profile.setVoiceChannelCategory(guild, null);
 					profile.save();
-					channel.sendMessage("**The configured voice channel category is invalid.**").queue();
+					channel.sendMessage(Reference.embedError(jda, "The configured voice channel category is invalid.")).queue();
 				}
 			} else {
-				channel.sendMessage("**There is no voice channel category configured. Contact the server administrators.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "There is no voice channel category configured. Contact the server administrators.")).queue();
 			}
 			
 			return true;

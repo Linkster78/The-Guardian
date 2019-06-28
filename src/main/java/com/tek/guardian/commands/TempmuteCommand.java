@@ -47,19 +47,19 @@ public class TempmuteCommand extends Command {
 							if(!memberOpt.get().getRoles().contains(r)) {
 								Guardian.getInstance().getActionManager().temporarilyMute(member, memberOpt.get(), profile, time, channel, reason);
 							} else {
-								channel.sendMessage("**This person is already muted.**").queue();
+								channel.sendMessage(Reference.embedError(jda, "This person is already muted.")).queue();
 							}
 						} else {
-							channel.sendMessage("**You cannot mute this person.**").queue();
+							channel.sendMessage(Reference.embedError(jda, "You cannot mute this person.")).queue();
 						}
 					} catch(IllegalArgumentException e) {
-						channel.sendMessage("**Invalid time. Format:** `time[s/m/h/d] Ex: 5h = 5 hours`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid time. Format: `time[s/m/h/d] Ex: 5h = 5 hours`.")).queue();
 					}
 				} else {
-					channel.sendMessage("**No member was found by the identifier** `" + args[0] + "`").queue();
+					channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[0] + "`.")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot mute members.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot mute members.")).queue();
 			}
 			
 			return true;

@@ -30,7 +30,7 @@ public class UnlockCommand extends Command {
 				if(channelOpt.isPresent()) {
 					lockChannel = channelOpt.get();
 				} else {
-					channel.sendMessage("**The channel specified does not exist.**").queue();
+					channel.sendMessage(Reference.embedError(jda, "The channel specified does not exist.")).queue();
 					return true;
 				}
 			}
@@ -38,10 +38,10 @@ public class UnlockCommand extends Command {
 			if(profile.getLockedChannels().contains(lockChannel.getId())) {
 				Guardian.getInstance().getActionManager().unlock(member, profile, channel, lockChannel);
 			} else {
-				channel.sendMessage("**This channel is not locked.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "This channel is not locked.")).queue();
 			}
 		} else {
-			channel.sendMessage("**You cannot unlock channels.**").queue();
+			channel.sendMessage(Reference.embedError(jda, "You cannot unlock channels.")).queue();
 		}
 		
 		return true;

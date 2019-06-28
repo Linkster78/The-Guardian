@@ -27,7 +27,7 @@ public class ActionManager {
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You have been muted in the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been muted in the server **" + guild.getName() + "** for the reason: `" + reason + "`")).queue(m -> {
 					guild.addRoleToMember(member, r).queue();
 				}, e -> {
 					guild.addRoleToMember(member, r).queue();
@@ -36,7 +36,7 @@ public class ActionManager {
 				guild.addRoleToMember(member, r).queue();
 			});
 			
-			channel.sendMessage("Successfully muted " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully muted " + member.getUser().getAsMention() + ". `" + reason + "`")).queue();
 			
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Muted")
 					.setColor(Color.black)
@@ -50,7 +50,7 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't mute " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't mute " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class ActionManager {
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You have been temporarily muted in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been temporarily muted in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`")).queue(m -> {
 					guild.addRoleToMember(member, r).queue();
 				}, e -> {
 					guild.addRoleToMember(member, r).queue();
@@ -72,7 +72,7 @@ public class ActionManager {
 			TemporaryAction action = new TemporaryAction(member.getId(), guild.getId(), Action.TEMPMUTE, System.currentTimeMillis(), time);
 			Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
 			
-			channel.sendMessage("Temporarily muted " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Temporarily muted " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`")).queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Muted")
 					.setColor(Color.black)
@@ -86,17 +86,17 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't mute " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't mute " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
 	public void unmute(Member author, Member member, ServerProfile profile, TextChannel channel) {
-		Guild guild = author.getGuild();
+		Guild guild = member.getGuild();
 		Role r = guild.getRoleById(profile.getRoleMap().get(BotRole.MUTED.name()));
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You have been unmuted in the server **" + guild.getName() + "**.").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(member.getJDA(), "You have been unmuted in the server **" + guild.getName() + "**.")).queue(m -> {
 					guild.removeRoleFromMember(member, r).queue();
 				}, e -> {
 					guild.removeRoleFromMember(member, r).queue();
@@ -113,9 +113,9 @@ public class ActionManager {
 				}
 			}
 			
-			if(channel != null) channel.sendMessage("Successfully unmuted " + member.getUser().getAsMention() + ".").queue();
+			if(channel != null) channel.sendMessage(Reference.embedSuccess(member.getJDA(), "Successfully unmuted " + member.getUser().getAsMention() + ".")).queue();
 		
-			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Unmuted")
+			MessageEmbed embed = Reference.formatEmbed(member.getJDA(), "User Unmuted")
 					.setColor(Color.white)
 					.setDescription("A user was unmuted.")
 					.addField("Staff Member", author == null ? "Temporary Action" : author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
@@ -126,7 +126,7 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't unmute " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't unmute " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
@@ -136,7 +136,7 @@ public class ActionManager {
 		if(guild.getSelfMember().canInteract(member)) {
 			if(member.getVoiceState().inVoiceChannel()) {
 				member.getUser().openPrivateChannel().queue(pm -> {
-					pm.sendMessage("You have been deafened in the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
+					pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been deafened in the server **" + guild.getName() + "** for the reason: `" + reason + "`")).queue(m -> {
 						member.deafen(true).queue();
 					}, e -> {
 						member.deafen(true).queue();
@@ -145,7 +145,7 @@ public class ActionManager {
 					member.deafen(true).queue();
 				});
 				
-				channel.sendMessage("Successfully deafened " + member.getUser().getAsMention() + ". `" + reason + "`").queue();
+				channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully deafened " + member.getUser().getAsMention() + ". `" + reason + "`")).queue();
 			
 				MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Deafened")
 						.setColor(Color.black)
@@ -159,10 +159,10 @@ public class ActionManager {
 				
 				log(embed, guild, profile);
 			} else {
-				channel.sendMessage("The user " + member.getUser().getAsMention() + " is not in a voice channel.").queue();
+				channel.sendMessage(Reference.embedError(author.getJDA(), "The user " + member.getUser().getAsMention() + " is not in a voice channel.")).queue();
 			}
 		} else {
-			channel.sendMessage("Couldn't deafen " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't deafen " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class ActionManager {
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You have been temporarily deafened in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been temporarily deafened in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`")).queue(m -> {
 					member.deafen(true).queue();
 				}, e -> {
 					member.deafen(true).queue();
@@ -183,7 +183,7 @@ public class ActionManager {
 			TemporaryAction action = new TemporaryAction(member.getId(), guild.getId(), Action.TEMPDEAFEN, System.currentTimeMillis(), time);
 			Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
 			
-			channel.sendMessage("Temporarily deafened " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Temporarily deafened " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`")).queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Deafened")
 					.setColor(Color.black)
@@ -197,16 +197,16 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't deafen " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't deafen " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
 	public void undeafen(Member author, Member member, TextChannel channel, ServerProfile profile) {
-		Guild guild = author.getGuild();
+		Guild guild = member.getGuild();
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You have been undeafened in the server **" + guild.getName() + "**").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(member.getJDA(), "You have been undeafened in the server **" + guild.getName() + "**.")).queue(m -> {
 					member.deafen(false).queue();
 				}, e -> {
 					member.deafen(false).queue();
@@ -223,9 +223,9 @@ public class ActionManager {
 				}
 			}
 			
-			if(channel != null) channel.sendMessage("Successfully undeafened " + member.getUser().getAsMention() + ".").queue();
+			if(channel != null) channel.sendMessage(Reference.embedSuccess(member.getJDA(), "Successfully undeafened " + member.getUser().getAsMention() + ".")).queue();
 		
-			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Undeafened")
+			MessageEmbed embed = Reference.formatEmbed(member.getJDA(), "User Undeafened")
 					.setColor(Color.white)
 					.setDescription("A user was undeafened.")
 					.addField("Staff Member", author == null ? "Temporary Action" : author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
@@ -236,7 +236,7 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't undeafen " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(member.getJDA(), "Couldn't undeafen " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
@@ -245,7 +245,7 @@ public class ActionManager {
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You were banned from the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(author.getJDA(), "You were banned from the server **" + guild.getName() + "** for the reason: `" + reason + "`")).queue(m -> {
 					guild.ban(member, 0, reason).queue();
 				}, e -> {
 					guild.ban(member, 0, reason).queue();
@@ -254,7 +254,7 @@ public class ActionManager {
 				guild.ban(member, 0, reason).queue();
 			});
 			
-			channel.sendMessage("Successfully banned " + member.getUser().getAsMention() + " from the server. `" + reason + "`").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully banned " + member.getUser().getAsMention() + " from the server. `" + reason + "`")).queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Banned")
 					.setColor(Color.red)
@@ -268,7 +268,7 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't ban " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't ban " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
@@ -277,7 +277,7 @@ public class ActionManager {
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You have been temporarily banned in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been temporarily banned in the server **" + guild.getName() + "** for **" + Reference.formatTime(time) + "** for the reason: `" + reason + "`")).queue(m -> {
 					guild.ban(member, 0, reason).queue();
 				}, e -> {
 					guild.ban(member, 0, reason).queue();
@@ -289,7 +289,7 @@ public class ActionManager {
 			TemporaryAction action = new TemporaryAction(member.getId(), guild.getId(), Action.TEMPBAN, System.currentTimeMillis(), time);
 			Guardian.getInstance().getMongoAdapter().createTemporaryAction(action);
 				
-			channel.sendMessage("Temporarily banned " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Temporarily banned " + member.getUser().getAsMention() + " for " + Reference.formatTime(time) + ". `" + reason + "`")).queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Banned")
 					.setColor(Color.red)
@@ -303,7 +303,7 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't ban " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't ban " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
@@ -318,7 +318,7 @@ public class ActionManager {
 		
 		if(guild.getSelfMember().canInteract(member)) {
 			member.getUser().openPrivateChannel().queue(pm -> {
-				pm.sendMessage("You were kicked from the server **" + guild.getName() + "** for the reason: `" + reason + "`").queue(m -> {
+				pm.sendMessage(Reference.embedInfo(author.getJDA(), "You were kicked from the server **" + guild.getName() + "** for the reason: `" + reason + "`")).queue(m -> {
 					guild.kick(member, reason).queue();
 				}, e -> {
 					guild.kick(member, reason).queue();
@@ -327,7 +327,7 @@ public class ActionManager {
 				guild.kick(member, reason).queue();
 			});
 			
-			channel.sendMessage("Successfully kicked " + member.getUser().getAsMention() + " from the server. `" + reason + "`").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully kicked " + member.getUser().getAsMention() + " from the server. `" + reason + "`")).queue();
 		
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Kicked")
 					.setColor(Color.orange)
@@ -340,7 +340,7 @@ public class ActionManager {
 			
 			log(embed, guild, profile);
 		} else {
-			channel.sendMessage("Couldn't kick " + member.getUser().getAsMention()).queue();
+			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't kick " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	
@@ -361,7 +361,7 @@ public class ActionManager {
 			i++;
 		}
 		channel.deleteMessages(toDelete).queue(v -> {
-			channel.sendMessage("Cleared **" + toDelete.size() + "** messages.").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Cleared **" + toDelete.size() + "** messages.")).queue();
 		});
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Messages Cleared")
@@ -392,7 +392,7 @@ public class ActionManager {
 			}
 		}
 		channel.deleteMessages(toDelete).queue(v -> {
-			channel.sendMessage("Cleared **" + toDelete.size() + "** messages from " + member.getAsMention() + ".").queue();
+			channel.sendMessage(Reference.embedSuccess(author.getJDA(), "Cleared **" + toDelete.size() + "** messages from " + member.getAsMention() + ".")).queue();
 		});
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Messages Cleared")
@@ -410,7 +410,7 @@ public class ActionManager {
 	public void lock(Member author, ServerProfile profile, TextChannel in, TextChannel channel) {
 		profile.getLockedChannels().add(channel.getId());
 		profile.save();
-		in.sendMessage("Locked the channel " + channel.getAsMention() + ".").queue();
+		in.sendMessage(Reference.embedSuccess(author.getJDA(), "Locked the channel " + channel.getAsMention() + ".")).queue();
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Channel Locked")
 				.setColor(Color.yellow)
@@ -427,7 +427,7 @@ public class ActionManager {
 	public void unlock(Member author, ServerProfile profile, TextChannel in, TextChannel channel) {
 		profile.getLockedChannels().remove(channel.getId());
 		profile.save();
-		in.sendMessage("Unlocked the channel " + channel.getAsMention() + ".").queue();
+		in.sendMessage(Reference.embedSuccess(author.getJDA(), "Unlocked the channel " + channel.getAsMention() + ".")).queue();
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Channel Unlocked")
 				.setColor(Color.yellow)
@@ -447,10 +447,10 @@ public class ActionManager {
 		userProfile.pushWarning(warning);
 		userProfile.save();
 		
-		in.sendMessage("Successfully warned " + member.getAsMention() + " for `" + warningText + "`. He now has **" + userProfile.getWarnings().size() + "** warning(s).").queue();
+		in.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully warned " + member.getAsMention() + " for `" + warningText + "`. He now has **" + userProfile.getWarnings().size() + "** warning(s).")).queue();
 	
 		member.getUser().openPrivateChannel().queue(pm -> {
-			pm.sendMessage("You have been warned in the server **" + author.getGuild().getName() + "**: `" + warningText + "`.").queue(m -> {}, e -> {});
+			pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been warned in the server **" + author.getGuild().getName() + "**: `" + warningText + "`.")).queue(m -> {}, e -> {});
 		});
 		
 		MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Member Warned")
@@ -472,7 +472,7 @@ public class ActionManager {
 			userProfile.getWarnings().clear();
 			userProfile.save();
 			
-			in.sendMessage("Cleared the warnings of " + member.getAsMention()).queue();
+			in.sendMessage(Reference.embedSuccess(author.getJDA(), "Cleared the warnings of " + member.getAsMention() + ".")).queue();
 			
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Member Warnings Cleared")
 					.setColor(Color.gray)
@@ -490,7 +490,7 @@ public class ActionManager {
 			userProfile.getWarnings().remove(count - 1);
 			userProfile.save();
 			
-			in.sendMessage("Warning `" + warning.getWarning() + "` assigned by **" + (warningAuthor == null ? "Unknown User" : warningAuthor.getUser().getName() + "#" + warningAuthor.getUser().getDiscriminator()) + "** removed from " + member.getAsMention() + ".").queue();
+			in.sendMessage(Reference.embedSuccess(author.getJDA(), "Warning `" + warning.getWarning() + "` assigned by **" + (warningAuthor == null ? "Unknown User" : warningAuthor.getUser().getName() + "#" + warningAuthor.getUser().getDiscriminator()) + "** removed from " + member.getAsMention() + ".")).queue();
 			
 			MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "Member Warning Removed")
 					.setColor(Color.gray)

@@ -1,5 +1,6 @@
 package com.tek.guardian.main;
 
+import java.awt.Color;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -42,6 +44,18 @@ public class Reference {
 		return new EmbedBuilder()
 				.setAuthor(title, null, self.getAvatarUrl())
 				.setFooter("Executed at " + timeFormatter.format(now) + " EST");
+	}
+	
+	public static MessageEmbed embedSuccess(JDA jda, String success) {
+		return formatEmbed(jda, "Success").setColor(Color.green).setDescription(success).build();
+	}
+	
+	public static MessageEmbed embedError(JDA jda, String error) {
+		return formatEmbed(jda, "Error").setColor(Color.red).setDescription(error).build();
+	}
+	
+	public static MessageEmbed embedInfo(JDA jda, String info) {
+		return formatEmbed(jda, "Information").setColor(Color.blue).setDescription(info).build();
 	}
 	
 	public static Optional<Member> memberFromString(Guild guild, String str) {

@@ -28,7 +28,7 @@ public class SlowmodeCommand extends Command {
 					try {
 						time = Reference.timeToMillis(args[0]) / 1000;
 					} catch(IllegalArgumentException e) {
-						channel.sendMessage("**Invalid time. Format:** `time[s/m/h] Ex: 15s = 15 seconds`").queue();
+						channel.sendMessage(Reference.embedError(jda, "Invalid time. Format: `time[s/m/h] Ex: 15s = 15 seconds`.")).queue();
 						return true;
 					}
 				}
@@ -36,15 +36,15 @@ public class SlowmodeCommand extends Command {
 				if(time >= 0 && time <= 21600) {
 					channel.getManager().setSlowmode(time).queue();
 					if(time == 0) {
-						channel.sendMessage("Disabled the channel slowmode.").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Disabled the channel slowmode.")).queue();
 					} else {
-						channel.sendMessage("Set the channel slowmode to every " + Reference.formatTime(time * 1000) + ".").queue();
+						channel.sendMessage(Reference.embedSuccess(jda, "Set the channel slowmode to every " + Reference.formatTime(time * 1000) + ".")).queue();
 					}
 				} else {
-					channel.sendMessage("**Slow mode time out of range: 0-" + 21600 + "**").queue();
+					channel.sendMessage(Reference.embedError(jda, "Slow mode time out of range: 0-" + 21600 + "")).queue();
 				}
 			} else {
-				channel.sendMessage("**You cannot set the channel slowmode.**").queue();
+				channel.sendMessage(Reference.embedError(jda, "You cannot set the channel slowmode.")).queue();
 			}
 			
 			return true;
