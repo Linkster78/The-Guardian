@@ -26,16 +26,20 @@ public class ClearCommand extends Command {
 				if(Reference.isInteger(args[0])) {
 					int amount = Integer.parseInt(args[0]);
 					
-					if(args.length == 1) {
-						Guardian.getInstance().getActionManager().clear(member, channel, amount, profile);
-					} else if(args.length == 2) {
-						Optional<Member> memberOpt = Reference.memberFromString(guild, args[1]);
-						
-						if(memberOpt.isPresent()) {
-							Guardian.getInstance().getActionManager().clearUser(member, memberOpt.get(), channel, amount, profile);
-						} else {
-							channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[1] + "`.")).queue();
+					if(amount >= 1 && amount <= 100) {
+						if(args.length == 1) {
+							Guardian.getInstance().getActionManager().clear(member, channel, amount, profile);
+						} else if(args.length == 2) {
+							Optional<Member> memberOpt = Reference.memberFromString(guild, args[1]);
+							
+							if(memberOpt.isPresent()) {
+								Guardian.getInstance().getActionManager().clearUser(member, memberOpt.get(), channel, amount, profile);
+							} else {
+								channel.sendMessage(Reference.embedError(jda, "No member was found by the identifier `" + args[1] + "`.")).queue();
+							}
 						}
+					} else {
+						channel.sendMessage(Reference.embedError(jda, "The message amount must be a number from 1-100.")).queue();
 					}
 				} else {
 					channel.sendMessage(Reference.embedError(jda, "Invalid Amount `" + args[0] + "`.")).queue();

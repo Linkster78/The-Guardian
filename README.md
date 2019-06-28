@@ -6,6 +6,8 @@ The guardian is a moderation/administration bot made with server owners in mind.
 
 [Click Here for the Bot Invite Link](https://discordapp.com/oauth2/authorize?client_id=591840782793834505&scope=bot&permissions=8)
 
+[Click Here for the Testing Server Invite Link](https://discord.gg/ETynfsA)
+
 ## Team Members
  - Toon Link#8313 (148118565386584065)
  - I'm by myself, there's no one else :/
@@ -36,8 +38,10 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - Mute/Temporary Mute/Unmute
  - Deafen/Temporary Deafen/Undeafen
  - Paginated Help Menu
- 
+
 *Note that you can view all of this with the* **help** *command.*
+
+**The** `Guide` **command can also walk you through a few of the features in your server.**
 
 ## Server Configuration
 **Every server** has their own custom server configuration. The bot adapts its features to it. **You can customize:**
