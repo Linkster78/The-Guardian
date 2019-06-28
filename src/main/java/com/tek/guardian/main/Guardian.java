@@ -21,6 +21,7 @@ import com.tek.guardian.commands.KickCommand;
 import com.tek.guardian.commands.LockCommand;
 import com.tek.guardian.commands.MentionCommand;
 import com.tek.guardian.commands.MuteCommand;
+import com.tek.guardian.commands.PingCommand;
 import com.tek.guardian.commands.PollCommand;
 import com.tek.guardian.commands.ReactionRoleCommand;
 import com.tek.guardian.commands.SecurityScanCommand;
@@ -112,6 +113,7 @@ public class Guardian {
 		commandHandler.registerCommand(new DeafenCommand());
 		commandHandler.registerCommand(new TempdeafenCommand());
 		commandHandler.registerCommand(new UndeafenCommand());
+		commandHandler.registerCommand(new PingCommand());
 		
 		jda.addEventListener(waiter, commandHandler, new ServerStatusListener(), 
 				new VoiceChannelListener(), new AccountFlaggingListener(), new ReactionRoleListener(),

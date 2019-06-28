@@ -101,9 +101,11 @@ public class ServerProfile {
 				Role r = guild.getRoleById(roleMap.get(role.name()));
 				if(r == null) {
 					createRole(guild, role);
+					System.out.println("missing role " + role.name());
 				}
 			} else {
 				createRole(guild, role);
+				System.out.println("missing " + role.name());
 			}
 		}
 	}
