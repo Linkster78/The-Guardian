@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.mongodb.MongoClient;
+import com.tek.guardian.cache.ServerProfileCache;
 
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
@@ -19,10 +20,13 @@ public class MongoAdapter {
 	private MongoClient client;
 	private Datastore datastore;
 	
+	private ServerProfileCache spCache;
+	
 	public void connect(String database) {
 		client = new MongoClient();
 		morphia.mapPackage("com.tek.guardian.data");
 		datastore = morphia.createDatastore(client, database);
+		spCache = new ServerProfileCache();
 	}
 	
 	public ServerProfile createServerProfile(Guild guild) {
@@ -43,14 +47,23 @@ public class MongoAdapter {
 	}
 	
 	public ServerProfile getServerProfile(Guild guild) {
-		Query<ServerProfile> profileQuery = datastore.createQuery(ServerProfile.class)
-				.field("serverId").equal(guild.getId());
-		if(profileQuery.count() > 0) {
-			ServerProfile first = profileQuery.first();
-			first.verify(guild);
-			return first;
+		Optional<ServerProfile> profileOpt = spCache.getServerProfile(guild.getId());
+		if(profileOpt.isPresent()) {
+			profileOpt.get().verify(guild);
+			return profileOpt.get();
+		} else {
+			Query<ServerProfile> profileQuery = datastore.createQuery(ServerProfile.class)
+					.field("serverId").equal(guild.getId());
+			if(profileQuery.count() > 0) {
+				ServerProfile first = profileQuery.first();
+				first.verify(guild);
+				spCache.cacheServerProfile(guild.getId(), first);
+				return first;
+			}
+			ServerProfile created = createServerProfile(guild);
+			spCache.cacheServerProfile(guild.getId(), created);
+			return created;
 		}
-		return createServerProfile(guild);
 	}
 	
 	public void saveServerProfile(ServerProfile serverProfile) {
@@ -258,6 +271,10 @@ public class MongoAdapter {
 	
 	public Datastore getDatastore() {
 		return datastore;
+	}
+	
+	public ServerProfileCache getServerProfileCache() {
+		return spCache;
 	}
 	
 }

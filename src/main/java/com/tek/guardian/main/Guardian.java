@@ -25,6 +25,7 @@ import com.tek.guardian.commands.PollCommand;
 import com.tek.guardian.commands.ReactionRoleCommand;
 import com.tek.guardian.commands.SecurityScanCommand;
 import com.tek.guardian.commands.ServerCommand;
+import com.tek.guardian.commands.SlowmodeCommand;
 import com.tek.guardian.commands.SuggestCommand;
 import com.tek.guardian.commands.TempbanCommand;
 import com.tek.guardian.commands.TempdeafenCommand;
@@ -101,6 +102,7 @@ public class Guardian {
 		commandHandler.registerCommand(new WarningsCommand(waiter));
 		commandHandler.registerCommand(new UnwarnCommand());
 		commandHandler.registerCommand(new MentionCommand());
+		commandHandler.registerCommand(new SlowmodeCommand());
 		commandHandler.registerCommand(new KickCommand());
 		commandHandler.registerCommand(new BanCommand());
 		commandHandler.registerCommand(new TempbanCommand());
