@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.requests.restaction.pagination.PaginationAction.PaginationIterator;
 
 public class ActionManager {
@@ -341,6 +342,35 @@ public class ActionManager {
 			log(embed, guild, profile);
 		} else {
 			channel.sendMessage(Reference.embedError(author.getJDA(), "Couldn't kick " + member.getUser().getAsMention() + ".")).queue();
+		}
+	}
+	
+	public void voiceKick(Member author, Member member, TextChannel in, ServerProfile profile) {
+		Guild guild = author.getGuild();
+		
+		if(guild.getSelfMember().canInteract(member)) {
+			VoiceChannel channel = member.getVoiceState().getChannel();
+			
+			guild.moveVoiceMember(member, null).queue(e -> {
+				member.getUser().openPrivateChannel().queue(pm -> pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been kicked from your voice channel in the server **" + guild.getName() + "**.")).queue(m -> { }, e1 -> { }), e1 -> { });
+				
+				in.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully kicked " + member.getUser().getAsMention() + " from his voice channel.")).queue();
+			
+				MessageEmbed embed = Reference.formatEmbed(author.getJDA(), "User Voice-Kicked")
+						.setColor(Color.gray)
+						.setDescription("A user was voice-kicked.")
+						.addField("Staff Member", author.getUser().getName() + "#" + author.getUser().getDiscriminator(), true)
+						.addField("Staff Member ID", author.getId(), true)
+						.addField("Voice-Kicked User", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
+						.addField("Voice-Kicked User ID", member.getId(), true)
+						.addField("Voice Channel", channel.getName(), true)
+						.addField("Voice Channel ID", channel.getId(), true)
+						.build();
+				
+				log(embed, guild, profile);
+			});
+		} else {
+			in.sendMessage(Reference.embedError(author.getJDA(), "Couldn't voice-kick " + member.getUser().getAsMention() + ".")).queue();
 		}
 	}
 	

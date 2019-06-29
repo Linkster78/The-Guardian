@@ -37,6 +37,7 @@ import com.tek.guardian.commands.UndeafenCommand;
 import com.tek.guardian.commands.UnlockCommand;
 import com.tek.guardian.commands.UnmuteCommand;
 import com.tek.guardian.commands.UnwarnCommand;
+import com.tek.guardian.commands.VoiceKickCommand;
 import com.tek.guardian.commands.WarnCommand;
 import com.tek.guardian.commands.WarningsCommand;
 import com.tek.guardian.commands.WhoisCommand;
@@ -104,6 +105,7 @@ public class Guardian {
 		commandHandler.registerCommand(new WarnCommand());
 		commandHandler.registerCommand(new WarningsCommand(waiter));
 		commandHandler.registerCommand(new UnwarnCommand());
+		commandHandler.registerCommand(new VoiceKickCommand());
 		commandHandler.registerCommand(new MentionCommand());
 		commandHandler.registerCommand(new SlowmodeCommand());
 		commandHandler.registerCommand(new RoleColorCommand());

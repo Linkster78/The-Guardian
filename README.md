@@ -1,4 +1,3 @@
-
 ![A guardian from breath of the wild](https://i.imgur.com/3DFIDkI.png)
 
 ## The Guardian
@@ -11,6 +10,12 @@ The guardian is a moderation/administration bot made with server owners in mind.
 ## Team Members
  - Toon Link#8313 (148118565386584065)
  - I'm by myself, there's no one else :/
+
+## Advantages
+ - Extensive customizability
+ - Future-proof code built with scalability in mind
+ - Covers tasks that usually require many bots to accomplish
+ - Simple, concise and idiot-proof syntax and command responses
 
 ## Features
  - Guide Menu
@@ -31,6 +36,7 @@ The guardian is a moderation/administration bot made with server owners in mind.
  - New Account Flagging
  - Deleted Message Logging
  - Moderation Action Logging
+ - User Voice Channel Kicking
  - Role Color (Hex)
  - Role mentioning
  - Channel slowmode
@@ -80,3 +86,4 @@ This should **only** be done if you are not able to use the provided bot (if he 
 
 ## Licensing
 The project is under the **GNU General Public License v3.0**
+
