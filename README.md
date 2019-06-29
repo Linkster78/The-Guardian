@@ -72,8 +72,9 @@ The guardian is a moderation/administration bot made with server owners in mind.
 ## Setup
 This should **only** be done if you are not able to use the provided bot (if he is offline or unavailable). If you've missed it, [here's the invite link](https://discordapp.com/oauth2/authorize?client_id=591840782793834505&scope=bot&permissions=8). Anyways, here it is:
  1. Compile the bot's source code into a runnable jar (Or download from the release section)
- 2. Create a `config.json` file in the same folder.
- 3. Inside of said file, insert this: 
+ 2. Install a distribution of the MongoDB Server on your computer/server. *The bot will configure it automatically, just make sure that it's running and on port 27017.*
+ 3. Create a `config.json` file in the same folder.
+ 4. Inside of said file, insert this: 
 
 ~~~~
 {
