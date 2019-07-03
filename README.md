@@ -1,6 +1,8 @@
 ![A guardian from breath of the wild](https://i.imgur.com/3DFIDkI.png)
 
 ## The Guardian
+**Good job, great work, a week wasted. Thank you hack week, especially the** *great* **judges. ffs, at least I know what I'm not doing next year.**
+
 The guardian is a moderation/administration bot made with server owners in mind. It is easy to use, there is a large set of tools from simple moderation to server backups and security scans.
 
 [Click Here for the Bot Invite Link](https://discordapp.com/oauth2/authorize?client_id=591840782793834505&scope=bot&permissions=8)
