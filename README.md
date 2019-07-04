@@ -1,13 +1,13 @@
 ![A guardian from breath of the wild](https://i.imgur.com/3DFIDkI.png)
 
 ## The Guardian
-**Good job, great work, a week wasted. Thank you hack week, especially the** *great* **judges. ffs, at least I know what I'm not doing next year.**
+**Good job, great work, a week wasted. Thank you hack week, especially the** *great* judges.** ffs, at least I know what I'm not doing next year. How about next time, you take the full 4 days between submissions ending and results to actually judge instead of starting a day before the reveal and half-hazardly picking winners? The winners have "innovative" features, no, not really. A role "co-dependence" is completely useless and the rest of the features are extremely common. The second one, as winning features had "Minesweeper", during hackweek we were told that features that didn't fit within the categories would be ignored, guess that wasn't the case huh? 3rd place, wumpi bot. Sure. That's the most worth-while bot of the three. All in all, I just lost a week of my life that I'll never get back, yes I'm salty, yes, I do think that the results are complete bullshit. Anyways, thanks for coming to my TED talk. I'm out.
 
-The guardian is a moderation/administration bot made with server owners in mind. It is easy to use, there is a large set of tools from simple moderation to server backups and security scans.
+**I'm deleting the bot account in a few hours, don't bother adding it to your server.**
+
+The guardian is a moderation/administration bot made with server owners in mind. It is easy to use, there is a large set of tools from simple moderation to security scans.
 
 [Click Here for the Bot Invite Link](https://discordapp.com/oauth2/authorize?client_id=591840782793834505&scope=bot&permissions=8)
-
-[Click Here for the Testing Server Invite Link](https://discord.gg/ETynfsA)
 
 ## Team Members
  - Toon Link#8313 (148118565386584065)
@@ -89,4 +89,3 @@ This should **only** be done if you are not able to use the provided bot (if he 
 
 ## Licensing
 The project is under the **GNU General Public License v3.0**
-
