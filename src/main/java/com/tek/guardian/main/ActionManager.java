@@ -477,7 +477,7 @@ public class ActionManager {
 		userProfile.pushWarning(warning);
 		userProfile.save();
 		
-		in.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully warned " + member.getAsMention() + " for `" + warningText + "`. He now has **" + userProfile.getWarnings().size() + "** warning(s).")).queue();
+		in.sendMessage(Reference.embedSuccess(author.getJDA(), "Successfully warned " + member.getAsMention() + " for `" + warningText + "`. They now have **" + userProfile.getWarnings().size() + "** warning(s).")).queue();
 	
 		member.getUser().openPrivateChannel().queue(pm -> {
 			pm.sendMessage(Reference.embedInfo(author.getJDA(), "You have been warned in the server **" + author.getGuild().getName() + "**: `" + warningText + "`.")).queue(m -> {}, e -> {});
