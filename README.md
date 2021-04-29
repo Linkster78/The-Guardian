@@ -1,13 +1,9 @@
 ![A guardian from breath of the wild](https://i.imgur.com/3DFIDkI.png)
 
-## The Guardian
-**Here's an interesting reddit post:** [Reddit](https://www.reddit.com/r/discordapp/comments/c8us0n/discord_hack_week_problem/)
-
 The guardian is a moderation/administration bot made with server owners in mind. It is easy to use, there is a large set of tools from simple moderation to security scans.
 
 ## Team Members
- - Toon Link#8313 (148118565386584065)
- - I'm by myself, there's no one else :/
+ - Link#8313 (148118565386584065)
 
 ## Advantages
  - Extensive customizability
